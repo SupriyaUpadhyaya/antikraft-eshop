@@ -1,2 +1,2 @@
-# our-eshop-codebase
-A virtual shop for all your needs
+# antiKraft-eshop-codebase
+A virtual shop to buy and sell antiques and art
