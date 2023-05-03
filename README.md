@@ -10,7 +10,7 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
 | 241215 | Aneesh Sathyan | aneesh.pindalavalappil@st.ovgu.de |
 
 ### <br/><br/>**Logo :** 
-<img src="static/logo/png/logo-white.png" width="150" height="150">    <img src="static/team-logo/codepanda.gif" width="150" height="150">
+<figure><img src="static/logo/2.png" width="500" height="150" > <figcaption>eShop Logo</figcaption> </figure>  <figure><img src="static/team-logo/codepanda.gif" width="150" height="150" > <figcaption>Team Logo</figcaption> </figure>
 
 ### <br/><br/>**Technology stack :**
     Python with Flask
@@ -30,17 +30,19 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
     │   ├── controller.py
     │   └── model.py
     ├── images                   // Product images uploaded by seller, can be moved to cloud storage
-    │   └── dummy.png            
+    │   └── dummy.png
     ├── static                   // CSS, images and other static content
-    │   └── logo
-    │   └── style
-    |       └── style.css
+    │   ├── logo
+    │   ├── team-logo
+    │   ├── Architecture.drawio
+    │   ├── Architecture.png
+    │   └── homepage.png
     ├── templates                // UI - htmls
     │   ├── homepage
     │   ├── product-page
     │   └── base.html
     ├── tests                    // Test cases
-    ├── Architecture.png
+    │   └── test.py
     ├── LICENSE
     ├── README.md
     ├── antikraft-app.py
@@ -48,7 +50,10 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
     └── schema.sql               // Sqlite database schema
 
 ### <br/><br/>**Architecture :**
-<img src="Architecture.png">
+<img src="static/Architecture.png">
+
+### <br/><br/>**Homepage Layout :**
+<img src="static/homepage.png">
 
 
 
