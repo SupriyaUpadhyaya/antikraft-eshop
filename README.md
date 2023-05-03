@@ -26,25 +26,26 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
 
 ### <br/><br/>**Project directory Structure :**
     antiKraft-eshop/
-    ├── backend
+    ├── backend                  // Business logic and DB CRUD operation
     │   ├── controller.py
     │   └── model.py
-    ├── images
-    │   └── dummy.png
-    ├── static
+    ├── images                   // Product images uploaded by seller, can be moved to cloud storage
+    │   └── dummy.png            
+    ├── static                   // CSS, images and other static content
     │   └── logo
-    ├── templates
+    │   └── style
+    |       └── style.css
+    ├── templates                // UI - htmls
     │   ├── homepage
     │   ├── product-page
     │   └── base.html
-    ├── tests
+    ├── tests                    // Test cases
     ├── Architecture.png
     ├── LICENSE
     ├── README.md
     ├── antikraft-app.py
-    ├── config.py
-    ├── requirements.txt
-    └── schema.sql
+    ├── requirements.txt         // Pre-requisites to be installed
+    └── schema.sql               // Sqlite database schema
 
 ### <br/><br/>**Architecture :**
 <img src="Architecture.png">
