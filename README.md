@@ -7,7 +7,7 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
 |----------|:-------------:|------:|
 | 244815 | Supriya Upadhyaya | supriya.upadhyaya@st.ovgu.de |
 | xxxxxx | Aarathi |   aarathi@st.ovgu.de |
-| xxxxxx | Aneesh Sathyan | aneesh.pindalavalappil@st.ovgu.de |
+| 241215 | Aneesh Sathyan | aneesh.pindalavalappil@st.ovgu.de |
 
 ### <br/><br/>**Logo :** 
 <img src="static/logo/png/logo-white.png" width="150" height="150">    <img src="static/team-logo/codepanda.gif" width="150" height="150">
