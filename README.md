@@ -10,7 +10,7 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
 | xxxxxx | Aneesh Sathyan | aneesh.pindalavalappil@st.ovgu.de |
 
 ### <br/><br/>**Logo :** 
-<img src="static/logo/png/logo-no-background.png" width="150" height="150">    <img src="static/team-logo/codepanda.gif" width="150" height="150">
+<img src="static/logo/png/logo-white.png" width="150" height="150">    <img src="static/team-logo/codepanda.gif" width="150" height="150">
 
 ### <br/><br/>**Technology stack :**
     Python with Flask
@@ -47,7 +47,7 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
     └── schema.sql
 
 ### <br/><br/>**Architecture :**
-![](architecture.png)
+<img src="Architecture.png">
 
 
 
