@@ -1,0 +1,9 @@
+{% include 'base.html' %}
+<div class="container-fluid overflow-auto">
+    {% include 'header/header.html' %}
+    {%for values in products.items()%}
+        <h5>
+            {{values[1]}}
+        </h5>
+    {%endfor%}
+</div>
