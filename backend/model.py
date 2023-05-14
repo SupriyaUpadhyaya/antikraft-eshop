@@ -19,3 +19,17 @@ def readOperation(TABLE_NAME: str, COLS: str):
         categories[row["category_id"]] = row["category_name"]
     if categories is not None:
         return categories
+
+
+def readOperationProductList(TABLE_NAME: str, COLS: str, CAT_ID: int, SUB_CAT_ID: int):
+    conn = get_db_connection()
+    if SUB_CAT_ID == 0:
+        query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID)
+    else:
+        query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " AND subcategory_id=" + str(SUB_CAT_ID)
+    data = conn.execute(query)
+    products = {}
+    for row in data:
+        products[row["product_id"]] = row["description"]
+    if products is not None:
+        return products
