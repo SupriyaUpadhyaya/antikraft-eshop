@@ -6,10 +6,11 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def antiqkraft():
+def home():
     categories = getAllCategories()
     print(categories.json)
-    return render_template('base.html', categories=categories.json)
+    return render_template('homepage/home.html', categories=categories.json)
+
 
 @app.route('/getAllCategories',  methods=['GET'])
 def getAllCategories():
@@ -20,6 +21,11 @@ def getAllCategories():
         mimetype='application/json'
     )
     return response
+
+
+@app.route("/login")
+def login():
+    return render_template('login/login.html')
 
 
 if __name__ == '__main__':
