@@ -6,11 +6,11 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
 | Student ID | Name |  Email ID |
 |----------|:-------------:|------:|
 | 244815 | Supriya Upadhyaya | supriya.upadhyaya@st.ovgu.de |
-| xxxxxx | Aarathi |   aarathi@st.ovgu.de |
+| 244267 | Aarathi Vijayachandran Chettiar Bhagavathi | aarathi.vijayachandran@st.ovgu.de |
 | 241215 | Aneesh Sathyan | aneesh.pindalavalappil@st.ovgu.de |
 
 ### <br/><br/>**Logo :** 
-<figure><img src="static/logo/2.png" width="500" height="150" > <figcaption>eShop Logo</figcaption> </figure>  <figure><img src="static/team-logo/codepanda.gif" width="150" height="150" > <figcaption>Team Logo</figcaption> </figure>
+<figure><img src="static/logo/logo-black.png" width="250" height="250" > <figcaption>eShop Logo</figcaption> </figure>  <figure><img src="static/team-logo/CODEpanda.png" width="150" height="150" > <figcaption>Team Logo</figcaption> </figure>
 
 ### <br/><br/>**Technology stack :**
     Python with Flask
@@ -53,7 +53,7 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
 <img src="static/Architecture.png">
 
 ### <br/><br/>**Homepage Layout :**
-<img src="static/homepage.png">
+<img src="static/homepage.jpeg">
 
 
 
