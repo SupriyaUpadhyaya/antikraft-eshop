@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def antiqkraft():
+def home():
     categories = getAllCategories()
     return render_template('base.html', categories=categories.json)
 
@@ -70,6 +70,11 @@ def getSubCategoryProducts():
         mimetype='application/json'
     )
     return response
+
+
+@app.route("/login")
+def login():
+    return render_template('login/login.html')
 
 
 if __name__ == '__main__':
