@@ -1,0 +1,44 @@
+/* body {
+    border: 5px;
+}
+
+#header {
+    margin: auto;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 210px;
+    padding: 5px;
+    background: url(logo-black.png);
+}
+
+#header-logo {
+    box-sizing: border-box;
+    position: center;
+    width: 200px;
+    height: 200px;
+    padding: 5px;
+    background: url(logo-black.png);
+}
+ */
+
+
+h5, h6 {
+    color: black;
+    float:center;
+    text-align: right;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+* {
+    box-sizing: border-box;
+}
+
+#search {
+    text-align: center;
+   
+
+}
