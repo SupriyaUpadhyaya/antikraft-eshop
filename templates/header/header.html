@@ -43,67 +43,21 @@
 
         </ul>
         <ul class="navbar-nav nav-fill">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="#">
                     <h5 class="text-uppercase">ALL ANTIQUES</h5>
                 </a>
             </li>
-            <li class="nav-item" float=center>
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 class="text-uppercase">FURNITURES</h5>
-                </a>
-            </li>
-            <li class="nav-item">
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 class="text-uppercase">SILVER</h5>
-                </a>
-            </li>
-            <li class="nav-item">
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 class="text-uppercase">ART</h5>
-                </a>
-            </li>
-            <li class="nav-item">
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 class="text-uppercase">CLOCKS</h5>
-                </a>
-            </li>
-            <li class="nav-item">
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 class="text-uppercase">MIRRORS</h5>
-                </a>
-            </li>
-            <li class="nav-item">
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 class="text-uppercase">JEWELRY & WATCHES</h5>
-                </a>
-            </li>
-            <li class="nav-item">
-                <h3>|</h3>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <h5 lass="text-uppercase">LIGHTING</h5>
-                </a>
-            </li>
+            {%for values in categories.items()%}
+                <li class="nav-item" float=center>
+                    <h3>|</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <h5 class="text-uppercase">{{values[1]}}</h5>
+                    </a>
+                </li>
+            {%endfor%}
         </ul>
     </div>
 </nav>
