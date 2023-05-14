@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     categories = getAllCategories()
-    return render_template('base.html', categories=categories.json)
+    return render_template('homepage/home.html', categories=categories.json)
 
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
@@ -20,7 +20,8 @@ def getCategory():
         status=200,
         mimetype='application/json'
     )
-    return render_template('category/category.html', categories=response.json)
+    categories = getAllCategories()
+    return render_template('category/category.html', products=response.json, categories=categories.json)
 
 # To render category HTML page when user clicks on sub-category in top nav 
 @app.route("/subcategory")
@@ -33,7 +34,8 @@ def getSubCategory():
         status=200,
         mimetype='application/json'
     )
-    return render_template('category/category.html', categories=response.json)
+    categories = getAllCategories()
+    return render_template('category/category.html', products=response.json, categories=categories.json)
 
 # API to get names of all categories
 @app.route('/getAllCategories',  methods=['GET'])
