@@ -57,3 +57,7 @@ h5, h6 {
     height: 185px; /* only if you want fixed height */
     
     }
+
+    #footer {
+        padding: 10px;
+    }
