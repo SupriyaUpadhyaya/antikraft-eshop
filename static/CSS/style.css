@@ -29,16 +29,31 @@ h5, h6 {
     text-align: right;
 }
 
-.container {
-    width: 100%;
-    height: 100%;
-}
-* {
-    box-sizing: border-box;
-}
-
 #search {
     text-align: center;
    
 
 }
+
+#home-banner .carousel-item .img-fluid {  
+    object-fit: cover;
+    height: 300px;
+  }
+
+#offerzone {
+    
+    padding: 5px;
+    text-align: center;
+
+}
+
+#shopByCategory .shopByCategory{
+    text-align: center;
+    padding: 10px;
+}
+
+.fit-image{
+    object-fit: cover;
+    height: 185px; /* only if you want fixed height */
+    
+    }
