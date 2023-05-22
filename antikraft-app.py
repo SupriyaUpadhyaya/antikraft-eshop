@@ -13,7 +13,9 @@ def home():
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
 def getCategory():
+    #("request.args.get('categoryid')", request.args.get('categoryid'))
     catId = int(request.args.get('categoryid'))
+    #print(catId)
     products = getCategoryProductsList(catId)
     response = app.response_class(
         response=json.dumps(products),
@@ -35,7 +37,7 @@ def getSubCategory():
         mimetype='application/json'
     )
     categories = getAllCategories()
-    return render_template('category/category.html', products=response.json, categories=categories.json)
+    return render_template('subcategory/subcategory.html', products=response.json, categories=categories.json)
 
 # API to get names of all categories
 @app.route('/getAllCategories',  methods=['GET'])
