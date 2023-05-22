@@ -38,6 +38,7 @@ h5, h6 {
 #home-banner .carousel-item .img-fluid {  
     object-fit: cover;
     height: 300px;
+    padding: 10px;
   }
 
 #offerzone {
