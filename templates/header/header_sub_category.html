@@ -1,0 +1,89 @@
+<style>
+    .button {
+        background-color: #f1f1f1;
+        color: rgb(0, 0, 0);
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+        border: 2px solid black;
+        box-shadow: 2px 4px #888888;
+        margin-left: 32px;
+        margin-right: 16px;
+        width: 120px;
+        height: 100px;
+        vertical-align: top;
+        }
+
+    .button:hover {
+        background-color: #ffffff;
+    }
+
+    #logo {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+</style>
+
+<nav class="navbar navbar-expand-lg">
+
+    <div id="logo">
+        <a href="http://127.0.0.1:5000/">
+            <img src="static/logo/logo-black.png" width="200" height="200">
+        </a>
+    </div>
+
+    <div class="col-2"></div>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="d-flex flex-column flex-nowrap col-9 ">
+        <ul class="navbar-nav nav-fill nav-pills pb-4">
+            <li class="nav-item"></li>
+            <div class="col-6">
+                <li class="nav-item">
+                    <div class="input-group-append rounded d-flex flex-row">
+                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                            aria-describedby="search-addon" id="search">
+
+                        <button class="btn border-0" type="button"><img class="img-fluid" max-width=20px height=20px
+                                id="search-logo" src="static/header/search.png" /></button>
+                    </div>
+                    </input>
+                </li>
+            </div>
+            <div class="col-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5000/login">
+                        <h6>Login | Sign Up</h6>
+                    </a>
+                </li>
+            </div>
+            <li class="nav-item">
+                <button class="btn border-0" type="button"><img class="img-fluid" max-width=20px height=20px
+                         src="static/header/Globe.svg" /></button>
+                <button class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
+                         src="static/header/Heart.svg" /></button>
+                <button class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
+                         src="static/header/Cart.png" /></button>
+            </li>
+        </ul>
+
+        <ul>
+            <button class="button">Today's Deals</button>
+            <button class="button">On Sale NOW!</button>
+            <button class="button">Up to 50% Off!</button>
+            <button class="button">New Arrivals</button>
+            <button class="button">Trending</button>
+            <button class="button">Offer Zone</button>
+        </ul>
+        
+</nav>
