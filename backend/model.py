@@ -16,7 +16,8 @@ def readOperation(TABLE_NAME: str, COLS: str):
     data = conn.execute(query)
     categories = {}
     for row in data:
-        categories[row["category_id"]] = row["category_name"]
+        url = "http://127.0.0.1:5000/category?categoryid=" + str(row["category_id"])
+        categories[url] = row["category_name"]
     if categories is not None:
         return categories
 
@@ -33,3 +34,15 @@ def readOperationProductList(TABLE_NAME: str, COLS: str, CAT_ID: int, SUB_CAT_ID
         products[row["product_id"]] = row["description"]
     if products is not None:
         return products
+
+
+def searchProductList(qterm):
+    conn = get_db_connection()
+    query = "SELECT * from PRODUCT where product_description LIKE " + str(qterm)
+    data = conn.execute(query)
+    products = {}
+    for row in data:
+        products[row["product_id"]] = row["product_description"]
+    if products is not None:
+        return products
+

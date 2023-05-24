@@ -1,6 +1,6 @@
 import json
 from flask import Flask, jsonify, render_template, request
-from backend.controller import getAllCategoriesList, getSubCategoryProductsList, getCategoryProductsList, getCategoryProductsList
+from backend.controller import getAllCategoriesList, getSearch, getCategoryProductsList, getCategoryProductsList
 
 app = Flask(__name__)
 
@@ -36,6 +36,12 @@ def login():
 @app.route("/signup")
 def signup():
     return render_template('signup/signup.html')
+
+@app.route('/search/', methods=['GET'])
+def search():
+    qTerm = request.args.get('s')
+    productList = getSearch(qTerm)
+    return render_template('search.html', productList=productList.json)
 
 
 if __name__ == '__main__':

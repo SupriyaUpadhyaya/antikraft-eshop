@@ -1,5 +1,5 @@
 from flask import Flask
-from backend.model import readOperation, readOperationProductList
+from backend.model import readOperation, readOperationProductList, searchProductList
 
 app = Flask(__name__)
 
@@ -20,5 +20,14 @@ def getSubCategoryProductsList(catId, subCatId):
     data = {}
     data = readOperationProductList("PRODUCT", "*", catId, subCatId)
     return data
+
+
+def getSearch(qTerm):
+    if not qTerm:
+        print("You did not search for anything")
+        return "Error"
+    elif qTerm:
+        searchResult = searchProductList(qTerm)
+        return searchResult
 
 
