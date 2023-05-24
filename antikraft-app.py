@@ -13,31 +13,9 @@ def home():
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
 def getCategory():
-    #("request.args.get('categoryid')", request.args.get('categoryid'))
-    catId = int(request.args.get('categoryid'))
-    #print(catId)
-    products = getCategoryProductsList(catId)
-    response = app.response_class(
-        response=json.dumps(products),
-        status=200,
-        mimetype='application/json'
-    )
     categories = getAllCategories()
-    return render_template('category/category.html', products=response.json, categories=categories.json)
-
-# To render category HTML page when user clicks on sub-category in top nav 
-@app.route("/subcategory")
-def getSubCategory():
-    catId = int(request.args.get('categoryid'))
-    subCatId = int(request.args.get('subCategoryid'))
-    categories = getSubCategoryProductsList(catId, subCatId)
-    response = app.response_class(
-        response=json.dumps(categories),
-        status=200,
-        mimetype='application/json'
-    )
-    categories = getAllCategories()
-    return render_template('subcategory/subcategory.html', products=response.json, categories=categories.json)
+    print(categories.json)
+    return render_template('category/category.html', categories=categories.json)
 
 # API to get names of all categories
 @app.route('/getAllCategories',  methods=['GET'])
@@ -49,32 +27,6 @@ def getAllCategories():
         mimetype='application/json'
     )
     return response
-
-# API to get product list for a specific category
-@app.route('/getCatProducts',  methods=['GET'])
-def getCatProducts():
-    catId = int(request.args.get('categoryid'))
-    products = getCategoryProductsList(catId)
-    response = app.response_class(
-        response=json.dumps(products),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
-
-# API to get product list for a specific sub category of a category
-@app.route('/getSubCategoryProducts',  methods=['GET'])
-def getSubCategoryProducts():
-    catId = int(request.args.get('categoryid'))
-    subCatId = int(request.args.get('subCategoryid'))
-    categories = getSubCategoryProductsList(catId, subCatId)
-    response = app.response_class(
-        response=json.dumps(categories),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
-
 
 @app.route("/login")
 def login():
