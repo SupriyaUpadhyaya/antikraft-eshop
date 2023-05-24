@@ -1,19 +1,12 @@
 <style>
-
     .separator_2 {
         display: flex;
         align-items: center;
         flex: 2;
         border-bottom: 1px solid #000;
-        margin-top: 2px;
+        margin-top: 4px;
         margin-bottom: 2px;
         
-    }
-
-    
-
-    .bottom_stuff_1 {
-        align-content: center;
     }
 
     .bottom_stuff_2 {
@@ -23,59 +16,77 @@
         justify-content: center;
         margin-bottom: 4px;
     }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+    }
 </style>
 
-<div class="separator_2"></div>
-
-<div class="bottom_stuff_1" style="margin-top: 4px;">
-    <!--
-    <ul class="bottom_stuff_2">
-        <a class="nav-link" href="Document URL">Today's Arrivals</a>
-        <h6>&nbsp;&nbsp;|&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">This Week's Arrivals</a>
-        <h6>&nbsp;&nbsp;|&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">Shop Directory</a>
-        <h6>&nbsp;&nbsp;|&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">New Shops</a>
-        <h6>&nbsp;&nbsp;|&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">Today's Featured Shops</a>
-    </ul>
-    -->
-    <ul class="bottom_stuff_2">
-        <a class="nav-link" href="Document URL">Terms of Use</a>
-        <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">Privacy Policy</a>
-        <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">Help</a>
-        <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">FAQ</a>
-        <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
-        <a class="nav-link" href="Document URL">About AntiQKraft</a>
-    </ul>
-</div>
-
-<div class="separator_2"></div>
-
-<div class="bottom_stuff_2">
-    <a href="https://www.facebook.com/">
-        <img src="static/category/Vector.jpg" width="32" height="32" style="margin-top: 5px;">
-    </a>
-    <a href="https://www.instagram.com/">
-        <img src="static/category/Instagram.jpg" width="40" height="40">
-    </a>
-    <a href="https://www.pinterest.com/">
-        <img src="static/category/Pinterest.jpg" width="40" height="40">
-    </a>
-    <a href="https://twitter.com/">
-        <img src="static/category/Twitter.jpg" width="40" height="40">
-    </a>
-</div>
-
-<div class="separator_2"></div>
-
-<div class="bottom_stuff_2">
-    <img src="static/category/Copyright.jpg" width="30" height="30">
-</div>
-<div class="bottom_stuff_2">
-    <font size="3">CodePanda</font>
+<div class="container">
+    <div class="separator_2"></div>
+    <div class="row justify-content-md-center" id="footer">
+        <ul class="bottom_stuff_2">
+            <div class="col-md-auto">
+                <a class="link-dark" href="link address">
+                    <h8>Terms of Use</h8>
+                </a>
+                
+            </div>
+            <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+            <div class="col-md-auto">
+                <a class="link-dark" href="link address">
+                    <h8>Privacy Policy</h8>
+                </a>
+            </div>
+            <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+            <div class="col-md-auto">
+                <a class="link-dark" href="link address">
+                    <h8>Help</h8>
+                </a>
+            </div>
+            <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+            <div class="col-md-auto">
+                <a class="link-dark" href="link address">
+                    <h8>FAQ</h8>
+                </a>
+            </div>
+            <h6>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+            <div class="col-md-auto">
+                <a class="link-dark" href="link address">
+                    <h8>About AntiQKraft</h8>
+                </a>
+            </div>
+        </ul>
+    </div>
+    <div class="separator_2"></div>
+    <div class="row justify-content-md-center" id="footer">
+        <div class="col-md-auto clearfix">
+            <a href="https://www.facebook.com/">
+                <img src="static/category/Vector.jpg" width="32" height="32" style="margin-top: 5px;">
+            </a>
+        </div>
+        <div class="col-md-auto clearfix">
+            <a href="https://www.instagram.com/">
+                <img src="static/category/Instagram.jpg" width="40" height="40">
+            </a>
+        </div>
+        <div class="col-md-auto clearfix">
+            <a href="https://www.pinterest.com/">
+                <img src="static/category/Pinterest.jpg" width="40" height="40">
+            </a>
+        </div>
+        <div class="col-md-auto clearfix">
+            <a href="https://twitter.com/">
+                <img src="static/category/Twitter.jpg" width="40" height="40">
+            </a>
+        </div>
+    </div>
+    <div class="separator_2"></div>
+    <div class="row justify-content-md-center" id="footer">
+        <div class="col-md-auto clearfix">
+            <img src="static/category/Copyright.jpg" width="30" height="30">
+        </div>
+        <h8 style="text-align: center;">CodePanda - ISEE SoSe23</h8>
+    </div>
 </div>

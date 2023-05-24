@@ -21,69 +21,62 @@
     .separator:not(:empty)::after {
         margin-left: .25em;
     }
-
-    .separator_2 {
-        display: flex;
-        align-items: center;
-        flex: 2;
-        border-bottom: 1px solid #000;
-        margin-top: 2px;
-        margin-bottom: 2px;
-    }
-
-    .bottom_stuff_1 {
-        align-content: center;
-    }
-
-    .bottom_stuff_2 {
-        margin-top: 2px;
-        display: flex;
-        text-align: center;
-        justify-content: center;
-        margin-bottom: 4px;
-    }
 </style>
 
-<div class="container-fluid">
-    {% include 'header/header_category.html' %}
-    <div class="separator">
-        <h3>ART</h3>
-    </div>
-    <div>
-        <div style="display: inline-block;align-content: center;">
-            <ul style="display: flex; margin-right: 100px; margin-left: 100px;">
-                <a class="nav-link" href="Document URL" style="text-align: center; margin-right: 100px; margin-left: auto; ">
-                    <img src="static/category/Frame 1.jpg" width="180px" height="180px" style="margin-top: 10px;">
-                    <br></br>
-                    Vintage
-                </a>
-                <a class="nav-link" href="Document URL" style="text-align: center; margin-right: 100px; margin-left: auto; ">
-                    <img src="static/category/Frame 2.jpg" width="180px" height="180px" style="margin-top: 10px;">
-                    <br></br>
-                    Paintings
-                </a>
-                <a class="nav-link" href="Document URL" style="text-align: center; margin-right: 100px; margin-left: auto; ">
-                    <img src="static/category/Frame 3.jpg" width="180px" height="180px" style="margin-top: 10px;">
-                    <br></br>
-                    Abstract
-                </a>
-                <a class="nav-link" href="Document URL" style="text-align: center; margin-right: 100px; margin-left: auto; ">
-                    <img src="static/category/Frame 5.jpg" width="180px" height="180px" style="margin-top: 10px;">
-                    <br></br>
-                    Scuplture
-                </a>
-                <a class="nav-link" href="Document URL" style="text-align: center; margin-right: 100px; margin-left: auto; ">
-                    <img src="static/category/Frame 4.jpg" width="180px" height="180px" style="margin-top: 10px;">
-                    <br></br>
-                    Other
-                </a>
-            </ul>
-        </div>
 
-        {% include 'footer/footer.html' %}    
+{% include 'header/header_category.html' %}
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+            <hr class="hr" style="background-color: #000; opacity: 1;" />
+        </div>
+        <div class="col-2">
+            <h5 style="text-align: center;">ART</h5>
+        </div>
+        <div class="col-5">
+            <hr class="hr" style="background-color: #000; opacity: 1;"/>
+        </div>
     </div>
+
+    <div>
+        <ul style="display: flex; justify-content:space-between;">
+            <a class="nav-link" href="Document URL"
+                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                <img src="static/category/Frame 1.jpg" width="180px" height="180px" style="margin-top: 10px;">
+                <br></br>
+                Vintage
+            </a>
+            <a class="nav-link" href="Document URL"
+                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                <img src="static/category/Frame 2.jpg" width="180px" height="180px" style="margin-top: 150px;">
+                <br></br>
+                Paintings
+            </a>
+            <a class="nav-link" href="Document URL"
+                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                <img src="static/category/Frame 3.jpg" width="180px" height="180px" style="margin-top: 10px;">
+                <br></br>
+                Abstract
+            </a>
+            <a class="nav-link" href="Document URL"
+                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                <img src="static/category/Frame 5.jpg" width="180px" height="180px" style="margin-top: 150px;">
+                <br></br>
+                Scuplture
+            </a>
+            <a class="nav-link" href="Document URL"
+                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                <img src="static/category/Frame 4.jpg" width="180px" height="180px" style="margin-top: 10px;">
+                <br></br>
+                Other
+            </a>
+        </ul>
+    </div>
+
+    {% include 'footer/footer.html' %}
 </div>
-<!--{%for values in products.items()%}
+
+    <!--{%for values in products.items()%}
         <h5>
             {{values[1]}}
         </h5>
