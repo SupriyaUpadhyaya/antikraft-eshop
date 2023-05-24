@@ -1,0 +1,14 @@
+<div class="container">
+    {%for values in productList.items()%}
+    {% if loop.index != 1 %}
+    <li class="nav-item" float=center>
+        <h3>|</h3>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{values[0]}}" onclick="RedirectURL();return false;">
+            <h5 class="text-uppercase">{{values[1]}}</h5>
+        </a>
+    </li>
+    {%endfor%}
+</div>
