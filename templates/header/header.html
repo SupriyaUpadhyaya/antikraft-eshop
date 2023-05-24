@@ -47,20 +47,17 @@
 
                 </ul>
                 <ul class="navbar-nav nav-fill">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <h5 class="text-uppercase">ALL ANTIQUES</h5>
-                        </a>
-                    </li>
                     {%for values in categories.items()%}
-                    <li class="nav-item" float=center>
-                        <h3>|</h3>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <h5 class="text-uppercase">{{values[1]}}</h5>
-                        </a>
-                    </li>
+                        {% if loop.index != 1 %}
+                            <li class="nav-item" float=center>
+                                <h3>|</h3>
+                            </li>
+                            {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <h5 class="text-uppercase">{{values[1]}}</h5>
+                            </a>
+                        </li>
                     {%endfor%}
                 </ul>
             </div>

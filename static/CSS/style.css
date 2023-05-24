@@ -62,3 +62,8 @@ h5, h6 {
     #footer {
         padding: 10px;
     }
+
+hr {
+        background-color: black;
+        opacity: 1;
+}
