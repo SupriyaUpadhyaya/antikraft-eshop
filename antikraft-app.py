@@ -81,7 +81,7 @@ def login():
     return render_template('login/login.html')
 
 
-@app.route("/login")
+@app.route("/signup")
 def signup():
     return render_template('signup/signup.html')
 
