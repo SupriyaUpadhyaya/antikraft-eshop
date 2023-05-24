@@ -50,10 +50,10 @@ AntiKraft is an eCommerce platform to buy or sell antique art and artifacts acro
     └── schema.sql               // Sqlite database schema
 
 ### <br/><br/>**Architecture :**
-<img src="static/Architecture.png">
+<img src="static/readme/Architecture.png">
 
 ### <br/><br/>**Homepage Layout :**
-<img src="static/homepage.jpeg">
+<img src="static/readme/homepage.jpeg">
 
 
 
