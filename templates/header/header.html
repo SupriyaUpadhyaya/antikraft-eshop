@@ -19,15 +19,20 @@
 
                     <div class="col-6">
                         <li class="nav-item">
-                            <div class="input-group-append rounded d-flex flex-row">
-                                <input type="search" class="form-control rounded" placeholder="Search"
-                                    aria-label="Search" aria-describedby="search-addon" id="search">
+                            <form action="search" method="POST">
+                                <div class="input-group-append rounded d-flex flex-row">
 
-                                <button class="btn border-0" type="submit"><img class="img-fluid" max-width=20px
-                                        height=20px id="search-logo" src="static/header/search.png" /></button>
-                            
-                            </input>
-                        </div>
+                                    <input type="text" class="form-control rounded" placeholder="Search"
+                                        aria-label="Search" aria-describedby="search-addon" id="search" name="search">
+
+                                    <button class="btn border-0" type="submit"><img class="img-fluid" max-width=20px
+                                            height=20px id="search-logo" src="static/header/search.png" /></button>
+                                            
+
+                                    </input>
+
+                                </div>
+                            </form>
                         </li>
                     </div>
                     <div class="col-3">
@@ -49,16 +54,16 @@
                 </ul>
                 <ul class="navbar-nav nav-fill">
                     {%for values in categories.items()%}
-                        {% if loop.index != 1 %}
-                            <li class="nav-item" float=center>
-                                <h3>|</h3>
-                            </li>
-                            {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{values[0]}}" onclick="RedirectURL();return false;">
-                                <h5 class="text-uppercase">{{values[1]}}</h5>
-                            </a>
-                        </li>
+                    {% if loop.index != 1 %}
+                    <li class="nav-item" float=center>
+                        <h3>|</h3>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{values[0]}}" onclick="RedirectURL();return false;">
+                            <h5 class="text-uppercase">{{values[1]}}</h5>
+                        </a>
+                    </li>
                     {%endfor%}
                 </ul>
             </div>

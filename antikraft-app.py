@@ -37,8 +37,10 @@ def login():
 def signup():
     return render_template('signup/signup.html')
 
-@app.route('/search/', methods=['GET'])
+@app.route('/search', methods=['POST'])
 def search():
+    query = request.form['search']
+    print(query)
     qTerm = request.args.get('s')
     productList = getSearch(qTerm)
     return render_template('search.html', productList=productList.json)
