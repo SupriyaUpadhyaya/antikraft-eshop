@@ -1,5 +1,5 @@
 from flask import Flask
-from backend.model import readOperation, readOperationProductList, searchProductList, readOperationCategory, readOperationCategoryImages
+from backend.model import readOperation, readOperationProductList, searchProductList, readOperationCategory, readOperationCategoryImages, readOperationSubCategory
 
 def getAllCategoriesList():
     data = {}
@@ -15,6 +15,12 @@ def getSpecificCategoryList(category_id):
 def getSpecificCategoryImages(category_id):
     data = {}
     data = readOperationCategoryImages("SUB_CATEGORY", category_id)
+        
+    return data
+
+def getSubCategoryProductList(category_id, sub_category_id):
+    data = {}
+    data = readOperationSubCategory("PRODUCT", category_id, sub_category_id)
         
     return data
 
