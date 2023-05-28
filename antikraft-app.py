@@ -1,12 +1,8 @@
 import json
 from flask import Flask, jsonify, render_template, request
-<<<<<<< HEAD
-from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages
-from backend.controllers.account import validateCredentails, validateRegistration
-=======
+
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
-from backend.controllers.account import validateCredentails
->>>>>>> d27b9e7f3e79ec857daa4f746246f6ab7a4cc8ca
+from backend.controllers.account import validateCredentails, validateRegistration
 
 app = Flask(__name__)
 
