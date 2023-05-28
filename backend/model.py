@@ -30,7 +30,6 @@ def readOperationCategoryImages(TABLE_NAME: str, CAT_ID: int):
     sub_category_row = {key: [] for key in keyList}
 
     for row in data:
-        # print('row', row)
         sub_category_row['category_id'].append(row["category_id"])
         sub_category_row['sub_category_id'].append(row["sub_category_id"])
         sub_category_row['sub_category_name'].append(row["sub_category_name"])
@@ -38,7 +37,7 @@ def readOperationCategoryImages(TABLE_NAME: str, CAT_ID: int):
 
     if sub_category_row is not None:
         return sub_category_row
-    
+
 def readOperation(TABLE_NAME: str, COLS: str):
     conn = get_db_connection()
     query = "SELECT * from " + TABLE_NAME
@@ -49,6 +48,29 @@ def readOperation(TABLE_NAME: str, COLS: str):
         categories[url] = row["category_name"]
     if categories is not None:
         return categories
+
+def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
+    conn = get_db_connection()
+    query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " and sub_category_id=" + str(SUB_CAT_ID)
+    
+    data = conn.execute(query)
+  
+    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "image_id", "url"]
+    sub_category_row = {key: [] for key in keyList}
+
+    for row in data:
+        url = "http://127.0.0.1:5000/subcategory?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"])
+        sub_category_row['category_id'].append(row["category_id"])
+        sub_category_row['sub_category_id'].append(row["sub_category_id"])
+        sub_category_row['product_id'].append(row["product_id"])
+        sub_category_row['product_name'].append(row["product_name"])
+        sub_category_row['product_description'].append(row["product_description"])
+        sub_category_row['image_id'].append(row["image_id"])
+        sub_category_row['url'].append(url)
+
+    if sub_category_row is not None:
+        return sub_category_row
+
 
 def readOperationProductList(TABLE_NAME: str, COLS: str, CAT_ID: int, SUB_CAT_ID: int):
     conn = get_db_connection()
