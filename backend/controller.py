@@ -1,11 +1,22 @@
-from backend.model import readOperation, readOperationProductList, searchProductList
-
+from flask import Flask
+from backend.model import readOperation, readOperationProductList, searchProductList, readOperationCategory, readOperationCategoryImages
 
 def getAllCategoriesList():
     data = {}
     data = readOperation("CATEGORY", "category_name")
     return data
 
+def getSpecificCategoryList(category_id):
+    data = {}
+    data = readOperationCategory("CATEGORY", category_id)
+        
+    return data
+
+def getSpecificCategoryImages(category_id):
+    data = {}
+    data = readOperationCategoryImages("SUB_CATEGORY", category_id)
+        
+    return data
 
 def getCategoryProductsList(catId):
     data = {}
