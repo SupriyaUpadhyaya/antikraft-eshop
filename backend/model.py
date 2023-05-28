@@ -1,10 +1,19 @@
 import sqlite3
+import sys
 
 
 def get_db_connection():
-    conn = sqlite3.connect('antiqkraft-database.db')
+    conn = sqlite3.connect('antiqkraft-database.db', isolation_level=None)
     conn.row_factory = sqlite3.Row
     return conn.cursor()
+
+def get_write_db():
+    conn = sqlite3.connect('antiqkraft-database.db')
+    with open('schema.sql') as f:
+        conn.executescript(f.read())
+    cur = conn.cursor()
+    return cur
+
 
 def readOperationCategory(TABLE_NAME: str, CAT_ID: int):
     conn = get_db_connection()
@@ -77,3 +86,18 @@ def readUserAccount(username):
     sqlquery = "SELECT * from USER where user_email='" + username + "'"
     data = conn.execute(sqlquery)
     return data
+
+
+def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone ) VALUES (?, ?, ?, ?, ?, ?)"
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery, (firstname, lastname, salutation, email, password, phonenumber ))
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+   

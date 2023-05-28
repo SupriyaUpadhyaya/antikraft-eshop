@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount
+from backend.model import readUserAccount, insertUserAccount
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -54,4 +54,20 @@ def validateCredentails(username, password):
         if passwordEntered == user["user_password"].decode('ascii'):
             return "True"
     return "False"
+
+def validateRegistration(salutation, firstname, lastname, email, password, phonenumber):
+    status = addUserAccount(salutation, firstname, lastname, email, password, phonenumber)
+    if status == "False":
+        return "ERROR: Registration not successful"
+    else:
+        return "True"
+
+def addUserAccount(salutation, firstname, lastname, email, password, phonenumber):
+    status = insertUserAccount(salutation, firstname, lastname, email, password, phonenumber)
+    if status == "True":
+        #user = getUserAccount(email)
+        #user["login_status"]="True"
+        return "True"
+    else:
+        return "False"
 
