@@ -1,6 +1,6 @@
 import json
 from flask import Flask, jsonify, render_template, request
-from backend.controller import getAllCategoriesList, getSearch, getCategoryProductsList, getSpecificCategoryImages
+from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages
 from backend.controllers.account import validateCredentails
 
 app = Flask(__name__)
