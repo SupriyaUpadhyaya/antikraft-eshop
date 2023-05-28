@@ -39,19 +39,16 @@ h6 {
 #home-banner .carousel-item .img-fluid {
     object-fit: cover;
     height: 300px;
-    padding: 10px;
+    padding-bottom: 20px;
 }
 
 #offerzone {
-
-    padding: 5px;
+    
     text-align: center;
-
 }
 
 a.offerzone {
     text-decoration: none;
-
 }
 
 #shopByCategory .shopByCategory {
