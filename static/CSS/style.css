@@ -23,47 +23,105 @@
  */
 
 
-h5, h6 {
+h5,
+h6 {
     color: black;
-    float:center;
-    text-align: right;
+    float: center;
+    text-align: center;
 }
 
 #search {
     text-align: center;
-   
+
 
 }
 
-#home-banner .carousel-item .img-fluid {  
+#home-banner .carousel-item .img-fluid {
     object-fit: cover;
     height: 300px;
     padding: 10px;
-  }
+}
 
 #offerzone {
-    
+
     padding: 5px;
     text-align: center;
 
 }
 
-#shopByCategory .shopByCategory{
+a.offerzone {
+    text-decoration: none;
+
+}
+
+#shopByCategory .shopByCategory {
     text-align: center;
     padding: 10px;
 }
 
-.fit-image{
+.fit-image {
     object-fit: cover;
-    height: 185px; /* only if you want fixed height */
-    
-    }
+    height: 185px;
+    /* only if you want fixed height */
 
-    #footer {
-        padding: 10px;
-    }
+}
 
 hr {
-        background-color: black;
-        opacity: 1;
+    background-color: black;
+    opacity: 1;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.tile {
+    width: 250px;
+    height: 300px;
+    align-content: center;
+    padding: 35px;
+    margin: 20px;
+}
+
+.tile-image {
+    width: 180px;
+    height: 180px;
+    padding-bottom: 15px;
+}
+
+.tile-text {
+    text-align: center;
+}
+
+.min-container {
+    min-height: 550px;
+    height: 550px;
+}
+
+.over-image {
+    position: relative;
+    top: -50%;
+    left: 0;
+    width: 100%;
+    color: white;
+}
+
+.over-image-banner {
+    position: absolute;
+    top: 45%;
+    left: 40%;
+    width: 100%;
+    color: white;
+}
+
+.login-form {
+    padding : 20px;
+    float: center;
+}
+
+.login-input {
+    outline: 0;
+  border-width: 0 0 2px;
+  border-color: black;
+  border-radius: 0%;
 }

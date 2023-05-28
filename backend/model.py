@@ -1,7 +1,4 @@
-import json
 import sqlite3
-
-from flask import jsonify
 
 
 def get_db_connection():
@@ -36,13 +33,16 @@ def readOperationProductList(TABLE_NAME: str, COLS: str, CAT_ID: int, SUB_CAT_ID
         return products
 
 
-def searchProductList(qterm):
+def searchProductList(query):
     conn = get_db_connection()
-    query = "SELECT * from PRODUCT where product_description LIKE " + str(qterm)
-    data = conn.execute(query)
-    products = {}
-    for row in data:
-        products[row["product_id"]] = row["product_description"]
-    if products is not None:
-        return products
+    sqlquery = "SELECT * from PRODUCT where product_description LIKE '%" + str(query) + "%' OR product_name LIKE '%" + str(query) + "%'"
+    data = conn.execute(sqlquery)
+    return data
 
+
+def readUserAccount(username):
+    conn = get_db_connection()
+    print(username)
+    sqlquery = "SELECT * from USER where user_email='" + username + "'"
+    data = conn.execute(sqlquery)
+    return data

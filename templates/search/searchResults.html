@@ -1,14 +1,27 @@
-<div class="container">
-    {%for values in productList.items()%}
-    {% if loop.index != 1 %}
-    <li class="nav-item" float=center>
-        <h3>|</h3>
-    </li>
-    {% endif %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{values[0]}}" onclick="RedirectURL();return false;">
-            <h5 class="text-uppercase">{{values[1]}}</h5>
-        </a>
-    </li>
-    {%endfor%}
+<div class="container min-container">
+    <div class="row">
+        <div class="col-5">
+            <hr/>
+        </div>
+        <div class="col-2">
+            <h5 id="shopByCategory">SEARCH RESULTS</h5>
+        </div>
+        <div class="col-5">
+            <hr/>
+        </div>
+    </div>
+    <ul>
+        <div class="row">
+            {%for values in productList.items()%}
+            <div class="col-sm-3 tile">
+                <li>
+                    <a class="link-dark" href={{values[1].url}}><img class="tile-image" src={{values[1].image_id}}></img>
+                        <h6 class="tile-text">Product Id: {{values[1].product_id}}</h6>
+                        <h6 class="tile-text">{{values[1].product_name}}</h6>
+                    </a>
+                </li>
+            </div>
+            {%endfor%}
+        </div>
+    </ul>
 </div>
