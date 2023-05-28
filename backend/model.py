@@ -16,7 +16,6 @@ def readOperationCategory(TABLE_NAME: str, CAT_ID: int):
     for row in data:
         category_row['category_id'] = row["category_id"]
         category_row['category_name'] = row["category_name"]
-        category_row['category_description'] = row["category_description"]
     if category_row is not None:
         return category_row
 
