@@ -52,11 +52,17 @@ def login():
 def signup():
     return render_template('signup/signup.html')
 
-@app.route('/search/', methods=['GET'])
+@app.route('/search', methods=['POST'])
 def search():
-    qTerm = request.args.get('s')
-    productList = getSearch(qTerm)
-    return render_template('search.html', productList=productList.json)
+    query = request.form['search']
+    result = getSearch(query)
+    productList = app.response_class(
+        response=json.dumps(result),
+        status=200,
+        mimetype='application/json'
+    )
+    categories = getAllCategories()
+    return render_template('search/search.html', productList=productList.json, categories=categories.json)
 
 
 if __name__ == '__main__':
