@@ -7,13 +7,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn.cursor()
 
-def get_write_db():
-    conn = sqlite3.connect('antiqkraft-database.db')
-    with open('schema.sql') as f:
-        conn.executescript(f.read())
-    cur = conn.cursor()
-    return cur
-
 
 def readOperationCategory(TABLE_NAME: str, CAT_ID: int):
     conn = get_db_connection()
