@@ -1,7 +1,8 @@
 import json
 from flask import Flask, jsonify, render_template, request
+
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
-from backend.controllers.account import validateCredentails
+from backend.controllers.account import validateCredentails, validateRegistration
 
 app = Flask(__name__)
 
@@ -110,6 +111,24 @@ def search():
     )
     categories = getAllCategories()
     return render_template('search/search.html', productList=productList.json, categories=categories.json)
+
+@app.route('/register', methods=['POST'])
+def userAccountRegistration():
+    salutation = request.form['salutation']
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
+    email = request.form['email']
+    password = request.form['password']
+    phonenumber = request.form['phonenumber']
+    registration_status = validateRegistration(salutation, firstname, lastname, email, password, phonenumber)
+    categories = getAllCategories()
+    print("Login status")
+    print(registration_status)
+    if registration_status == "True":
+        return render_template('homepage/home.html', categories=categories.json, loginStatus=registration_status)
+    else:
+        return render_template('login/login.html', categories=categories.json, loginStatus=registration_status)
+
 
 
 if __name__ == '__main__':
