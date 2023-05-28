@@ -1,14 +1,15 @@
 import json
-from flask import Flask, jsonify, render_template, request
-from backend.controller import getAllCategoriesList, getSearch, getCategoryProductsList, getCategoryProductsList
+from flask import Flask, render_template, request
+from backend.controller import getAllCategoriesList, getSearch
+from backend.controllers.account import validateCredentails
 
 app = Flask(__name__)
-
 
 @app.route("/")
 def home():
     categories = getAllCategories()
     return render_template('homepage/home.html', categories=categories.json)
+
 
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
@@ -16,6 +17,7 @@ def getCategory():
     categories = getAllCategories()
     print(categories.json)
     return render_template('category/category.html', categories=categories.json)
+
 
 # API to get names of all categories
 @app.route('/getAllCategories',  methods=['GET'])
@@ -28,9 +30,24 @@ def getAllCategories():
     )
     return response
 
-@app.route("/login")
+
+@app.route('/login')
 def login():
     return render_template('login/login.html')
+
+
+@app.route('/userAccountLogin', methods=['POST'])
+def userAccountLogin():
+    username = request.form['username']
+    password = request.form['password']
+    loginStatus = validateCredentails(username, password)
+    categories = getAllCategories()
+    print("Login status")
+    print(loginStatus)
+    if loginStatus == "True":
+        return render_template('homepage/home.html', categories=categories.json, loginStatus=loginStatus)
+    else:
+        return render_template('login/login.html', categories=categories.json, loginStatus=loginStatus)
 
 
 @app.route("/signup")
