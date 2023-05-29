@@ -1,7 +1,7 @@
 import json
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
-from backend.controllers.account import validateCredentails, validateRegistration, validateSellerCredentails
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -102,6 +102,10 @@ def userAccountLogin():
 def signup():
     return render_template('signup/signup.html')
 
+@app.route("/sellersignup")
+def sellersignup():
+    return render_template('seller-signup/sellersignup.html')
+
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['search']
@@ -129,7 +133,22 @@ def userAccountRegistration():
     if registration_status == "True":
         return render_template('homepage/home.html', categories=categories.json, loginStatus=registration_status)
     else:
-        return render_template('login/login.html', categories=categories.json, loginStatus=registration_status)
+        return render_template('signup/signup.html', categories=categories.json, loginStatus=registration_status)
+
+@app.route('/sellerregister', methods=['POST'])
+def sellerAccountRegistration():
+    sellername = request.form['sellername']
+    email = request.form['email']
+    password = request.form['password']
+    address = request.form['address']
+    registration_status = validateSellerRegistration(sellername, email, password, address)
+    categories = getAllCategories()
+    print("Login status")
+    print(registration_status)
+    if registration_status == "True":
+        return render_template('homepage/home.html', categories=categories.json, loginStatus=registration_status)
+    else:
+        return render_template('sellersignup/sellersignup.html', categories=categories.json, loginStatus=registration_status)
 
 
 @app.route('/logout')

@@ -138,6 +138,11 @@
 <div class="container">
   <h2>Sign Up</h2>
   <form action="/register" method="POST" onsubmit="return validateForm()">
+      <div class="row">
+        {% if error == "True" %}
+            <h6 style="color: red; text-align: left;">Error : Registration was not successful, Please try again</h6>
+        {%endif%}
+    </div>
     <div class="form-group">
       <label for="salutation">Salutation:</label>
       <select class="form-control" id="salutation" name="salutation" required>
