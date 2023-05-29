@@ -1,7 +1,7 @@
 import json
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
-from backend.controllers.account import validateCredentails, validateRegistration
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerCredentails
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -138,6 +138,36 @@ def logout():
     session.pop('username', None)
     session.pop('login_status', None)
     return redirect('http://127.0.0.1:5000/')
+
+@app.route('/seller-login')
+def sellerLogin():
+    return render_template('seller-login/seller-login.html', error="False")
+
+
+@app.route('/sellerAccountLogin', methods=['POST'])
+def sellerAccountLogin():
+    username = request.form['username']
+    password = request.form['password']
+    user = validateSellerCredentails(username, password)
+    for item in user:
+        session[item]=user[item]
+    loginStatus = session["login_status"]
+    print(loginStatus)
+    categories = getAllCategories()
+    if loginStatus == "True":
+        return render_template('homepage/home.html', categories=categories.json)
+    else:
+        return render_template('login/login.html', categories=categories.json, error="True")
+
+
+@app.route('/sellerPasswordReset')
+def sellerPasswordReset():
+    return render_template('password-rest/seller-password-reset.html', error="False")
+
+
+@app.route('/userPasswordReset')
+def userPasswordReset():
+    return render_template('password-rest/user-password-reset.html', error="False")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

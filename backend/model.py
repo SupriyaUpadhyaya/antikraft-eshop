@@ -102,6 +102,14 @@ def readUserAccount(username):
     return data
 
 
+def readSellerAccount(username):
+    conn = get_db_connection()
+    print(username)
+    sqlquery = "SELECT * from SELLER where seller_emai='" + username + "'"
+    data = conn.execute(sqlquery)
+    return data
+
+
 def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber):
     conn = get_db_connection()
     sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone ) VALUES (?, ?, ?, ?, ?, ?)"
