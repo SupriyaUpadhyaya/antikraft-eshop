@@ -126,14 +126,17 @@ def userAccountRegistration():
     email = request.form['email']
     password = request.form['password']
     phonenumber = request.form['phonenumber']
-    registration_status = validateRegistration(salutation, firstname, lastname, email, password, phonenumber)
+    user = validateRegistration(salutation, firstname, lastname, email, password, phonenumber)
+    for item in user:
+        session[item] = user[item]
+    login_status = session["login_status"]
     categories = getAllCategories()
     print("Login status")
-    print(registration_status)
-    if registration_status == "True":
-        return render_template('homepage/home.html', categories=categories.json, loginStatus=registration_status)
+    print(login_status)
+    if login_status == "True":
+        return render_template('homepage/home.html', categories=categories.json)
     else:
-        return render_template('signup/signup.html', categories=categories.json, loginStatus=registration_status)
+        return render_template('signup/signup.html', categories=categories.json, error ="True")
 
 @app.route('/sellerregister', methods=['POST'])
 def sellerAccountRegistration():
