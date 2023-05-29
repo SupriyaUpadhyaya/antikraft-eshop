@@ -114,4 +114,18 @@ def insertUserAccount(salutation, firstname, lastname, email, password, phonenum
         print(error)
         status = "False"
     return status
+
+
+def insertSellerAccount(sellername, email, password, address):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address ) VALUES (?, ?, ?, ?)"
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery, (sellername, email, password, address ))
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
    

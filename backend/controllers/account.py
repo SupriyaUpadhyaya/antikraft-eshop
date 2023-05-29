@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount, insertUserAccount
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -55,18 +55,37 @@ def validateCredentails(username, password):
             return "True"
     return "False"
 
+
 def validateRegistration(salutation, firstname, lastname, email, password, phonenumber):
-    status = addUserAccount(salutation, firstname, lastname, email, password, phonenumber)
-    if status == "False":
-        return "ERROR: Registration not successful"
-    else:
-        return "True"
+    encrypted_password = cipher.encrypt(password).decode("ascii")
+    status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber)
+    if status == "True":
+        user = getUserAccount(email)
+    user["login_status"] = status
+    return user
+    
+
 
 def addUserAccount(salutation, firstname, lastname, email, password, phonenumber):
     status = insertUserAccount(salutation, firstname, lastname, email, password, phonenumber)
     if status == "True":
-        #user = getUserAccount(email)
-        #user["login_status"]="True"
+        return "True"
+    else:
+        return "False"
+  
+   
+def validateSellerRegistration(sellername, email, password, address):
+    encrypted_spassword = cipher.encrypt(password).decode("ascii")
+    status = addSellerAccount(sellername, email, encrypted_spassword, address)
+    if status == "False":
+        return "ERROR: Seller Registration not successful"
+    else:
+        return "True"
+
+
+def addSellerAccount(sellername, email, password, address):
+    status = insertSellerAccount(sellername, email, password, address)
+    if status == "True":
         return "True"
     else:
         return "False"
