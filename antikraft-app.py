@@ -68,6 +68,37 @@ def getSubCategoryJson(category_id, sub_category_id):
 
     return response
 
+# To render sub category HTML page when user clicks on category page tiles
+@app.route("/product")
+def getSpecificProduct():
+    sub_category_id = request.args.get('subcategoryid')
+    category_id = request.args.get('categoryid')
+    sub_cat_product_json = getSubCategoryJson(category_id, sub_category_id)
+    category_table_row = getSpecificCategoryRow(category_id)
+    sub_cat_json = sub_cat_product_json.json
+    sub_cat_name = getSpecificCategoryImages(category_id)
+    sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]
+    categories = getAllCategories()
+    return render_template('subcategory/subcategory_landing_page.html', categories = categories.json, \
+                           category_name = category_table_row.json['category_name'], \
+                           sub_category_name = sub_cat_name, \
+                           product_count = len(sub_cat_json['category_id']), \
+                           product_name_list = sub_cat_json['product_name'], \
+                           product_image_list = sub_cat_json['image_id'], \
+                           product_price_list = sub_cat_json['product_price'], \
+                           range=range)
+
+def getSubCategoryJson2(category_id, sub_category_id):
+    spec_cat = getSubCategoryProductList(category_id, sub_category_id)
+    
+    response = app.response_class(
+        response=json.dumps(spec_cat),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
+
 # API to get names of all categories
 @app.route('/getAllCategories',  methods=['GET'])
 def getAllCategories():
