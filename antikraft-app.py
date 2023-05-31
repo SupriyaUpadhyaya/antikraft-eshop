@@ -1,6 +1,6 @@
 import json
 from flask import Flask, jsonify, redirect, render_template, request, session
-from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
+from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
 from backend.controllers.cart import getOrder
 
@@ -43,6 +43,7 @@ def getSpecificCategoryRow(qTerm):
 def getSpecificSubCategory():
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
+    
     sub_cat_product_json = getSubCategoryJson(category_id, sub_category_id)
     category_table_row = getSpecificCategoryRow(category_id)
     sub_cat_json = sub_cat_product_json.json
@@ -56,10 +57,62 @@ def getSpecificSubCategory():
                            product_name_list = sub_cat_json['product_name'], \
                            product_image_list = sub_cat_json['image_id'], \
                            product_price_list = sub_cat_json['product_price'], \
+                           product_id_list = sub_cat_json['product_id'], \
+                           sub_category_id = sub_category_id, \
+                           category_id = category_id, \
                            range=range)
 
 def getSubCategoryJson(category_id, sub_category_id):
     spec_cat = getSubCategoryProductList(category_id, sub_category_id)
+    
+    response = app.response_class(
+        response=json.dumps(spec_cat),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# To render sub category HTML page when user clicks on category page tiles
+@app.route("/product")
+def getSpecificProduct():
+    sub_category_id = request.args.get('subcategoryid')
+    category_id = request.args.get('categoryid')
+    product_id = request.args.get('productid')
+
+    categories = getAllCategories()
+    category_table_row = getSpecificCategoryRow(category_id)
+    cat_name = category_table_row.json['category_name']
+
+    sub_cat_name = getSpecificCategoryImages(category_id)
+    sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]    
+
+    product_json = getProductJson(category_id, sub_category_id, product_id)
+    product_json = product_json.json
+
+    sec_images = product_json['secondary_images'][0]
+    li_sec_images = sec_images.split(';')
+    
+    return render_template('product/product_page.html', categories = categories.json, \
+                           category_name = cat_name, \
+                           sub_category_name = sub_cat_name, \
+                           sub_category_id = sub_category_id, \
+                           category_id = category_id, \
+                           product_id = product_json['product_id'], \
+                           product_name = product_json['product_name'], \
+                           product_price = product_json['product_price'], \
+                           product_main_image = product_json['image_id'], \
+                           product_sec_image1 = li_sec_images[0], \
+                           product_sec_image2 = li_sec_images[1], \
+                           product_sec_image3 = li_sec_images[2], \
+                           product_sec_image4 = li_sec_images[3], \
+                           range=range)
+
+
+def getProductJson(category_id, sub_category_id, product_id):
+    spec_cat = getProductData(category_id, sub_category_id, product_id)
     
     response = app.response_class(
         response=json.dumps(spec_cat),
