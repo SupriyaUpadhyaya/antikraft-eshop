@@ -1,118 +1,95 @@
 {% include 'base.html' %}
 {% include 'header/header.html' %}
 
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+<div class="container">
+<h2 style="text-align: left;" >User Account<h2>
+<hr>
+<style>
+    #key{text-align: right;}
+    #val{text-align: left;}
+    .nav-pills .nav-link {
+      color: #000;
+      background-color: #ffffff;
     }
 
-    .container-sidebar {
-      display: flex;
-      height: 75vh;
-    }
-
-    .sidebar {
-      width: 250px;
-      background-color: #333;
+    .nav-pills .nav-link.active,
+    .nav-pills .nav-link:hover {
       color: #fff;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 10px;
-    }
-
-    .sidebar li button {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .content {
-      flex-grow: 1;
-      padding: 20px;
-      color: #333;
-      background-color: #f2f2f2;
-    }
-
-    .content h2 {
-      margin-top: 0;
-      display: none;
-    }
-
-    .content.active h2 {
-      display: block;
+      background-color: #000;
     }
   </style>
-  <div >
-    <h2 style=" margin-left:700px">User Account</h2>
+</div>
 
-    </div>
-
-
-
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const sidebarButtons = document.querySelectorAll('.sidebar li button');
-      const contentSections = document.querySelectorAll('.content h2');
-
-      sidebarButtons.forEach((button, index) => {
-        button.addEventListener('click', (event) => {
-          event.preventDefault();
-          toggleActiveSection(index);
-        });
-      });
-
-      function toggleActiveSection(index) {
-        contentSections.forEach((section, sectionIndex) => {
-          if (sectionIndex === index) {
-            section.parentNode.classList.toggle('active');
-          } else {
-            section.parentNode.classList.remove('active');
-          }
-        });
-      }
-    });
-  </script>
-
-  <div class="container container-sidebar">
-    <div class="sidebar">
-      <ul>
-        <li><button>Personal Information</button></li>
-        <li><button>Order Details</button></li>
-        <li><button>Wish List</button></li>
-      </ul>
-    </div>
-    <div class="content">
-      <div>
-        <h2>Personal Information</h2>
-        <p>{% session.user_email %}</p>
+<div class="container">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</a>
+          <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Order History</a>
+          <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Wishlist</a>
+          <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Password Reset</a>
+        </div>
       </div>
-      <div>
-        <h2>Order Details</h2>
-        <p>Here you can view your past order details.</p>
-      </div>
-      <div>
-        <h2>Wish List</h2>
-        <p>Here you can view and manage your wish list.</p>
+      <div class="col-md-9">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            <div class="row">
+                <div class="col-1"> </div>  
+                <div class="col-2">
+                <h5 id="key">Firstname:</h5>
+                </div>
+                <div class="col-1"> </div>  
+                <div class="col-4">
+                <h5 id="val">{{ session.user_firstname[0] }}</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"> </div>  
+                <div class="col-2">
+                <h5 id="key">lastname:</h5>
+                </div>
+                <div class="col-1"> </div> 
+                <div class="col-6">
+                <h5 id="val">{{ session.user_lastname[0] }}</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"> </div>  
+                <div class="col-2">
+                <h5 id="key">Email:</h5>
+                </div>
+                <div class="col-1"> </div> 
+                <div class="col-6">
+                <h5 id="val">{{ session.user_email[0] }}</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"> </div>  
+                <div class="col-2">
+                <h5 id="key">Address:</h5>
+                </div>
+                <div class="col-1"> </div> 
+                <div class="col-6">
+                <h5 id="val">{{ session.user_address[0] }}</h5>
+                </div>
+            </div>
+        </div>
+          <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+            <h1>Profile</h1>
+            <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+          </div>
+          <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+            <h1>Messages</h1>
+            <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+          </div>
+          <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+            <h1>Settings</h1>
+            <p>This is the settings tab content.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
 
 
 {% include 'footer/footer.html' %}
