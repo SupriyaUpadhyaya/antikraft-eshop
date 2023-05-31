@@ -1,15 +1,15 @@
 import json
-from flask import Flask, jsonify, render_template, request
-
+from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
-from backend.controllers.account import validateCredentails, validateRegistration
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route("/")
 def home():
     categories = getAllCategories()
-    return render_template('homepage/home.html', categories=categories.json)
+    return render_template('homepage/home.html', categories=categories.json, user="None")
 
 
 # To render category HTML page when user clicks on category in top nav 
@@ -113,26 +113,32 @@ def getAllCategories():
 
 @app.route('/login')
 def login():
-    return render_template('login/login.html')
+    return render_template('login/login.html', error="False")
 
 
 @app.route('/userAccountLogin', methods=['POST'])
 def userAccountLogin():
     username = request.form['username']
     password = request.form['password']
-    loginStatus = validateCredentails(username, password)
-    categories = getAllCategories()
-    print("Login status")
+    user = validateCredentails(username, password)
+    for item in user:
+        session[item]=user[item]
+    loginStatus = session["login_status"]
     print(loginStatus)
+    categories = getAllCategories()
     if loginStatus == "True":
-        return render_template('homepage/home.html', categories=categories.json, loginStatus=loginStatus)
+        return render_template('homepage/home.html', categories=categories.json)
     else:
-        return render_template('login/login.html', categories=categories.json, loginStatus=loginStatus)
+        return render_template('login/login.html', categories=categories.json, error="True")
 
 
 @app.route("/signup")
 def signup():
     return render_template('signup/signup.html')
+
+@app.route("/sellersignup")
+def sellersignup():
+    return render_template('seller-signup/sellersignup.html')
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -154,16 +160,70 @@ def userAccountRegistration():
     email = request.form['email']
     password = request.form['password']
     phonenumber = request.form['phonenumber']
-    registration_status = validateRegistration(salutation, firstname, lastname, email, password, phonenumber)
+    user = validateRegistration(salutation, firstname, lastname, email, password, phonenumber)
+    for item in user:
+        session[item] = user[item]
+    login_status = session["login_status"]
+    categories = getAllCategories()
+    print("Login status")
+    print(login_status)
+    if login_status == "True":
+        return render_template('homepage/home.html', categories=categories.json)
+    else:
+        return render_template('signup/signup.html', categories=categories.json, error ="True")
+
+@app.route('/sellerregister', methods=['POST'])
+def sellerAccountRegistration():
+    sellername = request.form['sellername']
+    email = request.form['email']
+    password = request.form['password']
+    address = request.form['address']
+    registration_status = validateSellerRegistration(sellername, email, password, address)
     categories = getAllCategories()
     print("Login status")
     print(registration_status)
     if registration_status == "True":
         return render_template('homepage/home.html', categories=categories.json, loginStatus=registration_status)
     else:
-        return render_template('login/login.html', categories=categories.json, loginStatus=registration_status)
+        return render_template('sellersignup/sellersignup.html', categories=categories.json, loginStatus=registration_status)
 
 
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    session.pop('login_status', None)
+    return redirect('http://127.0.0.1:5000/')
+
+@app.route('/seller-login')
+def sellerLogin():
+    return render_template('seller-login/seller-login.html', error="False")
+
+
+@app.route('/sellerAccountLogin', methods=['POST'])
+def sellerAccountLogin():
+    username = request.form['username']
+    password = request.form['password']
+    user = validateSellerCredentails(username, password)
+    for item in user:
+        session[item]=user[item]
+    loginStatus = session["login_status"]
+    print(loginStatus)
+    categories = getAllCategories()
+    if loginStatus == "True":
+        return render_template('homepage/home.html', categories=categories.json)
+    else:
+        return render_template('login/login.html', categories=categories.json, error="True")
+
+
+@app.route('/sellerPasswordReset')
+def sellerPasswordReset():
+    return render_template('password-rest/seller-password-reset.html', error="False")
+
+
+@app.route('/userPasswordReset')
+def userPasswordReset():
+    return render_template('password-rest/user-password-reset.html', error="False")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

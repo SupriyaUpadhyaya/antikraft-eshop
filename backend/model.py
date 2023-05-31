@@ -103,12 +103,34 @@ def readUserAccount(username):
     return data
 
 
+def readSellerAccount(username):
+    conn = get_db_connection()
+    print(username)
+    sqlquery = "SELECT * from SELLER where seller_emai='" + username + "'"
+    data = conn.execute(sqlquery)
+    return data
+
+
 def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber):
     conn = get_db_connection()
     sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone ) VALUES (?, ?, ?, ?, ?, ?)"
     print(sqlquery)
     try:
         conn.execute(sqlquery, (firstname, lastname, salutation, email, password, phonenumber ))
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+
+
+def insertSellerAccount(sellername, email, password, address):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address ) VALUES (?, ?, ?, ?)"
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery, (sellername, email, password, address ))
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:

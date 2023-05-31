@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount, insertUserAccount
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -21,22 +21,23 @@ pw = "password124"
 
 def getUserAccount(username):
     data = readUserAccount(username)
-    user = {}
-    print("user len")
-    data.moveToFirst()
-    print(len(data.fetchall()))
-    if len(data.fetchall()):
-        user = {}
-        user["user_id"] = data.fetchall()[0]
-        user["user_firstname"] = data.fetchall()[1]
-        user["user_lastname"] = data.fetchall()[2]
-        user["user_email"] = data.fetchall()[3]
-        user["user_password"] = data.fetchall()[4]
-        user["user_city"] = data.fetchall()[5]
-        user["user_state"] = data.fetchall()[6]
-        user["user_zip"] = data.fetchall()[7]
-        user["user_phone"] = data.fetchall()[8]
-        user["user_address"] = data.fetchall()[9]
+
+    keyList = ["user_id", "user_firstname", "user_lastname", "user_email", "user_password", "user_city", "user_state", "user_zip", "user_phone", "user_address", "login_status"]
+    user = {key: [] for key in keyList}
+
+    for row in data:
+        user['user_id'].append(row["user_id"])
+        user['user_firstname'].append(row["user_firstname"])
+        user['user_lastname'].append(row["user_lastname"])
+        user['user_email'].append(row["user_email"])
+        user['user_password'].append(row["user_password"])
+        user['user_city'].append(row["user_city"])
+        user['user_state'].append(row["user_state"])
+        user['user_zip'].append(row["user_zip"])
+        user['user_phone'].append(row["user_phone"])
+        user['user_address'].append(row["user_address"])
+
+    if user is not None:
         return user
     else:
         return "ERROR"
@@ -44,30 +45,82 @@ def getUserAccount(username):
 
 def validateCredentails(username, password):
     user = getUserAccount(username)
-    for item in user:
-        print(item)
     if user == "ERROR":
         return "ERROR: Username does not exist"
     else:
-        passwordEntered = cipher.encrypt(password)
-        print(user)
-        if passwordEntered == user["user_password"].decode('ascii'):
-            return "True"
-    return "False"
+        if password == cipher.decrypt(user["user_password"][0]).decode("ascii"):
+            status = "True"
+        else:
+            status = "False"
+    user["login_status"] = status
+    return user
+
+
 
 def validateRegistration(salutation, firstname, lastname, email, password, phonenumber):
-    status = addUserAccount(salutation, firstname, lastname, email, password, phonenumber)
-    if status == "False":
-        return "ERROR: Registration not successful"
-    else:
-        return "True"
+    encrypted_password = cipher.encrypt(password).decode("ascii")
+    status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber)
+    if status == "True":
+        user = getUserAccount(email)
+    user["login_status"] = status
+    return user
+    
+
+
 
 def addUserAccount(salutation, firstname, lastname, email, password, phonenumber):
     status = insertUserAccount(salutation, firstname, lastname, email, password, phonenumber)
     if status == "True":
-        #user = getUserAccount(email)
-        #user["login_status"]="True"
         return "True"
     else:
         return "False"
+  
+   
+def validateSellerRegistration(sellername, email, password, address):
+    encrypted_spassword = cipher.encrypt(password).decode("ascii")
+    status = addSellerAccount(sellername, email, encrypted_spassword, address)
+    if status == "False":
+        return "ERROR: Seller Registration not successful"
+    else:
+        return "True"
+
+
+def addSellerAccount(sellername, email, password, address):
+    status = insertSellerAccount(sellername, email, password, address)
+    if status == "True":
+        return "True"
+    else:
+        return "False"
+
+
+def getSellerAccount(username):
+    data = readSellerAccount(username)
+
+    keyList = ["seller_id", "seller_name", "seller_emai", "seller_password", "seller_address", "seller_address"]
+    seller = {key: [] for key in keyList}
+    for row in data:
+        seller['seller_id'].append(row["seller_id"])
+        seller['seller_name'].append(row["seller_name"])
+        seller['seller_emai'].append(row["seller_emai"])
+        seller['seller_password'].append(row["seller_password"])
+        seller['seller_address'].append(row["seller_address"])
+    if seller is not None:
+        return seller
+    else:
+        return "ERROR"
+
+
+def validateSellerCredentails(username, password):
+    seller = getSellerAccount(username)
+    if seller == "ERROR":
+        return "ERROR: Username does not exist"
+    else:
+        if password == cipher.decrypt(seller["user_password"][0]).decode("ascii"):
+            status = "True"
+        else:
+            status = "False"
+    seller["seller_login_status"] = status
+    return seller
+    
+
 
