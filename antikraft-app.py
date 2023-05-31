@@ -109,6 +109,11 @@ def signup():
 def sellersignup():
     return render_template('seller-signup/sellersignup.html')
 
+@app.route("/useraccount")
+def useraccount():
+    categories = getAllCategories()
+    return render_template('user-account/useraccount.html', categories=categories.json, user="None")
+    
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['search']

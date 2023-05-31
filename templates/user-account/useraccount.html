@@ -1,0 +1,118 @@
+{% include 'base.html' %}
+{% include 'header/header.html' %}
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container-sidebar {
+      display: flex;
+      height: 75vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+
+    .sidebar li button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      color: #333;
+      background-color: #f2f2f2;
+    }
+
+    .content h2 {
+      margin-top: 0;
+      display: none;
+    }
+
+    .content.active h2 {
+      display: block;
+    }
+  </style>
+  <div >
+    <h2 style=" margin-left:700px">User Account</h2>
+
+    </div>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const sidebarButtons = document.querySelectorAll('.sidebar li button');
+      const contentSections = document.querySelectorAll('.content h2');
+
+      sidebarButtons.forEach((button, index) => {
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          toggleActiveSection(index);
+        });
+      });
+
+      function toggleActiveSection(index) {
+        contentSections.forEach((section, sectionIndex) => {
+          if (sectionIndex === index) {
+            section.parentNode.classList.toggle('active');
+          } else {
+            section.parentNode.classList.remove('active');
+          }
+        });
+      }
+    });
+  </script>
+
+  <div class="container container-sidebar">
+    <div class="sidebar">
+      <ul>
+        <li><button>Personal Information</button></li>
+        <li><button>Order Details</button></li>
+        <li><button>Wish List</button></li>
+      </ul>
+    </div>
+    <div class="content">
+      <div>
+        <h2>Personal Information</h2>
+        <p>{% session.user_email %}</p>
+      </div>
+      <div>
+        <h2>Order Details</h2>
+        <p>Here you can view your past order details.</p>
+      </div>
+      <div>
+        <h2>Wish List</h2>
+        <p>Here you can view and manage your wish list.</p>
+      </div>
+    </div>
+  </div>
+
+
+
+{% include 'footer/footer.html' %}
