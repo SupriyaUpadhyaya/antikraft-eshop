@@ -1,5 +1,4 @@
 import sqlite3
-import sys
 
 
 def get_db_connection():
@@ -69,24 +68,39 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
         sub_category_row['product_price'].append(row["product_price"])
         sub_category_row['image_id'].append(row["image_id"])
         sub_category_row['url'].append(url)
-
+    
     if sub_category_row is not None:
         return sub_category_row
 
-
-def readOperationProductList(TABLE_NAME: str, COLS: str, CAT_ID: int, SUB_CAT_ID: int):
+def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, PRODUCT_ID:int):
     conn = get_db_connection()
-    if SUB_CAT_ID == 0:
-        query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID)
-    else:
-        query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " AND subcategory_id=" + str(SUB_CAT_ID)
+    query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " and sub_category_id=" + str(SUB_CAT_ID) + " and product_id=" + str(PRODUCT_ID)
+    
     data = conn.execute(query)
-    products = {}
-    for row in data:
-        products[row["product_id"]] = row["description"]
-    if products is not None:
-        return products
+  
+    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "seller_id", "stock", 
+               "posted_date", "offer_flag", "offer_percent", "image_id", "secondary_images", "url"]
+    product_row = {key: [] for key in keyList}
 
+    for row in data:
+        url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"]) + "&productid=" + str(row["product_id"])
+        product_row['category_id'].append(row["category_id"])
+        product_row['sub_category_id'].append(row["sub_category_id"])
+        product_row['product_id'].append(row["product_id"])
+        product_row['product_name'].append(row["product_name"])
+        product_row['product_description'].append(row["product_description"])
+        product_row['product_price'].append(row["product_price"])
+        product_row['seller_id'].append(row["seller_id"])
+        product_row['stock'].append(row["stock"])
+        product_row['posted_date'].append(row["posted_date"])
+        product_row['offer_flag'].append(row["offer_flag"])
+        product_row['offer_percent'].append(row["offer_percent"])
+        product_row['image_id'].append(row["image_id"])
+        product_row['secondary_images'].append(row["secondary_images"])
+        product_row['url'].append(url)
+
+    if product_row is not None:
+        return product_row
 
 def searchProductList(query):
     conn = get_db_connection()
