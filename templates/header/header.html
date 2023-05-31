@@ -52,7 +52,7 @@
                         <div class="col-2">
                             <li class="nav-item">
                                 <a class="nav-link link-dark" style="text-decoration: underline;"
-                                    href="http://127.0.0.1:5000/user-account">
+                                    href="http://127.0.0.1:5000/useraccount">
                                     <h6>Hello {{session.user_firstname[0]}}!</h6>
                                 </a>
                             </div>
@@ -66,12 +66,12 @@
                         </div>
                         {% endif %}
                         <li class="nav-item">
-                            <button class="btn border-0" type="button"><img class="img-fluid" max-width=20px height=20px
-                                    id="search-logo" src="static/header/Globe.svg" /></button>
-                            <button class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
-                                    id="search-logo" src="static/header/Heart.svg" /></button>
-                            <button class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
-                                    id="search-logo" src="static/header/Cart.png" /></button>
+                            <a class="btn border-0" type="button"><img class="img-fluid" max-width=20px height=20px
+                                    id="search-logo" src="static/header/Globe.svg" /></a>
+                            <a class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
+                                    id="search-logo" src="static/header/Heart.svg" /></a>
+                            <a class="btn border-0" type="button" href="http://127.0.0.1:5000/checkout" ><img class="img-fluid" max-width=100% height=auto
+                                    id="search-logo" src="static/header/Cart.png"/></a>
                         </li>
 
                     </ul>

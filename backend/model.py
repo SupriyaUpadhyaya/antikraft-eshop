@@ -1,5 +1,4 @@
 import sqlite3
-import sys
 
 
 def get_db_connection():
@@ -21,6 +20,7 @@ def readOperationCategory(TABLE_NAME: str, CAT_ID: int):
     if category_row is not None:
         return category_row
 
+
 def readOperationCategoryImages(TABLE_NAME: str, CAT_ID: int):
     conn = get_db_connection()
     query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID)
@@ -39,6 +39,7 @@ def readOperationCategoryImages(TABLE_NAME: str, CAT_ID: int):
     if sub_category_row is not None:
         return sub_category_row
 
+
 def readOperation(TABLE_NAME: str, COLS: str):
     conn = get_db_connection()
     query = "SELECT * from " + TABLE_NAME
@@ -56,7 +57,7 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
     
     data = conn.execute(query)
   
-    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "image_id", "url"]
+    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "image_id", "url"]
     sub_category_row = {key: [] for key in keyList}
 
     for row in data:
@@ -137,4 +138,79 @@ def insertSellerAccount(sellername, email, password, address):
         print(error)
         status = "False"
     return status
-   
+
+
+def addItemToNewOrder(userid, productid, selling_price, quantity):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO ORDER (order_id, user_id, quantity, selling_price, order_status, product_id) VALUES (?, ?, ?, ?, ?)"
+    try:
+        order_id = 1
+        conn.execute(sqlquery, (order_id, userid, quantity, selling_price, "incomplete", productid))
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+
+
+def getOrderID(userid):
+    conn = get_db_connection()
+    sqlquery = "SELECT order_id from ORDER where user_id=" + int(userid)
+    orderid = conn.execute(sqlquery)
+    return orderid
+
+
+def getPrice(productid):
+    conn = get_db_connection()
+    sqlquery = "SELECT product_price from PRODUCT where product_id=" + int(productid)
+    price = conn.execute(sqlquery)
+    return price
+
+
+def getProductsFromOrder(orderid, productid):
+    conn = get_db_connection()
+    sqlquery = "SELECT count(*) from ORDER where product_id=" + int(productid) + " AND order_id=" + int(orderid)
+    count = conn.execute(sqlquery)
+    return count
+
+
+def updateExistingItem(orderid, productid, selling_price, quantity):
+    conn = get_db_connection()
+    sqlquery = "UPDATE ORDER SET quantity = ? AND selling_price = ? where order_id=? and product_id=?"
+    try:
+        conn.execute(sqlquery, (quantity, selling_price, orderid, productid))
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+
+
+def addNewItemToOrder(orderid, userid, productid, selling_price, quantity):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO ORDER (order_id, user_id, quantity, selling_price, order_status, product_id) VALUES (?, ?, ?, ?, ?, ?)"
+    try:
+        conn.execute(sqlquery, (orderid, userid, quantity, selling_price, "incomplete", productid))
+        conn.close()
+        status = "True" 
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+
+
+def readOrder(userid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from ORDERS where user_id='" + str(userid) + "' AND order_status='incomplete'"
+    data = conn.execute(sqlquery)
+    return data
+
+
+def validateOrderId(orderid):
+    conn = get_db_connection()
+    sqlquery = "SELECT count(*) from ORDERS where order_id='" + str(orderid) + "'"
+    count = conn.execute(sqlquery)
+    return count
+

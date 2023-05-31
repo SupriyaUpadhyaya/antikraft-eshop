@@ -22,7 +22,7 @@ pw = "password124"
 def getUserAccount(username):
     data = readUserAccount(username)
 
-    keyList = ["user_id", "user_firstname", "user_lastname", "user_email", "user_password", "user_city", "user_state", "user_zip", "user_phone", "user_address", "login_status"]
+    keyList = ["user_id", "user_firstname", "user_lastname", "user_email", "user_password", "user_city", "user_state", "user_zip", "user_phone", "user_address", "login_status", "user_salutation"]
     user = {key: [] for key in keyList}
 
     for row in data:
@@ -36,6 +36,7 @@ def getUserAccount(username):
         user['user_zip'].append(row["user_zip"])
         user['user_phone'].append(row["user_phone"])
         user['user_address'].append(row["user_address"])
+        user['user_salutation'].append(row["user_salutation"])
 
     if user is not None:
         return user
@@ -56,7 +57,6 @@ def validateCredentails(username, password):
     return user
 
 
-
 def validateRegistration(salutation, firstname, lastname, email, password, phonenumber):
     encrypted_password = cipher.encrypt(password).decode("ascii")
     status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber)
@@ -65,8 +65,6 @@ def validateRegistration(salutation, firstname, lastname, email, password, phone
     user["login_status"] = status
     return user
     
-
-
 
 def addUserAccount(salutation, firstname, lastname, email, password, phonenumber):
     status = insertUserAccount(salutation, firstname, lastname, email, password, phonenumber)
