@@ -18,7 +18,6 @@
       background-color: #000;
     }
   </style>
-<<<<<<< Updated upstream
 </div>
 
 <div class="container">
@@ -30,56 +29,6 @@
           <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Wishlist</a>
           <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Password Reset</a>
         </div>
-=======
-  <div >
-    <h2 style=" margin-left:700px">User Account</h2>
-
-    </div>
-
-
-
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const sidebarButtons = document.querySelectorAll('.sidebar li button');
-      const contentSections = document.querySelectorAll('.content h2');
-
-      sidebarButtons.forEach((button, index) => {
-        button.addEventListener('click', (event) => {
-          event.preventDefault();
-          toggleActiveSection(index);
-        });
-      });
-
-      function toggleActiveSection(index) {
-        contentSections.forEach((section, sectionIndex) => {
-          if (sectionIndex === index) {
-            section.parentNode.classList.toggle('active');
-          } else {
-            section.parentNode.classList.remove('active');
-          }
-        });
-      }
-    });
-  </script>
-
-  <div class="container container-sidebar">
-    <div class="sidebar">
-      <ul>
-        <li><button>Personal Information</button></li>
-        <li><button>Order Details</button></li>
-        <li><button>Wish List</button></li>
-      </ul>
-    </div>
-    <div class="content">
-      <div>
-        <h2>Personal Information</h2>
-        <p>{{ session.user_email[0] }}</p>
-        <p>{{ session.user_firstname[0] }}</p>
-      </div>
-      <div>
-        <h2>Order Details</h2>
-        <p>Here you can view your past order details.</p>
->>>>>>> Stashed changes
       </div>
       <div class="col-md-9">
         <div class="tab-content" id="v-pills-tabContent">
