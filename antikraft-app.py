@@ -2,6 +2,7 @@ import json
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
+from backend.controllers.cart import getOrder
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -198,6 +199,12 @@ def sellerPasswordReset():
 @app.route('/userPasswordReset')
 def userPasswordReset():
     return render_template('password-rest/user-password-reset.html', error="False")
+
+@app.route('/checkout')
+def checkout():
+    categories = getAllCategories()
+    order = getOrder(session["user_id"])
+    return render_template('checkout/checkout.html', categories=categories.json, order=order)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
