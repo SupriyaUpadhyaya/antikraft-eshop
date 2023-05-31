@@ -57,7 +57,7 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
     
     data = conn.execute(query)
   
-    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "image_id", "url"]
+    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_price", "product_description", "image_id", "url"]
     sub_category_row = {key: [] for key in keyList}
 
     for row in data:
