@@ -1,55 +1,165 @@
 {% include 'base.html' %}
 
 <style>
+    .separator_2 {
+        display: flex;
+        align-items: center;
+        flex: 2;
+        border-bottom: 1px solid #000;
+        margin-top: 4px;
+        margin-bottom: 2px;
 
+    }
+
+    .arrow {
+        border: solid black;
+        border-width: 0 2px 2px 0;
+        display: inline-block;
+        padding: 2px;
+        margin-left: 5px;
+        margin-top: 0px;
+    }
+
+    .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+
+    .grid-item {
+        border: none;
+    }
+
+    .grid {
+        border: none;
+    }
 </style>
 
+<script type="text/javascript">
+    $(document).on("change", ".sort_by", function () {
+        var sortingMethod = $(this).val();
+
+        if (sortingMethod == '1') { sortProductsPriceAscending(); }
+        else if (sortingMethod == '2') { sortProductsPriceDescending(); }
+        else if (sortingMethod == '3') { sortProductsName(); }
+        else {
+            $(".grid").load(location.href + " .grid>*", "");
+        }
+    });
+
+    function sortProductsName() {
+        var gridItems = $('.grid-item');
+        gridItems.sort(function (a, b) {
+            console.log(a.getAttribute('data-name'))
+            return a.getAttribute('data-name') > b.getAttribute('data-name')
+        });
+
+        $(".grid").append(gridItems);
+    }
+
+    function sortProductsPriceAscending() {
+        var gridItems = $('.grid-item');
+        gridItems.sort(function (a, b) {
+            return $('.product-card', a).data("price") - $('.product-card', b).data("price");
+        });
+
+        $(".grid").append(gridItems);
+    }
+
+    function sortProductsPriceDescending() {
+        var gridItems = $('.grid-item');
+        gridItems.sort(function (a, b) {
+            return $('.product-card', b).data("price") - $('.product-card', a).data("price");
+        });
+
+        $(".grid").append(gridItems);
+    }
+</script>
 
 {% include 'header/header.html' %}
 
 <div class="container">
     <div class="row">
-        <div class="col-5">
-            <hr class="hr" style="background-color: #000; opacity: 1;" />
-        </div>
-        <div class="col-2">
-            <h3 style="text-align: center; text-transform: uppercase;">{{category_name}} / {{sub_category_name}}</h3>
-        </div>
-        <div class="col-5">
-            <hr class="hr" style="background-color: #000; opacity: 1;" />
+        <div>
+            <ul>
+                <h5 style="text-align: left; text-transform: uppercase;">{{category_name}} > {{sub_category_name}}</h5>
+            </ul>
         </div>
     </div>
 
-    <div>
-        <ul style="display: flex; justify-content:space-between; margin-bottom: 100px; margin-top: 50px;">
-            <a class="nav-link" href="Document URL" style="text-align: center; margin-right: auto; margin-left: auto; ">
-                <img src={{product_image_list[0]}} width="180px" height="180px" style="margin-top: 10px;">
-                <br></br>
-                {{sub_cat_product_list[0]}}
-            </a>
-            <a class="nav-link" href="Document URL" style="text-align: center; margin-right: auto; margin-left: auto; ">
-                <img src={{product_image_list[1]}} width="180px" height="180px" style="margin-top: 150px;">
-                <br></br>
-                {{sub_cat_product_list[1]}}
-            </a>
-            <a class="nav-link" href="Document URL" style="text-align: center; margin-right: auto; margin-left: auto; ">
-                <img src={{product_image_list[2]}} width="180px" height="180px" style="margin-top: 10px;">
-                <br></br>
-                {{sub_cat_product_list[2]}}
-            </a>
-            <a class="nav-link" href="Document URL" style="text-align: center; margin-right: auto; margin-left: auto; ">
-                <img src={{product_image_list[3]}} width="180px" height="180px" style="margin-top: 150px;">
-                <br></br>
-                {{sub_cat_product_list[3]}}
-            </a>
-            <a class="nav-link" href="Document URL" style="text-align: center; margin-right: auto; margin-left: auto; ">
-                <img src={{product_image_list[4]}} width="180px" height="180px" style="margin-top: 10px;">
-                <br></br>
-                {{sub_cat_product_list[4]}}
-            </a>
-        </ul>
-    </div>
+    <div class="separator_2"></div>
 
-    {% include 'footer/footer.html' %}
+    <div class="container">
+        <div class="col-3 my-3"><label style="text-align: left; font-weight: bold; margin-left: 12px;">SORT BY</label><i
+                class="arrow down"></i>
+            <select class="form-control col-3 sort_by" style="border: none; font-weight: bold;">
+                <option value="">None</option>
+                <option value="1">Price Low to High</option>
+                <option value="2">Price High to Low</option>
+                <option value="3">Product Name</option>
+            </select>
+        </div>
+
+        <div class="row grid my-50">
+            <div class="col-md-4 grid-item">
+                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[0]}}
+                    data-name={{product_name_list[0]}}>
+                    <div class="text-center">
+                        <img src={{product_image_list[0]}} width="200">
+                    </div>
+                    <div class="product-details text-center">
+                        <span class="font-weight-bold d-block">€{{product_price_list[0]}}</span>
+                        <span>{{product_name_list[0]}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-item">
+                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[1]}}>
+                    <div class="text-center">
+                        <img src={{product_image_list[1]}} width="200">
+                    </div>
+                    <div class="product-details text-center">
+                        <span class="font-weight-bold d-block">€{{product_price_list[1]}}</span>
+                        <span>{{product_name_list[1]}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-item">
+                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[2]}}>
+                    <div class="text-center">
+                        <img src={{product_image_list[2]}} width="200">
+                    </div>
+                    <div class="product-details text-center">
+                        <span class="font-weight-bold d-block">€{{product_price_list[2]}}</span>
+                        <span>{{product_name_list[2]}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-item">
+                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[3]}}>
+                    <div class="text-center">
+                        <img src={{product_image_list[3]}} width="200">
+                    </div>
+                    <div class="product-details text-center">
+                        <span class="font-weight-bold d-block">€{{product_price_list[3]}}</span>
+                        <span>{{product_name_list[3]}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-item">
+                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[4]}}>
+                    <div class="text-center">
+                        <img src={{product_image_list[4]}} width="200">
+                    </div>
+                    <div class="product-details text-center">
+                        <span class="font-weight-bold d-block">€{{product_price_list[4]}}</span>
+                        <span>{{product_name_list[4]}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
+{% include 'footer/footer.html' %}
+</div>

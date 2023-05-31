@@ -48,11 +48,14 @@ def getSpecificSubCategory():
     sub_cat_name = getSpecificCategoryImages(category_id)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]
     categories = getAllCategories()
-    return render_template('subcategory/subcategory_landing_page.html', categories=categories.json, \
-                           category_name=category_table_row.json['category_name'], \
-                           sub_category_name=sub_cat_name, \
-                           sub_cat_product_list=sub_cat_json['product_name'], \
-                           product_image_list=sub_cat_json['image_id'])
+    return render_template('subcategory/subcategory_landing_page.html', categories = categories.json, \
+                           category_name = category_table_row.json['category_name'], \
+                           sub_category_name = sub_cat_name, \
+                           product_count = len(sub_cat_json['category_id']), \
+                           product_name_list = sub_cat_json['product_name'], \
+                           product_image_list = sub_cat_json['image_id'], \
+                           product_price_list = sub_cat_json['product_price'], \
+                           range=range)
 
 def getSubCategoryJson(category_id, sub_category_id):
     spec_cat = getSubCategoryProductList(category_id, sub_category_id)
