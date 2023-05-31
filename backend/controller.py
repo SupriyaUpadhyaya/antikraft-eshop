@@ -1,5 +1,6 @@
 from flask import Flask
-from backend.model import readOperation, readOperationProductList, searchProductList, readOperationCategory, readOperationCategoryImages, readOperationSubCategory
+from backend.model import readOperation, searchProductList, readOperationCategory, readOperationCategoryImages, \
+                          readOperationSubCategory, readOperationProduct
 
 def getAllCategoriesList():
     data = {}
@@ -24,17 +25,11 @@ def getSubCategoryProductList(category_id, sub_category_id):
         
     return data
 
-def getCategoryProductsList(catId):
+def getProductData(category_id, sub_category_id, product_id):
     data = {}
-    data = readOperationProductList("PRODUCT", "*", catId, 0)
+    data = readOperationProduct("PRODUCT", category_id, sub_category_id, product_id)
+        
     return data
-
-
-def getSubCategoryProductsList(catId, subCatId):
-    data = {}
-    data = readOperationProductList("PRODUCT", "*", catId, subCatId)
-    return data
-
 
 def getSearch(query):
     if not query:
@@ -42,12 +37,13 @@ def getSearch(query):
         return "Error"
     elif query:
         data = searchProductList(query)
+        
         products = {}
         i = 1
         for row in data:
             block = {}
-            url = "http://127.0.0.1:5000/category?productid=" + str(row["product_id"])
-            block["product_id"] = row["product_id"]
+            url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" +  str(row["sub_category_id"]) + "&productid=" + str(row["product_id"])
+            block["product_serial_number"] = row["product_serial_number"]
             block["product_name"] = row["product_name"]
             block["product_description"] = row["product_description"]
             block["image_id"] = row["image_id"]

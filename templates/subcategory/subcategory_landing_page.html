@@ -76,7 +76,7 @@
 </script>
 
 {% include 'header/header.html' %}
-
+{{product_id_list[0]}}
 <div class="container">
     <div class="row">
         <div>
@@ -104,7 +104,11 @@
                 <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[0]}}
                     data-name={{product_name_list[0]}}>
                     <div class="text-center">
-                        <img src={{product_image_list[0]}} width="200">
+                        <a class="nav-link"
+                            href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[0]}}"
+                            style="text-align: center; margin-right: auto; margin-left: auto;">
+                            <img src={{product_image_list[0]}} width="200">
+                        </a>
                     </div>
                     <div class="product-details text-center">
                         <span class="font-weight-bold d-block">€{{product_price_list[0]}}</span>
@@ -115,7 +119,11 @@
             <div class="col-md-4 grid-item">
                 <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[1]}}>
                     <div class="text-center">
-                        <img src={{product_image_list[1]}} width="200">
+                        <a class="nav-link"
+                            href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[1]}}"
+                            style="text-align: center; margin-right: auto; margin-left: auto; ">
+                            <img src={{product_image_list[1]}} width="200">
+                        </a>
                     </div>
                     <div class="product-details text-center">
                         <span class="font-weight-bold d-block">€{{product_price_list[1]}}</span>
@@ -126,7 +134,11 @@
             <div class="col-md-4 grid-item">
                 <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[2]}}>
                     <div class="text-center">
-                        <img src={{product_image_list[2]}} width="200">
+                        <a class="nav-link"
+                            href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[2]}}"
+                            style="text-align: center; margin-right: auto; margin-left: auto; ">
+                            <img src={{product_image_list[2]}} width="200">
+                        </a>
                     </div>
                     <div class="product-details text-center">
                         <span class="font-weight-bold d-block">€{{product_price_list[2]}}</span>
@@ -137,7 +149,11 @@
             <div class="col-md-4 grid-item">
                 <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[3]}}>
                     <div class="text-center">
-                        <img src={{product_image_list[3]}} width="200">
+                        <a class="nav-link"
+                            href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[3]}}"
+                            style="text-align: center; margin-right: auto; margin-left: auto; ">
+                            <img src={{product_image_list[3]}} width="200">
+                        </a>
                     </div>
                     <div class="product-details text-center">
                         <span class="font-weight-bold d-block">€{{product_price_list[3]}}</span>
@@ -148,7 +164,11 @@
             <div class="col-md-4 grid-item">
                 <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[4]}}>
                     <div class="text-center">
-                        <img src={{product_image_list[4]}} width="200">
+                        <a class="nav-link"
+                            href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[4]}}"
+                            style="text-align: center; margin-right: auto; margin-left: auto; ">
+                            <img src={{product_image_list[4]}} width="200">
+                        </a>
                     </div>
                     <div class="product-details text-center">
                         <span class="font-weight-bold d-block">€{{product_price_list[4]}}</span>

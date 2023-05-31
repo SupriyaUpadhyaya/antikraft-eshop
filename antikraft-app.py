@@ -47,7 +47,6 @@ def getSpecificSubCategory():
     sub_cat_product_json = getSubCategoryJson(category_id, sub_category_id)
     category_table_row = getSpecificCategoryRow(category_id)
     sub_cat_json = sub_cat_product_json.json
-    # print("sub_cat_json", sub_cat_json)
     sub_cat_name = getSpecificCategoryImages(category_id)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]
     categories = getAllCategories()
@@ -87,22 +86,15 @@ def getSpecificProduct():
     category_table_row = getSpecificCategoryRow(category_id)
     cat_name = category_table_row.json['category_name']
 
-    # sub_cat_product_json = getSubCategoryJson(category_id, sub_category_id)
-    # sub_cat_json = sub_cat_product_json.json
-
     sub_cat_name = getSpecificCategoryImages(category_id)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]    
 
     product_json = getProductJson(category_id, sub_category_id, product_id)
     product_json = product_json.json
 
-    print("product_json", product_json)
-
     sec_images = product_json['secondary_images'][0]
-    # print("sec_images", sec_images)
     li_sec_images = sec_images.split(';')
-    # print("li_sec_images", li_sec_images)
-
+    
     return render_template('product/product_page.html', categories = categories.json, \
                            category_name = cat_name, \
                            sub_category_name = sub_cat_name, \
@@ -121,7 +113,7 @@ def getSpecificProduct():
 
 def getProductJson(category_id, sub_category_id, product_id):
     spec_cat = getProductData(category_id, sub_category_id, product_id)
-    print("spec_cat", spec_cat)
+    
     response = app.response_class(
         response=json.dumps(spec_cat),
         status=200,

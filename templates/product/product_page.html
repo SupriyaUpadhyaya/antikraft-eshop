@@ -1,0 +1,90 @@
+{% include 'base.html' %}
+<style>
+    .separator_2 {
+        display: flex;
+        align-items: center;
+        flex: 2;
+        border-bottom: 1px solid #000;
+        margin-top: 4px;
+        margin-bottom: 2px;
+
+    }
+
+    #product-banner.carousel-item.img-fluid {
+        object-fit: cover;
+        height: 300px;
+        padding-bottom: 20px;
+    }
+
+    .carousel-control-next,
+    .carousel-control-prev {
+        filter: invert(100%);
+    }
+</style>
+{% include 'header/header.html' %}
+
+<div class="container">
+    <div class="row">
+        <div>
+            <ul>
+                <h5 style="text-align: left; text-transform: uppercase;">{{category_name}} > {{sub_category_name}} >
+                    {{product_name[0]}}</h5>
+            </ul>
+        </div>
+    </div>
+    <div class="separator_2"></div>
+
+    <div class="container banner">
+        <div class="row">
+            <div class="col-3">
+
+                <div id="product-banner" class="carousel slide" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="0" class="active"
+                            aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="2"
+                            aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="3"
+                            aria-label="Slide 4"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="4"
+                            aria-label="Slide 5"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a><img class="w-100 img-fluid" id="banner" src={{product_main_image[0]}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" src={{product_sec_image1}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" src={{product_sec_image2}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" src={{product_sec_image3}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" src={{product_sec_image4}}></img></a>
+
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#product-banner"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#product-banner"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer/footer.html' %}
+</div>
