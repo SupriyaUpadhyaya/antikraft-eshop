@@ -1,6 +1,5 @@
 import sqlite3
 
-
 def get_db_connection():
     conn = sqlite3.connect('antiqkraft-database.db', isolation_level=None)
     conn.row_factory = sqlite3.Row
@@ -175,12 +174,13 @@ def insertSellerAccount(sellername, email, password, address):
     return status
 
 
-def addItemToNewOrder(userid, productid, selling_price, quantity):
+def addItemToNewOrder(orderid, userid, productid, selling_price, quantity):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO ORDER (order_id, user_id, quantity, selling_price, order_status, product_serial_number) VALUES (?, ?, ?, ?, ?)"
+    status_s = "incomplete"
+    sqlquery = "INSERT INTO ORDERS (order_id, user_id, quantity, selling_price, order_status, product_serial_number) VALUES (" + str(orderid) + ", " + str(userid) + ", " + str(quantity) + ", " + str(selling_price) + ", " + "'" + status_s + "'" + ", " + str(productid)+ ")"
     try:
-        order_id = 1
-        conn.execute(sqlquery, (order_id, userid, quantity, selling_price, "incomplete", productid))
+        print(sqlquery)
+        conn.execute(sqlquery)
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
@@ -282,5 +282,13 @@ def getImageUrl(productid):
     url = conn.execute(sqlquery)
     print(url)
     return url
+
+def getQuantity(productid, orderid):
+    conn = get_db_connection()
+    sqlquery = "SELECT quantity from ORDERS where product_serial_number='" + str(productid) + "' and order_id=" + str(orderid)
+    url = conn.execute(sqlquery)
+    print(url)
+    return url
+
 
 
