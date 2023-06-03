@@ -1,11 +1,14 @@
-from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl
+from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity
 from flask import session
-import uuid
+import random
 
 
 def addItemToCart(productid, quantity):
     userid = session["user_id"][0]
-    orderid = int(session["order_id"])
+    if session["order_id"] == 'None':
+        orderid = 'None'
+    else:
+        orderid = int(session["order_id"])
     sp = getPrice(productid)
     for i in sp:
         selling_price = i[0]
@@ -14,13 +17,18 @@ def addItemToCart(productid, quantity):
         orderid = 0
         orderExists = "True"
         while orderExists == "True":
-            orderid = uuid.uuid4()
-            count = validateOrderId(orderid)
+            orderid = random.randint(1111,9999)
+            print(orderid)
+            val = validateOrderId(orderid)
+            for i in val:
+                count = i[0]
+                print(count)
             if count == 0:
                 orderExists = "False" 
         addItemToNewOrder(orderid, userid, productid, selling_price, quantity)
         session["order-id"] = orderid
         session["total-items"] = 1
+        refreshCart(orderid)
     else:
         count = getProductsFromOrder(orderid, productid)
         for i in count:
@@ -32,6 +40,7 @@ def addItemToCart(productid, quantity):
 
         session["order-id"] = orderid
         session["total-items"] = count
+        refreshCart(orderid)
     return "True"
     
 
@@ -74,4 +83,29 @@ def deleteItemFromCart(productid):
     print(userid)
     orderid = int(session["order_id"])
     deleteItemFromOrder(orderid, userid, productid)
+    refreshCart(orderid)
     return "True"
+
+def refreshCart(orderid):
+    # cart = readOrderItemsForProductPage(orderid)
+    # order = []
+    # for item in cart:
+    #     items = {}
+    #     items["product_serial_number"] = item['product_serial_number']
+    #     items["quantity"] = item['quantity']
+    #     order.append(items)
+    order = readOrderForHeaderCart(session["user_email"][0])
+    order_id = 'None'
+    item_count = '0'
+    if order.rowcount != 0:
+        for i in order:
+            order_id = i['order_id']
+            item_count = i['item_count']
+            print("order id is")
+            print(order_id)
+    session["total_items"] = item_count
+
+
+def getCurrentQuantityForAProduct(productid):
+    quantity = getQuantity(productid, session['order_id'])
+    return quantity
