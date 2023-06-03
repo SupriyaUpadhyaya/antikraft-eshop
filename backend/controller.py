@@ -1,6 +1,6 @@
 from flask import Flask
 from backend.model import readOperation, searchProductList, readOperationCategory, readOperationCategoryImages, \
-                          readOperationSubCategory, readOperationProduct
+                          readOperationSubCategory, readOperationProduct, readOperationProductRatings
 
 def getAllCategoriesList():
     data = {}
@@ -28,6 +28,12 @@ def getSubCategoryProductList(category_id, sub_category_id):
 def getProductData(category_id, sub_category_id, product_id):
     data = {}
     data = readOperationProduct("PRODUCT", category_id, sub_category_id, product_id)
+        
+    return data
+
+def getProductRatings(product_serial_number):
+    data = {}
+    data = readOperationProductRatings("RATINGS", product_serial_number)
         
     return data
 

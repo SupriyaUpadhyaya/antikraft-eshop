@@ -105,6 +105,25 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, PRODUCT_
     if product_row is not None:
         return product_row
 
+def readOperationProductRatings(TABLE_NAME: str, PRODUCT_S_N:int):
+    conn = get_db_connection()
+    query = "SELECT * from " + TABLE_NAME + " where product_serial_number=" + str(PRODUCT_S_N)
+
+    data = conn.execute(query)
+
+    keyList = ["rating_id", "rating_score", "product_serial_number", "comments", "user_id"]
+    ratings_row = {key: [] for key in keyList}
+
+    for row in data:
+        ratings_row['rating_id'].append(row["rating_id"])
+        ratings_row['rating_score'].append(row["rating_score"])
+        ratings_row['product_serial_number'].append(row["product_serial_number"])
+        ratings_row['comments'].append(row["comments"])
+        ratings_row['user_id'].append(row["user_id"])
+
+    if ratings_row is not None:
+        return ratings_row
+    
 def searchProductList(query):
     conn = get_db_connection()
     sqlquery = "SELECT * from PRODUCT where product_description LIKE '%" + str(query) + "%' OR product_name LIKE '%" + str(query) + "%'"

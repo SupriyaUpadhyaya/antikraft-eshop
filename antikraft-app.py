@@ -1,6 +1,7 @@
 import json
+from statistics import mean, math
 from flask import Flask, jsonify, redirect, render_template, request, session
-from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData
+from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart
 
@@ -73,8 +74,6 @@ def getSubCategoryJson(category_id, sub_category_id):
 
     return response
 
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/product")
 def getSpecificProduct():
@@ -95,16 +94,30 @@ def getSpecificProduct():
     sec_images = product_json['secondary_images'][0]
     li_sec_images = sec_images.split(';')
 
-    quantity = request.args.get('quantity')
-    print("quantity", quantity)
-    
+    product_sn = product_json['product_serial_number']
+    product_sn = product_sn[0]
+
+    product_rating_json = getProductRatingsJson(product_sn)
+    product_rating_json = product_rating_json.json
+    rating_score_li = product_rating_json['rating_score']
+    print(product_rating_json)
+    print(product_rating_json['rating_score'])
+    no_of_ratings = len(rating_score_li)
+
+    if rating_score_li == []:
+        avg_rating_score = 0
+    else:
+        avg_rating_score = mean(rating_score_li)
+        avg_rating_score = round(avg_rating_score)
+        print("avg_rating_score", avg_rating_score)
+        
     return render_template('product/product_page.html', categories = categories.json, \
                            category_name = cat_name, \
                            sub_category_name = sub_cat_name, \
                            sub_category_id = sub_category_id, \
                            category_id = category_id, \
                            product_id = product_json['product_id'], \
-                           product_sn = product_json['product_serial_number'], \
+                           product_sn = product_sn, \
                            product_name = product_json['product_name'], \
                            product_price = product_json['product_price'], \
                            product_stock = product_json['stock'], \
@@ -113,12 +126,25 @@ def getSpecificProduct():
                            product_sec_image2 = li_sec_images[1], \
                            product_sec_image3 = li_sec_images[2], \
                            product_sec_image4 = li_sec_images[3], \
-                           product_description = product_json['product_description'], \
+                           product_description = product_json['product_description'],\
+                           avg_rating_score = avg_rating_score,\
+                           no_of_ratings = no_of_ratings, \
                            range=range)
 
 
 def getProductJson(category_id, sub_category_id, product_id):
     spec_cat = getProductData(category_id, sub_category_id, product_id)
+    
+    response = app.response_class(
+        response=json.dumps(spec_cat),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
+
+def getProductRatingsJson(product_sn):
+    spec_cat = getProductRatings(product_sn)
     
     response = app.response_class(
         response=json.dumps(spec_cat),

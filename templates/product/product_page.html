@@ -21,33 +21,6 @@
         filter: invert(100%);
     }
 
-    #myform {
-        text-align: center;
-        border: none;
-    }
-
-    .qty {
-        width: 40px;
-        height: 40px;
-        text-align: center;
-        font-weight: bold;
-
-    }
-
-    input.qtyplus {
-        width: 25px;
-        height: 25px;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    input.qtyminus {
-        width: 25px;
-        height: 25px;
-        text-align: center;
-        font-weight: bold;
-    }
-
     .button {
         background-color: #000000;
         color: rgb(255, 255, 255);
@@ -61,32 +34,24 @@
         border: 2px solid black;
     }
 
-    .stock {
-        color: green;
-        /* Style for in-stock items */
+    /* Define star rating styles */
+    .star-rating {
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
     }
 
-    .stock.out-of-stock {
-        color: red;
-        /* Style for out-of-stock items */
-    }
-
-    .rating {
+    #span1 {
+        font-size: 30px;
         color: gold;
-        /* Default star color */
-    }
-
-    .star {
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        background: url(https://www.sabre-roads.org.uk/wiki/images/d/d1/Star_grey.png) no-repeat;
-        background-size: contain;
+        position: relative;
     }
-
-    .star.selected {
-        background-image: url(https://upload.wikimedia.org/wikipedia/commons/2/29/Gold_Star.svg);
+    #span2 {
+        font-size: 30px;
+        color: rgba(145, 144, 143, 0.505);
+        display: inline-block;
+        position: relative;
     }
 
     input[type=number]::-webkit-inner-spin-button {
@@ -94,32 +59,6 @@
     }
 </style>
 <script>
-    jQuery(document).ready(($) => {
-        $('.quantity').on('click', '.plus', function (e) {
-            let $input = $(this).prev('input.qty');
-            let val = parseInt($input.val());
-            $input.val(val + 1).change();
-        });
-
-        $('.quantity').on('click', '.minus',
-            function (e) {
-                let $input = $(this).next('input.qty');
-                var val = parseInt($input.val());
-                if (val > 0) {
-                    $input.val(val - 1).change();
-                }
-            });
-    });
-
-    // Function to update the stock counter
-    function updateStockCounter(stockQuantity) {
-        const stockQuantityElement = document.getElementById('stock-quantity');
-        stockQuantityElement.textContent = stockQuantity;
-
-        if (stockQuantity === 0) {
-            stockContainer.classList.add('out-of-stock');
-        }
-    }
     // Function to handle star rating selection
     function handleStarRating(event) {
         const selectedStar = event.target;
@@ -211,7 +150,7 @@
                     </button>
                 </div>
             </div>
-            <!-- Change the `data-field` of buttons and `name` of input field's for multiple plus minus buttons-->
+
             <div class="col-4" style="margin-top: 25px; margin-left: 100px;">
                 <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:x-large;">Price:
                     €{{product_price[0]}}
@@ -219,40 +158,60 @@
 
                 <div class="col-3 input-group mb-3"
                     style="margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;"><label
-                        style="margin-top: 30px; text-align: left; font-weight: bold;">ORDER QUANTITY: </label>
+                        style="margin-top: 30px; text-align: left; font-weight: bold;">Order Quantity: </label>
 
                     <form action="updateQuantity" method="POST">
                         <div class="col-3 input-group mb-3">
 
                             <input
                                 style="font-size: large; margin-left: 20px; margin-top: 30px; height: 35px; width: 100px;  text-align: center;"
-                                type="number" id="typeNumber" name="quantity" class="form-control rounded" value=1>
+                                type="number" id="typeNumber" name="quantity" class="form-control rounded" min="0"
+                                max={{product_stock[0]}} value=0>
 
                             </input>
-                            <input type="hidden" id="typeNumber" name="product_serial_number"
-                                        class="form-control" value={{product_sn[0]}}
-                                        style="font-size: x-small;"> </input>
+                            <input type="hidden" id="typeNumber" name="product_serial_number" class="form-control"
+                                value={{product_sn[0]}} style="font-size: x-small;"> </input>
                         </div>
 
-
-
                 </div>
-                <div class="stock" style="margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">In
-                    Stock: <span id="stock-quantity">{{product_stock[0]}}</span>
+                <div id="stockStatus"
+                    style="color: red; margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">
+                    {% if product_stock[0] == 0 %}
+                    Out of Stock
+                    {% endif %}
+                </div>
+                <div id="stockStatus"
+                    style="color: rgb(0, 0, 0); margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">
+                    {% if product_stock[0] > 0 %}
+                    In Stock: {{product_stock[0]}}
+                    {% endif %}
                 </div>
 
-                <div class="rating" style="margin-top: 20px; margin-left: 80px;">
-                    <span class="star" data-value="1"></span>
-                    <span class="star" data-value="2"></span>
-                    <span class="star" data-value="3"></span>
-                    <span class="star" data-value="4"></span>
-                    <span class="star" data-value="5"></span>
+                <div class="star-rating" >
+                    <div style="margin-top: 20px; margin-left: -37px;">
+                        <label style="text-align:left;">
+                            &nbsp;{{no_of_ratings}}
+                            <span style="float:right;">
+                                &nbsp;ratings
+                            </span>
+                        </label>
+                        
+                        {% for rating in range(0,5-avg_rating_score) %}
+                        <span id="span2">&#x2605;</span>
+                        {% endfor %}
+                        {% for rating in range(0,avg_rating_score) %}
+                        <span id="span1">&#x2605;</span>
+                        {% endfor %}
+                        
+                        
+                    </div>
                 </div>
 
-
-                <button class="button"
-                    style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Add
-                    to Cart</button>
+                <div>
+                    <button class="button"
+                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Add
+                        to Cart</button>
+                </div>
                 </form>
                 <a href="http://127.0.0.1:5000/checkout">
                     <button class="button"
@@ -263,10 +222,9 @@
         </div>
     </div>
     <div class="separator_2"></div>
-    <h3>Product Description:</h3>
+    <h4>Product Description:</h4>
     <div style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:large;">{{product_description[0]}}
     </div>
-
 
 </div>
 {% include 'footer/footer.html' %}
