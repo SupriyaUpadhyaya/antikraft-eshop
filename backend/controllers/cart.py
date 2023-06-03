@@ -1,10 +1,10 @@
-from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, readOrder, validateOrderId, getImageUrl
+from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl
 from flask import session
 import uuid
 
 
 def addItemToCart(productid, quantity):
-    userid = session["user_id"]
+    userid = session["user_id"][0]
     orderid = int(session["order_id"])
     sp = getPrice(productid)
     for i in sp:
@@ -67,3 +67,11 @@ def getOrder(userid):
         return cart, order_total
     else:
         return "ERROR"
+    
+def deleteItemFromCart(productid):
+    userid = session["user_id"][0]
+    print("User :")
+    print(userid)
+    orderid = int(session["order_id"])
+    deleteItemFromOrder(orderid, userid, productid)
+    return "True"

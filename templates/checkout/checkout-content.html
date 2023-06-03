@@ -1,3 +1,8 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button {
+        opacity: 1
+    }
+</style>
 <div class="container">
     <h6 style="text-align: left;"><b>SHOPPING CART</b></h6>
     <hr>
@@ -39,18 +44,16 @@
                                 <div class="col-2 input-group mb-3">
                                     
                                 
-                                        <input type="number" id="typeNumber" name="quantity" class="form-control rounded" value={{orders["quantity"][0]}} style="font-size: x-small;"> </input>
-                                        <input type="hidden" id="typeNumber"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
+                                        <input type="number" id="Number" name="quantity" class="form-control rounded" min="1" max="10" value={{orders["quantity"][0]}} style="font-size: x-small; opacity: 1"> </input>
+                                        <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
                                     
                                 
                                 <div class="col-4 input-group-append" style="padding-left: 10px;">
                                     <button type="submit" class="btn btn-dark" style="font-size: x-small;">Update Quantity</button>
                                 </div>
-                                <div class="col-3 input-group-append" style="padding-left: 10px;">
-                                    <button type="submit" class="btn btn-dark" style="font-size: x-small;" value="0">Delete</button>
-                                </div>
                             </div>
                             </form>
+                            
                             </div> 
                         
                     </div>
@@ -62,6 +65,15 @@
                             <h6 class="tile-text" style="text-align: left;">&euro;{{orders["selling_price"][0]}}</h6>
                         </div>
                     </div>
+                    <div class="row">
+                        <form action="deleteItem" method="POST">
+                            <div class="col-4 input-group-append" style="padding-left: 10px;">
+                                <input type="hidden" id="typeNumber"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
+                                <button type="submit" class="btn btn-dark" style="font-size: x-small;" name="delete" value={{orders["product_serial_number"][0]}}>Remove Item</button>
+                            </div>
+                        </form>
+                    </div>
+                    
                 </div>
             </div>
             {%endfor%}
