@@ -3,7 +3,7 @@
         opacity: 1
     }
 </style>
-<div class="container">
+<div class="container min-container">
     <h6 style="text-align: left;"><b>SHOPPING CART</b></h6>
     <hr>
     {% if session.total_items != '0' %}
@@ -69,7 +69,7 @@
                         <form action="deleteItem" method="POST">
                             <div class="col-4 input-group-append" style="padding-left: 10px;">
                                 <input type="hidden" id="typeNumber"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
-                                <button type="submit" class="btn btn-dark" style="font-size: x-small;" name="delete" value={{orders["product_serial_number"][0]}}>Remove Item</button>
+                                <button type="submit" class="btn btn-light" style="font-size: x-small;" name="delete" value={{orders["product_serial_number"][0]}}>Remove Item</button>
                             </div>
                         </form>
                     </div>
@@ -141,7 +141,7 @@
             <div class="row">
                 <div class="col-8"></div>
                 <div class="col-4">
-                    <button type="button" class="btn btn-dark" style="border-radius: 0%;">Proceed To Buy</button>
+                    <button type="button" class="btn btn-dark rounded" style="border-radius: 0%;">Proceed To Buy</button>
                 </div>
             </div>
 

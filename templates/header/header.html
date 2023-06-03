@@ -56,7 +56,7 @@
                                     <h6>Hello {{session.user_firstname[0]}}!</h6>
                                 </a>
                             </div>
-                            <div class="col-1">
+                            <div class="col-2">
                                 <a class="nav-link link-dark" style="text-decoration: underline;"
                                     href="http://127.0.0.1:5000/logout">
                                     <h6>Logout</h6>
@@ -65,15 +65,21 @@
 
                         </div>
                         {% endif %}
-                        <li class="nav-item">
-                            <a class="btn border-0" type="button"><img class="img-fluid" max-width=20px height=20px
-                                    id="search-logo" src="static/header/Globe.svg" /></a>
-                            <a class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
-                                    id="search-logo" src="static/header/Heart.svg" /></a>
-                            <a class="btn border-0" type="button" href="http://127.0.0.1:5000/checkout" ><img class="img-fluid" max-width=100% height=auto
-                                    id="search-logo" src="static/header/Cart.png"/><sup style="font-size: large;">{{ session.total_items }}</sup></a>
-                        </li>
-
+                        <div class="row">
+                            <li class="nav-item">
+                                
+                                    <a class="border-0 btn dropdown-toggle" type="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" max-width=20px height=20px
+                                        id="search-logo" src="static/header/Globe.svg" /></a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="http://127.0.0.1:5000/">English</a>
+                                    </div>
+                                
+                                <a class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
+                                        id="search-logo" src="static/header/Heart.svg" /></a>
+                                <a class="btn border-0" type="button" href="http://127.0.0.1:5000/checkout" ><img class="img-fluid" max-width=100% height=auto
+                                        id="search-logo" src="static/header/Cart.png"/><sup style="font-size: large;">{{ session.total_items }}</sup></a>
+                            </li>
+                        </div>
                     </ul>
                     <ul class="navbar-nav nav-fill">
                         {%for values in categories.items()%}
