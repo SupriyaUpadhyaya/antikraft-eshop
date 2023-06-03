@@ -193,7 +193,8 @@ def getProductsFromOrder(orderid, productid):
 
 def updateExistingItem(orderid, productid, selling_price, quantity):
     conn = get_db_connection()
-    sqlquery = "UPDATE ORDERS SET quantity =" + str(quantity) + " AND " + str(selling_price)  + " = " + str(selling_price)  + " where order_id=" + str(orderid) + " AND product_serial_number=" + productid
+    sqlquery = "UPDATE ORDERS SET quantity=" + str(quantity) + ", selling_price=" + str(selling_price)  + " where order_id=" + str(orderid) + " AND product_serial_number=" + productid
+    print(sqlquery)
     print("Quanity from update:")
     print(quantity)
     print("product number")
@@ -213,6 +214,20 @@ def addNewItemToOrder(orderid, userid, productid, selling_price, quantity):
     sqlquery = "INSERT INTO ORDERS (order_id, user_id, quantity, selling_price, order_status, product_serial_number) VALUES (?, ?, ?, ?, ?, ?)"
     try:
         conn.execute(sqlquery, (int(orderid), int(userid), int(quantity), float(selling_price), "incomplete", int(productid)))
+        conn.close()
+        status = "True" 
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+
+
+def deleteItemFromOrder(orderid, userid, productid):
+    conn = get_db_connection()
+    sqlquery = "DELETE FROM ORDERS where order_id=" + str(orderid) + " AND user_id=" + str(userid) + " AND product_serial_number=" + str(productid)
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery)
         conn.close()
         status = "True" 
     except sqlite3.IntegrityError as error:

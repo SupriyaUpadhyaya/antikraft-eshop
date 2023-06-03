@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
-from backend.controllers.cart import getOrder, addItemToCart
+from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -277,14 +277,22 @@ def checkout():
 def updateQuantity():
     quantity = request.form['quantity']
     product_serial_number = request.form['product_serial_number']
-    # print("quantity")
-    # print(quantity)
-    # print("p_s_n")
-    # print(product_serial_number)
-    addItemToCart(quantity, product_serial_number)
-    categories = getAllCategories()
-    order, order_total = getOrder(session["user_id"])
-    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total)
+    print("quantity")
+    print(quantity)
+    print("p_s_n")
+    print(product_serial_number)
+    addItemToCart(product_serial_number, quantity)
+    return redirect(redirect_url())
+
+@app.route('/deleteItem',  methods=['POST'])
+def deleteItem():
+    product_serial_number = request.form['product_serial_number']
+    deleteItemFromCart(product_serial_number)
+    return redirect('checkout')
+
+def redirect_url(default='/'):
+    return request.args.get('next') or \
+           request.referrer 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
