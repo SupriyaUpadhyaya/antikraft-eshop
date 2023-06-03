@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
-from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart
+from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -10,6 +10,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 @app.route("/")
 def home():
     categories = getAllCategories()
+    session["start"] = True
     return render_template('homepage/home.html', categories=categories.json, user="None")
 
 
@@ -81,7 +82,6 @@ def getSpecificProduct():
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
     product_id = request.args.get('productid')
-
     categories = getAllCategories()
     category_table_row = getSpecificCategoryRow(category_id)
     cat_name = category_table_row.json['category_name']
@@ -97,8 +97,17 @@ def getSpecificProduct():
 
     quantity = request.args.get('quantity')
     print("quantity", quantity)
+
+    quant = 1
+    if session["start"] == True:
+        quant = 1
+    elif session["order_id"] != 'None':
+        orderquantity = getCurrentQuantityForAProduct(product_json['product_serial_number'][0])
+        for i in orderquantity:
+            quant = i[0]
+        print(quant)
     
-    return render_template('product/product_page.html', categories = categories.json, \
+    return render_template('product/product_page.html', categories = categories.json, orderquantity=quant, \
                            category_name = cat_name, \
                            sub_category_name = sub_cat_name, \
                            sub_category_id = sub_category_id, \
@@ -156,6 +165,7 @@ def userAccountLogin():
     print(loginStatus)
     categories = getAllCategories()
     if loginStatus == "True":
+        session["start"] = False
         return render_template('homepage/home.html', categories=categories.json)
     else:
         return render_template('login/login.html', categories=categories.json, error="True")
@@ -283,14 +293,18 @@ def checkout():
 
 @app.route('/updateQuantity',  methods=['POST'])
 def updateQuantity():
-    quantity = request.form['quantity']
-    product_serial_number = request.form['product_serial_number']
-    print("quantity")
-    print(quantity)
-    print("p_s_n")
-    print(product_serial_number)
-    addItemToCart(product_serial_number, quantity)
-    return redirect(redirect_url())
+    if session["start"] == False:
+        quantity = request.form['quantity']
+        product_serial_number = request.form['product_serial_number']
+        print("quantity")
+        print(quantity)
+        print("p_s_n")
+        print(product_serial_number)
+        addItemToCart(product_serial_number, quantity)
+        return redirect(redirect_url())
+    else:
+        return render_template('login/login.html', error="False")
+
 
 @app.route('/deleteItem',  methods=['POST'])
 def deleteItem():
