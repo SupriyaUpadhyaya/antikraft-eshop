@@ -99,7 +99,7 @@ def getSellerAccount(username):
     for row in data:
         seller['seller_id'].append(row["seller_id"])
         seller['seller_name'].append(row["seller_name"])
-        seller['seller_emai'].append(row["seller_emai"])
+        seller['seller_email'].append(row["seller_email"])
         seller['seller_password'].append(row["seller_password"])
         seller['seller_address'].append(row["seller_address"])
     if seller is not None:
