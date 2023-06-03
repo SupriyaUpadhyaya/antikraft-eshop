@@ -76,7 +76,7 @@
 </script>
 
 {% include 'header/header.html' %}
-{{product_id_list[0]}}
+
 <div class="container">
     <div class="row">
         <div>
@@ -89,9 +89,9 @@
     <div class="separator_2"></div>
 
     <div class="container">
-        <div class="col-3 my-3"><label style="text-align: left; font-weight: bold; margin-left: 12px;">SORT BY</label><i
+        <div class="col-2 my-3"><label style="text-align: left; font-weight: bold; margin-left: 12px;">SORT BY</label><i
                 class="arrow down"></i>
-            <select class="form-control col-3 sort_by" style="border: none; font-weight: bold;">
+            <select class="form-control col-2 sort_by" style="border-color: #000; font-weight: bold;">
                 <option value="">None</option>
                 <option value="1">Price Low to High</option>
                 <option value="2">Price High to Low</option>
@@ -110,7 +110,7 @@
                             <img src={{product_image_list[0]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center">
+                    <div class="product-details text-center"  style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[0]}}</span>
                         <span>{{product_name_list[0]}}</span>
                     </div>
@@ -125,7 +125,7 @@
                             <img src={{product_image_list[1]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center">
+                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[1]}}</span>
                         <span>{{product_name_list[1]}}</span>
                     </div>
@@ -140,7 +140,7 @@
                             <img src={{product_image_list[2]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center">
+                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[2]}}</span>
                         <span>{{product_name_list[2]}}</span>
                     </div>
@@ -155,7 +155,7 @@
                             <img src={{product_image_list[3]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center">
+                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[3]}}</span>
                         <span>{{product_name_list[3]}}</span>
                     </div>
@@ -170,8 +170,8 @@
                             <img src={{product_image_list[4]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center">
-                        <span class="font-weight-bold d-block">€{{product_price_list[4]}}</span>
+                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
+                        <span class="font-weight-bold d-block"></span>€{{product_price_list[4]}}</span>
                         <span>{{product_name_list[4]}}</span>
                     </div>
                 </div>
@@ -182,4 +182,3 @@
 </div>
 
 {% include 'footer/footer.html' %}
-</div>

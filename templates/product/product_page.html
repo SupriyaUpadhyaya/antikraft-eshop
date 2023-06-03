@@ -20,43 +20,125 @@
     .carousel-control-prev {
         filter: invert(100%);
     }
+
+    #myform {
+        text-align: center;
+        border: none;
+    }
+
+    .qty {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        font-weight: bold;
+
+    }
+
+    input.qtyplus {
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    input.qtyminus {
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .button {
+        background-color: #000000;
+        color: rgb(255, 255, 255);
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+        border: 2px solid black;
+    }
+
+    .stock {
+        color: green;
+        /* Style for in-stock items */
+    }
+
+    .stock.out-of-stock {
+        color: red;
+        /* Style for out-of-stock items */
+    }
+
+    .rating {
+        color: gold;
+        /* Default star color */
+    }
+
+    .star {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        background: url(https://www.sabre-roads.org.uk/wiki/images/d/d1/Star_grey.png) no-repeat;
+        background-size: contain;
+    }
+
+    .star.selected {
+        background-image: url(https://upload.wikimedia.org/wikipedia/commons/2/29/Gold_Star.svg);
+    }
 </style>
 <script>
-    $(document).ready(function () {
-
-        var quantitiy = 0;
-        $('.quantity-right-plus').click(function (e) {
-
-            // Stop acting like a button
-            e.preventDefault();
-            // Get the field name
-            var quantity = parseInt($('#quantity').val());
-
-            // If is not undefined
-
-            $('#quantity').val(quantity + 1);
-
-
-            // Increment
-
+    jQuery(document).ready(($) => {
+        $('.quantity').on('click', '.plus', function (e) {
+            let $input = $(this).prev('input.qty');
+            let val = parseInt($input.val());
+            $input.val(val + 1).change();
         });
 
-        $('.quantity-left-minus').click(function (e) {
-            // Stop acting like a button
-            e.preventDefault();
-            // Get the field name
-            var quantity = parseInt($('#quantity').val());
-
-            // If is not undefined
-
-            // Increment
-            if (quantity > 0) {
-                $('#quantity').val(quantity - 1);
-            }
-        });
-
+        $('.quantity').on('click', '.minus',
+            function (e) {
+                let $input = $(this).next('input.qty');
+                var val = parseInt($input.val());
+                if (val > 0) {
+                    $input.val(val - 1).change();
+                }
+            });
     });
+
+    // Function to update the stock counter
+    function updateStockCounter(stockQuantity) {
+        const stockQuantityElement = document.getElementById('stock-quantity');
+        stockQuantityElement.textContent = stockQuantity;
+
+        if (stockQuantity === 0) {
+            stockContainer.classList.add('out-of-stock');
+        }
+    }
+    // Function to handle star rating selection
+    function handleStarRating(event) {
+        const selectedStar = event.target;
+        const rating = parseInt(selectedStar.dataset.value);
+
+        // Remove "selected" class from all stars
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => star.classList.remove('selected'));
+
+        // Add "selected" class to clicked star and stars before it
+        for (let i = 0; i < rating; i++) {
+            stars[i].classList.add('selected');
+        }
+    }
+
+    // Add event listeners to each star
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+        star.addEventListener('click', handleStarRating);
+    });
+
 </script>
+
 
 {% include 'header/header.html' %}
 
@@ -126,27 +208,44 @@
                 </div>
             </div>
             <!-- Change the `data-field` of buttons and `name` of input field's for multiple plus minus buttons-->
-            <div class="col-4">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus"
-                            data-field="">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
-                    </span>
-                    <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10"
-                        min="1" max="100">
-                    <span class="input-group-btn">
-                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus"
-                            data-field="">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                    </span>
+            <div class="col-4" style="margin-top: 25px; margin-left: 100px;">
+                <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:x-large;">Price:
+                    €{{product_price[0]}}
+                </h3>
+                <form id='myform' method='POST' class='quantity' action='#'><label
+                        style="margin-top: 30px; text-align: left; font-weight: bold;">ORDER QUANTITY: </label>
+                    <input type='button' value='-' class='qtyminus minus' field='quantity' />
+                    <input type='text' name='quantity' value='0' class='qty' />
+                    <input type='button' value='+' class='qtyplus plus' field='quantity' />
+                </form>
+                <div class="stock" style="margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">In
+                    Stock: <span id="stock-quantity">{{product_stock[0]}}</span>
                 </div>
+
+                <div class="rating" style="margin-top: 20px; margin-left: 80px;">
+                    <span class="star" data-value="1"></span>
+                    <span class="star" data-value="2"></span>
+                    <span class="star" data-value="3"></span>
+                    <span class="star" data-value="4"></span>
+                    <span class="star" data-value="5"></span>
+                </div>
+
+
+                <button class="button"
+                    style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Add
+                    to Cart</button>
+                <button class="button"
+                    style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;"
+                    onclick="updateStockCounter({{product_stock[0]}}-1);">Checkout</button>
             </div>
 
         </div>
     </div>
+    <div class="separator_2"></div>
+    <h3>Product Description:</h3>
+    <div style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:large;">{{product_description[0]}}
+    </div>
 
-    {% include 'footer/footer.html' %}
+    
 </div>
+{% include 'footer/footer.html' %}

@@ -103,11 +103,13 @@ def getSpecificProduct():
                            product_id = product_json['product_id'], \
                            product_name = product_json['product_name'], \
                            product_price = product_json['product_price'], \
+                           product_stock = product_json['stock'], \
                            product_main_image = product_json['image_id'], \
                            product_sec_image1 = li_sec_images[0], \
                            product_sec_image2 = li_sec_images[1], \
                            product_sec_image3 = li_sec_images[2], \
                            product_sec_image4 = li_sec_images[3], \
+                           product_description = product_json['product_description'], \
                            range=range)
 
 
