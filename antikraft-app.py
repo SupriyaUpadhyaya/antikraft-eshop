@@ -94,6 +94,9 @@ def getSpecificProduct():
 
     sec_images = product_json['secondary_images'][0]
     li_sec_images = sec_images.split(';')
+
+    quantity = request.args.get('quantity')
+    print("quantity", quantity)
     
     return render_template('product/product_page.html', categories = categories.json, \
                            category_name = cat_name, \
@@ -101,6 +104,7 @@ def getSpecificProduct():
                            sub_category_id = sub_category_id, \
                            category_id = category_id, \
                            product_id = product_json['product_id'], \
+                           product_sn = product_json['product_serial_number'], \
                            product_name = product_json['product_name'], \
                            product_price = product_json['product_price'], \
                            product_stock = product_json['stock'], \
@@ -273,10 +277,10 @@ def checkout():
 def updateQuantity():
     quantity = request.form['quantity']
     product_serial_number = request.form['product_serial_number']
-    print("quantity")
-    print(quantity)
-    print("p_s_n")
-    print(product_serial_number)
+    # print("quantity")
+    # print(quantity)
+    # print("p_s_n")
+    # print(product_serial_number)
     addItemToCart(quantity, product_serial_number)
     categories = getAllCategories()
     order, order_total = getOrder(session["user_id"])

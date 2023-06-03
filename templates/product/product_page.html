@@ -88,6 +88,10 @@
     .star.selected {
         background-image: url(https://upload.wikimedia.org/wikipedia/commons/2/29/Gold_Star.svg);
     }
+
+    input[type=number]::-webkit-inner-spin-button {
+        opacity: 1
+    }
 </style>
 <script>
     jQuery(document).ready(($) => {
@@ -212,12 +216,27 @@
                 <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:x-large;">Price:
                     €{{product_price[0]}}
                 </h3>
-                <form id='myform' method='POST' class='quantity' action='#'><label
+
+                <div class="col-3 input-group mb-3"
+                    style="margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;"><label
                         style="margin-top: 30px; text-align: left; font-weight: bold;">ORDER QUANTITY: </label>
-                    <input type='button' value='-' class='qtyminus minus' field='quantity' />
-                    <input type='text' name='quantity' value='0' class='qty' />
-                    <input type='button' value='+' class='qtyplus plus' field='quantity' />
-                </form>
+
+                    <form action="updateQuantity" method="POST">
+                        <div class="col-3 input-group mb-3">
+
+                            <input
+                                style="font-size: large; margin-left: 20px; margin-top: 30px; height: 35px; width: 100px;  text-align: center;"
+                                type="number" id="typeNumber" name="quantity" class="form-control rounded" value=1>
+
+                            </input>
+                            <input type="hidden" id="typeNumber" name="product_serial_number"
+                                        class="form-control" value={{product_sn[0]}}
+                                        style="font-size: x-small;"> </input>
+                        </div>
+
+
+
+                </div>
                 <div class="stock" style="margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">In
                     Stock: <span id="stock-quantity">{{product_stock[0]}}</span>
                 </div>
@@ -234,9 +253,11 @@
                 <button class="button"
                     style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Add
                     to Cart</button>
-                <button class="button"
-                    style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;"
-                    onclick="updateStockCounter({{product_stock[0]}}-1);">Checkout</button>
+                </form>
+                <a href="http://127.0.0.1:5000/checkout">
+                    <button class="button"
+                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Checkout</button>
+                </a>
             </div>
 
         </div>
@@ -246,6 +267,6 @@
     <div style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:large;">{{product_description[0]}}
     </div>
 
-    
+
 </div>
 {% include 'footer/footer.html' %}

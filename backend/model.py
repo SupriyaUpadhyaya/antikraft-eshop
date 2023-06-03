@@ -81,7 +81,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, PRODUCT_
     data = conn.execute(query)
   
     keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "seller_id", "stock", 
-               "posted_date", "offer_flag", "offer_percent", "image_id", "secondary_images", "url"]
+               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url"]
     product_row = {key: [] for key in keyList}
 
     for row in data:
@@ -97,6 +97,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, PRODUCT_
         product_row['posted_date'].append(row["posted_date"])
         product_row['offer_flag'].append(row["offer_flag"])
         product_row['offer_percent'].append(row["offer_percent"])
+        product_row['product_serial_number'].append(row["product_serial_number"])
         product_row['image_id'].append(row["image_id"])
         product_row['secondary_images'].append(row["secondary_images"])
         product_row['url'].append(url)
