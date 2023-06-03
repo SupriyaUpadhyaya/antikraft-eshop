@@ -37,7 +37,7 @@
                                 </form>
                             </li>
                         </div>
-                        {% if session.login_status != "True" %}
+                        {% if session.login_status != "True" and session.seller_login_status != "True" %}
                         <div class="col-3">
                             <li class="nav-item">
                                 <a class="nav-link link-dark" style="text-decoration: underline;"
@@ -48,7 +48,7 @@
 
                         </div>
                         {% endif %}
-                        {% if session.login_status == "True" %}
+                        {% if session.login_status == "True" or session.seller_login_status == "True"%}
                         <div class="col-2">
                             <li class="nav-item">
                                 <a class="nav-link link-dark" style="text-decoration: underline;"
@@ -71,7 +71,7 @@
                             <a class="btn border-0" type="button"><img class="img-fluid" max-width=100% height=auto
                                     id="search-logo" src="static/header/Heart.svg" /></a>
                             <a class="btn border-0" type="button" href="http://127.0.0.1:5000/checkout" ><img class="img-fluid" max-width=100% height=auto
-                                    id="search-logo" src="static/header/Cart.png"/></a>
+                                    id="search-logo" src="static/header/Cart.png"/><sup style="font-size: large;">{{ session.total_items }}</sup></a>
                         </li>
 
                     </ul>
