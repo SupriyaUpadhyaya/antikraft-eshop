@@ -122,7 +122,7 @@ def readUserAccount(username):
 def readSellerAccount(username):
     conn = get_db_connection()
     print(username)
-    sqlquery = "SELECT * from SELLER where seller_emai='" + username + "'"
+    sqlquery = "SELECT * from SELLER where seller_email='" + username + "'"
     data = conn.execute(sqlquery)
     return data
 
@@ -157,7 +157,7 @@ def insertSellerAccount(sellername, email, password, address):
 
 def addItemToNewOrder(userid, productid, selling_price, quantity):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO ORDER (order_id, user_id, quantity, selling_price, order_status, product_id) VALUES (?, ?, ?, ?, ?)"
+    sqlquery = "INSERT INTO ORDER (order_id, user_id, quantity, selling_price, order_status, product_serial_number) VALUES (?, ?, ?, ?, ?)"
     try:
         order_id = 1
         conn.execute(sqlquery, (order_id, userid, quantity, selling_price, "incomplete", productid))
@@ -178,23 +178,27 @@ def getOrderID(userid):
 
 def getPrice(productid):
     conn = get_db_connection()
-    sqlquery = "SELECT product_price from PRODUCT where product_id=" + int(productid)
+    sqlquery = "SELECT product_price from PRODUCT where product_serial_number=" + str(productid)
     price = conn.execute(sqlquery)
     return price
 
 
 def getProductsFromOrder(orderid, productid):
     conn = get_db_connection()
-    sqlquery = "SELECT count(*) from ORDER where product_id=" + int(productid) + " AND order_id=" + int(orderid)
+    sqlquery = "SELECT count(*) from ORDERS where product_serial_number=" + str(productid) + " AND order_id=" + str(orderid)
     count = conn.execute(sqlquery)
     return count
 
 
 def updateExistingItem(orderid, productid, selling_price, quantity):
     conn = get_db_connection()
-    sqlquery = "UPDATE ORDER SET quantity = ? AND selling_price = ? where order_id=? and product_id=?"
+    sqlquery = "UPDATE ORDERS SET quantity =" + str(quantity) + " AND " + str(selling_price)  + " = " + str(selling_price)  + " where order_id=" + str(orderid) + " AND product_serial_number=" + productid
+    print("Quanity from update:")
+    print(quantity)
+    print("product number")
+    print(productid)
     try:
-        conn.execute(sqlquery, (quantity, selling_price, orderid, productid))
+        conn.execute(sqlquery)
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
@@ -205,9 +209,9 @@ def updateExistingItem(orderid, productid, selling_price, quantity):
 
 def addNewItemToOrder(orderid, userid, productid, selling_price, quantity):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO ORDER (order_id, user_id, quantity, selling_price, order_status, product_id) VALUES (?, ?, ?, ?, ?, ?)"
+    sqlquery = "INSERT INTO ORDERS (order_id, user_id, quantity, selling_price, order_status, product_serial_number) VALUES (?, ?, ?, ?, ?, ?)"
     try:
-        conn.execute(sqlquery, (orderid, userid, quantity, selling_price, "incomplete", productid))
+        conn.execute(sqlquery, (int(orderid), int(userid), int(quantity), float(selling_price), "incomplete", int(productid)))
         conn.close()
         status = "True" 
     except sqlite3.IntegrityError as error:
@@ -223,9 +227,25 @@ def readOrder(userid):
     return data
 
 
+def readOrderForHeaderCart(user_email):
+    conn = get_db_connection()
+    sqlquery =  "SELECT order_id, count(*) AS item_count from orders LEFT OUTER JOIN user ON orders.user_id = user.user_id where user.user_email='" + str(user_email) + "' and order_status='incomplete' GROUP BY order_id LIMIT 1"
+    data = conn.execute(sqlquery)
+    return data
+
+
 def validateOrderId(orderid):
     conn = get_db_connection()
     sqlquery = "SELECT count(*) from ORDERS where order_id='" + str(orderid) + "'"
     count = conn.execute(sqlquery)
     return count
+
+
+def getImageUrl(productid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from PRODUCT where product_serial_number='" + str(productid) + "'"
+    url = conn.execute(sqlquery)
+    print(url)
+    return url
+
 

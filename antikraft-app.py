@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
-from backend.controllers.cart import getOrder
+from backend.controllers.cart import getOrder, addItemToCart
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -206,21 +206,28 @@ def sellerAccountRegistration():
     email = request.form['email']
     password = request.form['password']
     address = request.form['address']
-    registration_status = validateSellerRegistration(sellername, email, password, address)
+    seller = validateSellerRegistration(sellername, email, password, address)
+    for item in seller:
+        session[item] = seller[item]
+    seller_login_status = session["seller_login_status"]
     categories = getAllCategories()
-    print("Login status")
-    print(registration_status)
-    if registration_status == "True":
-        return render_template('homepage/home.html', categories=categories.json, loginStatus=registration_status)
+    print("seller Login status")
+    print(seller_login_status)
+    if seller_login_status == "True":
+        return render_template('homepage/home.html', categories=categories.json, loginStatus=seller_login_status)
     else:
-        return render_template('sellersignup/sellersignup.html', categories=categories.json, loginStatus=registration_status)
+        return render_template('seller-signup/sellersignup.html', categories=categories.json, loginStatus=seller_login_status)
 
 
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
-    session.pop('username', None)
-    session.pop('login_status', None)
+    key = []
+    for item in session:
+        print(item)
+        key.append(item)
+    for item in key:
+        session.pop(item, None)
     return redirect('http://127.0.0.1:5000/')
 
 @app.route('/seller-login')
@@ -256,8 +263,22 @@ def userPasswordReset():
 @app.route('/checkout')
 def checkout():
     categories = getAllCategories()
-    order = getOrder(session["user_id"])
-    return render_template('checkout/checkout.html', categories=categories.json, order=order)
+    order, order_total = getOrder(session["user_id"])
+    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total)
+
+
+@app.route('/updateQuantity',  methods=['POST'])
+def updateQuantity():
+    quantity = request.form['quantity']
+    product_serial_number = request.form['product_serial_number']
+    print("quantity")
+    print(quantity)
+    print("p_s_n")
+    print(product_serial_number)
+    addItemToCart(quantity, product_serial_number)
+    categories = getAllCategories()
+    order, order_total = getOrder(session["user_id"])
+    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
