@@ -169,7 +169,15 @@ def sellersignup():
 def useraccount():
     categories = getAllCategories()
     return render_template('user-account/useraccount.html', categories=categories.json, user="None")
-    
+
+@app.route("/sellerpasswordreset")
+def sellerpasswordreset():
+    return render_template('password-reset/seller-password-reset.html')
+
+@app.route("/userpasswordreset")
+def userpasswordreset():
+    return render_template('password-reset/user-password-reset.html')    
+
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['search']
