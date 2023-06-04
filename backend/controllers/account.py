@@ -100,10 +100,12 @@ def getSellerAccount(username):
     
 def validateSellerCredentails(username, password):
     seller = getSellerAccount(username)
+    print(cipher.decrypt(seller["seller_password"][0]).decode("ascii"))
+    print(password)
     if seller == "ERROR":
         return "ERROR: Username does not exist"
     else:
-        if password == cipher.decrypt(seller["user_password"][0]).decode("ascii"):
+        if password == cipher.decrypt(seller["seller_password"][0]).decode("ascii"):
             status = "True"
         else:
             status = "False"

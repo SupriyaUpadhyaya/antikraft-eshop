@@ -267,7 +267,7 @@ def sellerAccountRegistration():
     print("seller Login status")
     print(seller_login_status)
     if seller_login_status == "True":
-        return render_template('homepage/home.html', categories=categories.json, loginStatus=seller_login_status)
+        return render_template('seller-account/selleraccount.html', categories=categories.json, loginStatus=seller_login_status)
     else:
         return render_template('seller-signup/sellersignup.html', categories=categories.json, loginStatus=seller_login_status)
 
@@ -295,13 +295,13 @@ def sellerAccountLogin():
     user = validateSellerCredentails(username, password)
     for item in user:
         session[item]=user[item]
-    loginStatus = session["login_status"]
+    loginStatus = session["seller_login_status"]
     print(loginStatus)
     categories = getAllCategories()
     if loginStatus == "True":
-        return render_template('homepage/home.html', categories=categories.json)
+        return render_template('seller-account/selleraccount.html', categories=categories.json)
     else:
-        return render_template('login/login.html', categories=categories.json, error="True")
+        return render_template('seller-login/seller-login.html', categories=categories.json, error="True")
 
 
 @app.route('/sellerPasswordReset')

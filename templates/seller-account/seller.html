@@ -22,10 +22,10 @@
         <div class="row">
           <div class="col-md-2">
             <div class="nav flex-column nav-pills accInfo" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <a class="nav-link active accInfo" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</a>
-              <a class="nav-link accInfo" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Order History</a>
-              <a class="nav-link accInfo" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Wishlist</a>
-              <a class="nav-link accInfo" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Password Reset</a>
+              <a class="nav-link active accInfo" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Seller Information</a>
+              <a class="nav-link accInfo" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Add new product</a>
+              <a class="nav-link accInfo" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Create new offer</a>
+              <a class="nav-link accInfo" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Awards</a>
             </div>
           </div>
           <div class="col-md-9">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-1"> </div>  
                     <div class="col-4">
-                    <h5 id="val">{{ session.user_firstname[0] }}</h5>
+                    <h5 id="val">{{ session.seller_name[0] }}</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-1"> </div> 
                     <div class="col-6">
-                    <h5 id="val">{{ session.user_lastname[0] }}</h5>
+                    <h5 id="val">{{ session.seller_email[0] }}</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -58,17 +58,7 @@
                     </div>
                     <div class="col-1"> </div> 
                     <div class="col-6">
-                    <h5 id="val">{{ session.user_email[0] }}</h5>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-1"> </div>  
-                    <div class="col-2">
-                    <h5 id="key">Address:</h5>
-                    </div>
-                    <div class="col-1"> </div> 
-                    <div class="col-6">
-                    <h5 id="val">{{ session.user_address[0] }}</h5>
+                    <h5 id="val">{{ session.seller_address[0] }}</h5>
                     </div>
                 </div>
             </div>
