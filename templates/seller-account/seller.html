@@ -1,0 +1,81 @@
+<div class="container">
+    <h2 style="text-align: left;" >User Account<h2>
+    <hr>
+    <style>
+        #key{text-align: right;}
+        #val{text-align: left;}
+        .accInfo {
+          color: #000;
+          background-color: #ffffff;
+        }
+    
+        .accInfo .accInfo.active,
+        .accInfo .accInfo:hover {
+          color: #fff;
+          background-color: #000;
+        }
+       
+      </style>
+    </div>
+    
+    <div class="container min-container">
+        <div class="row">
+          <div class="col-md-2">
+            <div class="nav flex-column nav-pills accInfo" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <a class="nav-link active accInfo" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Seller Information</a>
+              <a class="nav-link accInfo" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Add new product</a>
+              <a class="nav-link accInfo" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Create new offer</a>
+              <a class="nav-link accInfo" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Awards</a>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="tab-content" id="v-pills-tabContent">
+              <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                <div class="row">
+                    <div class="col-1"> </div>  
+                    <div class="col-2">
+                    <h5 id="key">Firstname:</h5>
+                    </div>
+                    <div class="col-1"> </div>  
+                    <div class="col-4">
+                    <h5 id="val">{{ session.seller_name[0] }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"> </div>  
+                    <div class="col-2">
+                    <h5 id="key">lastname:</h5>
+                    </div>
+                    <div class="col-1"> </div> 
+                    <div class="col-6">
+                    <h5 id="val">{{ session.seller_email[0] }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"> </div>  
+                    <div class="col-2">
+                    <h5 id="key">Email:</h5>
+                    </div>
+                    <div class="col-1"> </div> 
+                    <div class="col-6">
+                    <h5 id="val">{{ session.seller_address[0] }}</h5>
+                    </div>
+                </div>
+            </div>
+              <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                <h1>Order History</h1>
+                <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+              </div>
+              <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                <h1>Wishlist</h1>
+                <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+              </div>
+              <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                <h1>Password Reset</h1>
+                <p>This is the settings tab content.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
