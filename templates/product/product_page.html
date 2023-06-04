@@ -47,6 +47,7 @@
         display: inline-block;
         position: relative;
     }
+
     #span2 {
         font-size: 30px;
         color: rgba(145, 144, 143, 0.505);
@@ -90,7 +91,7 @@
         <div>
             <ul>
                 <h5 style="text-align: left; text-transform: uppercase;">{{category_name}} > {{sub_category_name}}
-                    </h5>
+                </h5>
             </ul>
         </div>
     </div>
@@ -152,13 +153,14 @@
             </div>
 
             <div class="col-7" style="margin-top: 25px; margin-left: 100px;">
-                <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:x-large;">{{product_name[0]}}</h3>
-                <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:larger;">Price:
+                <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:xx-large;">
+                    {{product_name[0]}}</h3>
+                <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger;">Price:
                     €{{product_price[0]}}
                 </h3>
 
                 <div class="col-3 input-group mb-3"
-                    style="margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;"><label
+                    style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:larger;"><label
                         style="margin-top: 30px; text-align: left; font-weight: bold;">Order Quantity: </label>
 
                     <form action="updateQuantity" method="POST">
@@ -175,36 +177,35 @@
                         </div>
 
                 </div>
-                <div id="stockStatus"
-                    style="color: red; margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">
+                <div id="stockStatus" style="color: red; margin-left: 80px; font-weight: bold; font-size:larger;">
                     {% if product_stock[0] == 0 %}
                     Out of Stock
                     {% endif %}
                 </div>
                 <div id="stockStatus"
-                    style="color: rgb(0, 0, 0); margin-top: 20px; margin-left: 80px; font-weight: bold; font-size:larger;">
+                    style="color: rgb(0, 0, 0); margin-left: 80px; font-weight: bold; font-size:larger;">
                     {% if product_stock[0] > 0 %}
                     In Stock: {{product_stock[0]}}
                     {% endif %}
                 </div>
 
-                <div class="star-rating" >
-                    <div style="margin-top: 20px; margin-left: -37px;">
+                <div class="star-rating">
+                    <div style="margin-top: 20px; margin-left: -367px;">
                         <label style="text-align:left;">
                             &nbsp;{{no_of_ratings}}
                             <span style="float:right;">
                                 &nbsp;ratings
                             </span>
                         </label>
-                        
+
                         {% for rating in range(0,5-avg_rating_score) %}
                         <span id="span2">&#x2605;</span>
                         {% endfor %}
                         {% for rating in range(0,avg_rating_score) %}
                         <span id="span1">&#x2605;</span>
                         {% endfor %}
-                        
-                        
+
+
                     </div>
                 </div>
 
