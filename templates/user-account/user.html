@@ -73,8 +73,175 @@
                 </div>
             </div>
               <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                <h1>Order History</h1>
-                <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+                <h3>Order History</h3>
+                <hr>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Order ID</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Shipping Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for order in orders%}
+                    <tr>
+                      <th scope="row">{{order['order_id']}}</th>
+                      <td>{{order['order_date']}}</td>
+                      <td>{{order['ship_address']}}</td>
+                      <td><button class="btn btn-dark" style="font-size: x-small;" type="button" data-toggle="collapse" data-target="#order{{order['order_id']}}" aria-expanded="false" aria-controls="collapseExample">
+                        View Details
+                      </button></td>
+                      <tr>
+                        <td colspan="4">
+                        <div class="collapse" id="order{{order['order_id']}}">
+                          <div class="row">
+                            <div class="col-7">
+                                {% for item in orderWithItems[order['order_id']] %}
+                                <div class="row">
+                                    <div class="col-5">
+                    
+                                        <a class="link-dark" href={{item['product_url'][0]}}><img class="tile-image"
+                                                src={{item['image_id'][0]}}></img></a>
+                    
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <a href={{item['product_url'][0]}} class="badge badge-dark" style="color: black;">
+                                                    <h6 class="tile-text" style="text-align: left;">{{item["product_name"][0]}}</h6>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h6 class="tile-text" style="text-align: right;">Product Id : </h6>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="tile-text" style="text-align: left;">{{item["product_serial_number"][0]}}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h6 class="tile-text" style="text-align: right;">Quantity : </h6>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="tile-text" style="text-align: left;">{{item["quantity"][0]}}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h6 class="tile-text" style="text-align: right;">Price : </h6>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="tile-text" style="text-align: left;">&euro;{{item["selling_price"][0]}}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                          <form action="submitRatings" method="POST">
+                                            <div class="col-1 input-group x-small">
+                                                
+                                            
+                                                    <input type="number" id="Number" name="quantity" class="form-control rounded" min="1" max="5" value=1 style="font-size: x-small; opacity: 1"> </input>
+                                                    <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{item["product_serial_number"][0]}} style="font-size: x-small;"> </input>
+                                                
+                                            
+                                            <div class="col-5 input-group-append" style="padding-left: 10px;">
+                                                <button type="submit" class="btn btn-dark" style="font-size: x-small;">Submit Rating</button>
+                                            </div>
+                                        </div>
+                                        </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                            </div> 
+                            <div class="col-5">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h6 class="tile-text" style="text-align: left;"><b>Delivery Details</b></h6>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <h6 style="text-align: left;">Delivery Address</h6>
+                                    </div>
+                                    <div class="col-7">
+                                        <h6 style="text-align: left;">{{ session.user_address[0] }}</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <h6 style="text-align: left;">Phone Number</h6>
+                                    </div>
+                                    <div class="col-5">
+                                        <h6 style="text-align: left;">{{ session.user_phone[0] }}</h6>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <h6 style="text-align: left;"><b>Payment Option</b></h6>
+                                    </div>
+                                    <div class="col-7">
+                                        <h6 style="text-align: left;">Cash On Delivery</h6>
+                                    </div>
+                                </div>
+                                <hr>
+                                <h6 class="tile-text" style="text-align: left;"><b>Order Summary</b></h6>
+                                <hr>
+                                {% for item in orderWithItems[order['order_id']]%}
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-1">
+                                        <h6>{{item["selling_price"][0]}}</h6>
+                                    </div>
+                                    <div class="col-1">
+                    
+                                    </div>
+                                    <div class="col-1">
+                                        <h6>X</h6>
+                                    </div>
+                                    <div class="col-1">
+                                        <h6>{{item["quantity"][0]}}</h6>
+                                    </div>
+                                    <div class="col-1">
+                                        <h6>=</h6>
+                                    </div>
+                                    <div class="col-1">
+                                        <h6>&euro;{{item["item_total"][0]}}</h6>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4">
+                                        <h6 style="text-align: right;">Total</h6>
+                                    </div>
+                                    <div class="col-1">
+                                        <h6 style="text-align: center;">=</h6>
+                                    </div>
+                                    <div class="col-3">
+                                        <h6 style="text-align: left;">&euro;{{total[order['order_id']]}}</h6>
+                                    </div>
+                                </div>
+                                <hr>
+                                </div>
+                    
+                            </div>
+                        </div>
+                        </div>
+                        </td>
+                      </tr>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+
               </div>
               <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                 <h1>Wishlist</h1>

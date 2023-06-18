@@ -198,7 +198,7 @@ def getOrderID(userid):
 
 def getPrice(productid):
     conn = get_db_connection()
-    sqlquery = "SELECT product_price from PRODUCT where product_serial_number=" + str(productid)
+    sqlquery = "SELECT * from PRODUCT where product_serial_number=" + str(productid)
     price = conn.execute(sqlquery)
     return price
 
@@ -268,6 +268,12 @@ def readOrderForHeaderCart(user_email):
     data = conn.execute(sqlquery)
     return data
 
+def readOrderByOrderId(orderid):
+    conn = get_db_connection()
+    sqlquery =  "SELECT * from orders where order_id='" + str(orderid) + "' and order_status='incomplete'"
+    data = conn.execute(sqlquery)
+    return data
+
 
 def validateOrderId(orderid):
     conn = get_db_connection()
@@ -283,6 +289,7 @@ def getImageUrl(productid):
     print(url)
     return url
 
+
 def getQuantity(productid, orderid):
     conn = get_db_connection()
     sqlquery = "SELECT quantity from ORDERS where product_serial_number='" + str(productid) + "' and order_id=" + str(orderid)
@@ -291,4 +298,42 @@ def getQuantity(productid, orderid):
     return url
 
 
+def getStock(product_serial_number):
+    conn = get_db_connection()
+    sqlquery = "SELECT stock from PRODUCT where product_serial_number='" + str(product_serial_number) + "'"
+    stock = conn.execute(sqlquery)
+    return stock
 
+
+def updateOrderStatus(orderid, new_stock, date, address):
+    conn = get_db_connection()
+    print(address)
+    sqlquery = "UPDATE ORDERS SET order_status='completed'" + ", ship_address='" + str(address) + "', order_date='" + str(date) + "' where order_id=" + str(orderid)
+    query = []
+    k = new_stock.keys()
+    for item in k:
+        item_query = "UPDATE PRODUCT SET stock=" + str(new_stock[item]) + " where product_serial_number=" + str(item)
+        query.append(item_query)
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery)
+        for q in query:
+            conn.execute(q)
+        conn.close()
+        status = True  
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = False
+    return status
+
+def readPlacedOrder(orderid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from ORDERS where order_id=" + str(orderid)
+    data = conn.execute(sqlquery)
+    return data
+
+def readOrderHistory(userid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from ORDERS where user_id=" + str(userid) + " GROUP BY order_id"
+    data = conn.execute(sqlquery)
+    return data

@@ -2,16 +2,17 @@ import json
 from statistics import mean, math
 from flask import Flask, jsonify, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
-from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails
-from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
+from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route("/")
 def home():
+    if len(session) == 0:
+        session["login_status"] = 'False'
     categories = getAllCategories()
-    session["start"] = True
     return render_template('homepage/home.html', categories=categories.json, user="None")
 
 
@@ -78,6 +79,8 @@ def getSubCategoryJson(category_id, sub_category_id):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/product")
 def getSpecificProduct():
+    if len(session) == 0:
+        session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
     product_id = request.args.get('productid')
@@ -98,13 +101,12 @@ def getSpecificProduct():
     print("quantity", quantity)
 
     quant = 1
-    if session["start"] == True:
-        quant = 1
-    elif session["order_id"] != 'None':
-        orderquantity = getCurrentQuantityForAProduct(product_json['product_serial_number'][0])
-        for i in orderquantity:
-            quant = i[0]
-        print(quant)
+    if session["login_status"] == 'True':
+        if session["order_id"] != 'None':
+            orderquantity = getCurrentQuantityForAProduct(product_json['product_serial_number'][0])
+            for i in orderquantity:
+                quant = i[0]
+            print(quant)
 
     product_sn = product_json['product_serial_number']
     product_sn = product_sn[0]
@@ -122,6 +124,14 @@ def getSpecificProduct():
         avg_rating_score = mean(rating_score_li)
         avg_rating_score = round(avg_rating_score)
         print("avg_rating_score", avg_rating_score)
+    
+    print("Offer flag: ", product_json['offer_flag'][0])
+    print("Offer flag: ", product_json['offer_percent'][0])
+
+    offer_price = 'None'
+    if product_json['offer_flag'][0] == 1:
+        offer_price = (product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100)
+        print(offer_price)
         
     return render_template('product/product_page.html', categories = categories.json, orderquantity=quant, \
                            category_name = cat_name, \
@@ -141,7 +151,10 @@ def getSpecificProduct():
                            product_description = product_json['product_description'],\
                            avg_rating_score = avg_rating_score,\
                            no_of_ratings = no_of_ratings, \
-                           range=range)
+                           range=range,\
+                           offer_flag = product_json['offer_flag'][0], \
+                           offer_price = offer_price, \
+                           offer_percent = int(product_json['offer_percent'][0]))
 
 
 def getProductJson(category_id, sub_category_id, product_id):
@@ -194,7 +207,6 @@ def userAccountLogin():
     print(loginStatus)
     categories = getAllCategories()
     if loginStatus == "True":
-        session["start"] = False
         return render_template('homepage/home.html', categories=categories.json)
     else:
         return render_template('login/login.html', categories=categories.json, error="True")
@@ -211,7 +223,17 @@ def sellersignup():
 @app.route("/useraccount")
 def useraccount():
     categories = getAllCategories()
-    return render_template('user-account/useraccount.html', categories=categories.json, user="None")
+    orders = getOrderHistory(session['user_id'][0])
+    neworders = getOrderHistory(session['user_id'][0])
+    orderWithItems = {}
+    total = {}
+    for i in neworders:
+        print(i['order_id'])
+        owi, order_total = getPlacedOrder(i['order_id'])
+        orderWithItems[i['order_id']] = owi
+        total[i['order_id']] = order_total
+
+    return render_template('user-account/useraccount.html', categories=categories.json, user="None", orders=orders, orderWithItems=orderWithItems, total=total)
 
 @app.route("/sellerpasswordreset")
 def sellerpasswordreset():
@@ -281,6 +303,7 @@ def logout():
         key.append(item)
     for item in key:
         session.pop(item, None)
+    session["login_status"] = 'False'
     return redirect('http://127.0.0.1:5000/')
 
 @app.route('/seller-login')
@@ -317,12 +340,12 @@ def userPasswordReset():
 def checkout():
     categories = getAllCategories()
     order, order_total = getOrder(session["user_id"])
-    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total)
+    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total, error=False)
 
 
 @app.route('/updateQuantity',  methods=['POST'])
 def updateQuantity():
-    if session["start"] == False:
+    if session["login_status"] == "True":
         quantity = request.form['quantity']
         product_serial_number = request.form['product_serial_number']
         print("quantity")
@@ -341,9 +364,24 @@ def deleteItem():
     deleteItemFromCart(product_serial_number)
     return redirect('checkout')
 
+
 def redirect_url(default='/'):
     return request.args.get('next') or \
            request.referrer 
+
+
+@app.route('/placeOrder',  methods=['POST'])
+def placeOrder():
+    orderid = session["order_id"]
+    orders, status = updateOrder()
+    if status is False:
+        categories = getAllCategories()
+        order, order_total = getOrder(session["user_id"])
+        return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total, error=True)
+    else:
+        categories = getAllCategories()
+        order, order_total = getPlacedOrder(orderid)
+        return render_template('checkout/order-confirmation.html', order=order, order_total=order_total, categories=categories.json, orderid=orderid)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
