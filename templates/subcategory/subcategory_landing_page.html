@@ -49,8 +49,15 @@
     function sortProductsName() {
         var gridItems = $('.grid-item');
         gridItems.sort(function (a, b) {
-            console.log(a.getAttribute('data-name'))
-            return a.getAttribute('data-name') > b.getAttribute('data-name')
+            var nameA = $('.product-card', a).data("name").toUpperCase();
+            var nameB = $('.product-card', b).data("name").toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
         });
 
         $(".grid").append(gridItems);
@@ -101,8 +108,8 @@
 
         <div class="row grid my-50">
             <div class="col-md-4 grid-item">
-                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[0]}}
-                    data-name={{product_name_list[0]}}>
+                <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[0]}}"
+                    data-name="{{product_name_list[0]}}">
                     <div class="text-center">
                         <a class="nav-link"
                             href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[0]}}"
@@ -110,14 +117,16 @@
                             <img src={{product_image_list[0]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center"  style="text-align: center; font-size: large; font-weight: bold;">
+                    <div class="product-details text-center"
+                        style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[0]}}</span>
                         <span>{{product_name_list[0]}}</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 grid-item">
-                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[1]}}>
+                <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[1]}}"
+                    data-name="{{product_name_list[1]}}">
                     <div class="text-center">
                         <a class="nav-link"
                             href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[1]}}"
@@ -125,14 +134,16 @@
                             <img src={{product_image_list[1]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
+                    <div class="product-details text-center"
+                        style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[1]}}</span>
                         <span>{{product_name_list[1]}}</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 grid-item">
-                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[2]}}>
+                <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[2]}}"
+                    data-name="{{product_name_list[2]}}">
                     <div class="text-center">
                         <a class="nav-link"
                             href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[2]}}"
@@ -140,14 +151,16 @@
                             <img src={{product_image_list[2]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
+                    <div class="product-details text-center"
+                        style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[2]}}</span>
                         <span>{{product_name_list[2]}}</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 grid-item">
-                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[3]}}>
+                <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[3]}}"
+                    data-name="{{product_name_list[3]}}">
                     <div class="text-center">
                         <a class="nav-link"
                             href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[3]}}"
@@ -155,14 +168,16 @@
                             <img src={{product_image_list[3]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
+                    <div class="product-details text-center"
+                        style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[3]}}</span>
                         <span>{{product_name_list[3]}}</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 grid-item">
-                <div class="card p-3 product-card" style="border: none;" data-price={{product_price_list[4]}}>
+                <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[4]}}"
+                    data-name="{{product_name_list[4]}}">
                     <div class="text-center">
                         <a class="nav-link"
                             href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[4]}}"
@@ -170,7 +185,8 @@
                             <img src={{product_image_list[4]}} width="200">
                         </a>
                     </div>
-                    <div class="product-details text-center" style="text-align: center; font-size: large; font-weight: bold;">
+                    <div class="product-details text-center"
+                        style="text-align: center; font-size: large; font-weight: bold;">
                         <span class="font-weight-bold d-block">€{{product_price_list[4]}}</span>
                         <span>{{product_name_list[4]}}</span>
                     </div>
