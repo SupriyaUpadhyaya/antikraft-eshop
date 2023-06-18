@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -131,6 +131,6 @@ def addSellerAccount(sellername, email, password, address):
         return "False"
 
 
-
-
-
+def getOrderHistory(userid):
+    order = readOrderHistory(userid)
+    return order

@@ -1,11 +1,9 @@
 <div class="container min-container">
-    <h6 style="text-align: left;"><b>SHOPPING CART</b></h6>
+    <h5 style="text-align: left;"><img width="25px" height="25px" src="/static/checkout/green-check.png"></img>&nbsp;&nbsp;&nbsp;Order Successful &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Order ID :&nbsp;&nbsp;&nbsp;{{orderid}}</h5>
     <hr>
-    {% if session.total_items != '0' %}
     <div class="row">
-        <div class="col-7">
-            {% for orders in orders %}
-
+        <div class="col-6">
+            {% for orders in order %}
             <div class="row">
                 <div class="col-3">
 
@@ -33,24 +31,9 @@
                         <div class="col-3">
                             <h6 class="tile-text" style="text-align: right;">Quantity : </h6>
                         </div>
-                        <div class="col-8">
-                            
-                                <form action="updateQuantity" method="POST">
-                                <div class="col-2 input-group mb-3">
-                                    
-                                
-                                        <input type="number" id="Number" name="quantity" class="form-control rounded" min="1" max="100" value={{orders["quantity"][0]}} style="font-size: x-small; opacity: 1"> </input>
-                                        <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
-                                    
-                                
-                                <div class="col-4 input-group-append" style="padding-left: 10px;">
-                                    <button type="submit" class="btn btn-dark" style="font-size: x-small;">Update Quantity</button>
-                                </div>
-                            </div>
-                            </form>
-                            
-                            </div> 
-                        
+                        <div class="col-9">
+                            <h6 class="tile-text" style="text-align: left;">{{orders["quantity"][0]}}</h6>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-3">
@@ -60,29 +43,14 @@
                             <h6 class="tile-text" style="text-align: left;">&euro;{{orders["selling_price"][0]}}</h6>
                         </div>
                     </div>
-                    <div class="row">
-                        <form action="deleteItem" method="POST">
-                            <div class="col-4 input-group-append" style="padding-left: 10px;">
-                                <input type="hidden" id="typeNumber"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
-                                <button type="submit" class="btn btn-light" style="font-size: x-small;" name="delete" value={{orders["product_serial_number"][0]}}>Remove Item</button>
-                            </div>
-                        </form>
-                    </div>
-                    
                 </div>
             </div>
             {%endfor%}
-
-        </div>
-        
+        </div> 
         <div class="col-5">
-            <form action="/placeOrder" method="POST">
             <div class="row">
                 <div class="col-10">
                     <h6 class="tile-text" style="text-align: left;"><b>Delivery Details</b></h6>
-                </div>
-                <div class="col-1" style="text-align: left;">
-                    <a href="http://127.0.0.1:5000/editAddress" class="btn btn-dark rounded" role="button" aria-disabled="true" style="font-size: x-small;">Edit</a>
                 </div>
             </div>
             <hr>
@@ -103,14 +71,14 @@
                 </div>
             </div>
             <hr>
-            <div class="col-5">
-                <h6 class="tile-text" style="text-align: left;"><b>Payment Option</b></h6>
+            <div class="row">
+                <div class="col-5">
+                    <h6 style="text-align: left;"><b>Payment Option</b></h6>
+                </div>
+                <div class="col-7">
+                    <h6 style="text-align: left;">Cash On Delivery</h6>
+                </div>
             </div>
-            <select class="form-select" required>
-                <option value="">None</option>
-                <option value="COD">Cash On Delivery</option>
-              </select>
-            
             <hr>
             <h6 class="tile-text" style="text-align: left;"><b>Order Summary</b></h6>
             <hr>
@@ -151,25 +119,8 @@
                 </div>
             </div>
             <hr>
-            <div class="row">
-                <div class="col-8"></div>
-                <div class="col-4">
-                    
-                        <button type="submit" class="btn btn-dark rounded" style="border-radius: 0%;">Proceed To Buy</button>        
-                        
-                </div>
-            </form>
             </div>
 
         </div>
-        
     </div>
-    {% endif %}
-    {% if session.total_items == '0' %}
-    <div class="row">
-        <div class="col-12">
-            <h6>No items in cart</h6>
-        </div>
-    </div>
-    {% endif %}
 </div>
