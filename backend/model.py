@@ -337,3 +337,16 @@ def readOrderHistory(userid):
     sqlquery = "SELECT * from ORDERS where user_id=" + str(userid) + " GROUP BY order_id"
     data = conn.execute(sqlquery)
     return data
+
+def insertNewRatings(rating_score, product_serial_number, user_id, comments=""):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO RATINGS (rating_score, product_serial_number, comments, user_id) VALUES (?, ?, ?, ?)"
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery, (int(rating_score), int(product_serial_number), str(comments), int(user_id)))
+        conn.close()
+        status = True
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = False
+    return status
