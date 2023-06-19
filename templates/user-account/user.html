@@ -1,3 +1,32 @@
+<style>
+.popup {
+  display: none;
+  position: fixed;
+  top:200px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+</style>
+
+<script>
+    function showPopup(orderid) {
+        console.log(orderid)
+  var popup = document.getElementById(orderid);
+  console.log(popup)
+  popup.style.display = "block";
+  
+  setTimeout(function() {
+    popup.style.display = "none";
+  }, 1000); // 15 seconds
+}
+
+</script>
+
 <div class="container">
     <h2 style="text-align: left;" >User Account<h2>
     <hr>
@@ -146,9 +175,9 @@
                                                     <input type="number" id="Number" name="quantity" class="form-control rounded" min="1" max="5" value=1 style="font-size: x-small; opacity: 1"> </input>
                                                     <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{item["product_serial_number"][0]}} style="font-size: x-small;"> </input>
                                                 
-                                            
+                                            <div id="popup{{order['order_id']}}" class="popup">Rating Successfully Added</div>
                                             <div class="col-5 input-group-append" style="padding-left: 10px;">
-                                                <button type="submit" class="btn btn-dark" style="font-size: x-small;">Submit Rating</button>
+                                                <button type="submit" class="btn btn-dark" style="font-size: x-small;" onclick="showPopup('popup{{order['order_id']}}')">Submit Rating</button>
                                             </div>
                                         </div>
                                         </form>

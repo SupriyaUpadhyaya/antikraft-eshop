@@ -1,9 +1,11 @@
 import json
 from statistics import mean, math
-from flask import Flask, jsonify, redirect, render_template, request, session
+from flask import Flask, jsonify, redirect, render_template, request, session, render_template_string
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
+from backend.model import insertNewRatings
+import time
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -382,6 +384,20 @@ def placeOrder():
         categories = getAllCategories()
         order, order_total = getPlacedOrder(orderid)
         return render_template('checkout/order-confirmation.html', order=order, order_total=order_total, categories=categories.json, orderid=orderid)
+
+@app.route('/submitRatings', methods=['POST'])
+def submit_ratings():
+    rating_score = int(request.form['quantity'])
+    product_serial_number = request.form['product_serial_number']
+    # print(rating_score)
+    # print(product_serial_number)
+    user_id = session["user_id"][0]
+    # print(user_id)
+    
+    insertNewRatings(rating_score, product_serial_number, user_id, comments="")
+        
+    time.sleep(1)
+    return redirect('useraccount') #render_template_string('<script>alert("{{ message }}");</script>', message=message)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
