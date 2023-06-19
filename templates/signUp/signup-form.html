@@ -1,95 +1,49 @@
-
 <style>
-    .already_section {
-        margin-top: 0px;
-        margin-right: 240px;
-        display: inline-block;
-    }
+  .already_section {
+    margin-top: 0px;
+    margin-right: 240px;
+    display: inline-block;
+  }
 
-    .already_section h4 {
-        display: inline-block;
-        margin-right: 10px;
-    }
+  .already_section h4 {
+    display: inline-block;
+    margin-right: 10px;
+  }
 
-    .rounded-button {
-        width: 80px;
-        height: 35px;
-        background-color: #000000;
-        border: none;
-        color: #ffffff;
-        text-align: center;
-        font-size: 16px;
-        border-radius: 10px;
-        display: inline-block;
-        vertical-align: middle;
-        margin-top: -10px;
-        margin-left: 10px;
-    }
+  .rounded-button {
+    width: 80px;
+    height: 35px;
+    background-color: #000000;
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -10px;
+    margin-left: 10px;
+  }
 </style>
 
 <div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-12 col-md-auto already_section">
-            <h4>If you are already a member,</h4>
-            <a href= "http://127.0.0.1:5000/login">
-            <button type="submit" class="rounded-button">Login</button></a>
-        </div>
+  <div class="row justify-content-md-center">
+    <div class="col-12 col-md-auto already_section">
+      <h4>If you are already a member,</h4>
+      <a href="http://127.0.0.1:5000/login">
+        <button type="submit" class="rounded-button">Login</button>
+      </a>
     </div>
+  </div>
 </div>
 
 <style>
-    .signup-section {
-        margin-top: 0px; 
-        margin-right: 720px; /* Adjust the value as needed to create the desired space */
-
-    }
-</style>
-
-<style>
-  body {
-    background-color: #fff;
-    color: #000;
-  }
-
-  .container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  .form-group {
-    margin-bottom: 20px;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  .form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #000;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #000;
-  }
-
-  .btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #000;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
+  .signup-section {
+    margin-top: 0px;
+    margin-right: 720px;
+    /* Adjust the value as needed to create the desired space */
   }
 </style>
-
-
 
 <style>
   body {
@@ -138,10 +92,10 @@
 <div class="container">
   <h2>Sign Up</h2>
   <form action="/register" method="POST" onsubmit="return validateForm()">
-      <div class="row">
-        {% if error == "True" %}
-            <h6 style="color: red; text-align: left;">Error : Registration was not successful, Please try again</h6>
-        {%endif%}
+    <div class="row">
+      {% if error == "True" %}
+      <h6 style="color: red; text-align: left;">Error: Registration was not successful. Please try again.</h6>
+      {% endif %}
     </div>
     <div class="form-group">
       <label for="salutation">Salutation*:</label>
@@ -169,6 +123,7 @@
       <label for="password">Password*:</label>
       <input type="password" class="form-control" id="password" name="password" minlength="8" required>
       <p id="passwordLengthMessage" style="display: none; color: red;">Password must be at least 8 characters long.</p>
+      <p id="passwordComplexityMessage" style="display: none; color: red;">Password must contain at least one lowercase letter, one uppercase letter, one symbol, and one digit.</p>
     </div>
     <div class="form-group">
       <label for="confirm-password">Confirm Password:</label>
@@ -185,6 +140,7 @@
     var newPasswordInput = document.getElementById("password");
     var confirmPasswordInput = document.getElementById("confirm-password");
     var passwordLengthMessage = document.getElementById("passwordLengthMessage");
+    var passwordComplexityMessage = document.getElementById("passwordComplexityMessage");
     var passwordMatchMessage = document.getElementById("passwordMatchMessage");
 
     newPasswordInput.addEventListener("input", validatePassword);
@@ -198,6 +154,17 @@
         passwordLengthMessage.style.display = "block";
       } else {
         passwordLengthMessage.style.display = "none";
+      }
+
+      var hasLowercase = /[a-z]/.test(newPassword);
+      var hasUppercase = /[A-Z]/.test(newPassword);
+      var hasSymbol = /[!@#$%^&*()\-=_+[\]{}|\\;:'",.<>/?]/.test(newPassword);
+      var hasDigit = /\d/.test(newPassword);
+
+      if (!(hasLowercase && hasUppercase && hasSymbol && hasDigit)) {
+        passwordComplexityMessage.style.display = "block";
+      } else {
+        passwordComplexityMessage.style.display = "none";
       }
 
       if (newPassword !== confirmPassword) {
@@ -216,6 +183,16 @@
         return false;
       }
 
+      var hasLowercase = /[a-z]/.test(newPassword);
+      var hasUppercase = /[A-Z]/.test(newPassword);
+      var hasSymbol = /[!@#$%^&*()\-=_+[\]{}|\\;:'",.<>/?]/.test(newPassword);
+      var hasDigit = /\d/.test(newPassword);
+
+      if (!(hasLowercase && hasUppercase && hasSymbol && hasDigit)) {
+        alert("Password must contain at least one lowercase letter, one uppercase letter, one symbol, and one digit.");
+        return false;
+      }
+
       if (newPassword !== confirmPassword) {
         alert("New password and confirm password do not match.");
         return false;
@@ -225,4 +202,3 @@
     }
   </script>
 </div>
-
