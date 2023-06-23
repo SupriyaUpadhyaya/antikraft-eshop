@@ -340,8 +340,24 @@ def readOrderHistory(userid):
 
 def insertNewRatings(rating_score, product_serial_number, user_id, comments=""):
     conn = get_db_connection()
+
+    checkquery = "SELECT COUNT(*) FROM RATINGS WHERE user_id = " + str(user_id) + " AND product_serial_number = " + str(product_serial_number)
+    # print(checkquery)
+    conn.execute(checkquery)
+    counts = conn.fetchall()
+    content_list = []
+    for row in counts:
+        content_list.append(list(row))
+
+    count_value = content_list[0]
+
+    if count_value[0] != 0:
+        del_query = "DELETE FROM RATINGS WHERE user_id = " + str(user_id) + " AND product_serial_number = " + str(product_serial_number)
+        # print(del_query)
+        conn.execute(del_query)
+
     sqlquery = "INSERT INTO RATINGS (rating_score, product_serial_number, comments, user_id) VALUES (?, ?, ?, ?)"
-    print(sqlquery)
+    # print(sqlquery)
     try:
         conn.execute(sqlquery, (int(rating_score), int(product_serial_number), str(comments), int(user_id)))
         conn.close()
