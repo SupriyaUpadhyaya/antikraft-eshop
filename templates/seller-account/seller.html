@@ -14,6 +14,16 @@
           <h5 style="color: black; background-color: grey;">Product added successfully</h5>
         </div>
       {%endif%}
+      {% if addOfferError == "True" %}
+      <div class="col-4 msg-panel">
+          <h5 style="color: red; background-color: grey;">Error adding offer. Please try again later.</h5>
+        </div>
+      {%endif%}
+      {% if addOfferError == "False" %}
+      <div class="col-4 msg-panel">
+          <h5 style="color: black; background-color: grey;">Offer added successfully</h5>
+        </div>
+      {%endif%}
     </div>
     <hr>
     <style>
@@ -39,7 +49,7 @@
             <div class="nav flex-column nav-pills accInfo" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               <a class="nav-link active accInfo" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Seller Information</a>
               <a class="nav-link accInfo" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Add new product</a>
-              <a class="nav-link accInfo" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Create new offer</a>
+              <a class="nav-link accInfo" id="v-pills-history-tab" data-toggle="pill" href="#v-pills-history" role="tab" aria-controls="v-pills-history" aria-selected="false">Create offers</a>
               <a class="nav-link accInfo" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Awards</a>
             </div>
           </div>
@@ -80,9 +90,8 @@
               <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                 {% include 'seller-account/addNewProduct.html' %}
               </div>
-              <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                <h1>Wishlist</h1>
-                <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+              <div class="tab-pane fade" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab">
+                {% include 'seller-account/createOffer.html' %}
               </div>
               <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                 <h1>Password Reset</h1>

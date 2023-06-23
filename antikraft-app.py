@@ -1,11 +1,11 @@
 from datetime import datetime
 import json
 from statistics import mean
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
-from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers
 from backend.model import insertNewRatings
 import time
 
@@ -218,15 +218,17 @@ def userAccountLogin():
     username = request.form['username']
     password = request.form['password']
     user = validateCredentails(username, password)
-    for item in user:
-        session[item]=user[item]
-    loginStatus = session["login_status"]
-    print(loginStatus)
     categories = getAllCategories()
-    if loginStatus == "True":
-        return render_template('homepage/home.html', categories=categories.json)
-    else:
+    if user == "False":
         return render_template('login/login.html', categories=categories.json, error="True")
+    else: 
+        for item in user:
+            session[item]=user[item]
+        loginStatus = session["login_status"]
+        print(loginStatus)
+        return redirect('/')
+    
+       
 
 
 @app.route("/signup")
@@ -290,7 +292,7 @@ def userAccountRegistration():
     print("Login status")
     print(login_status)
     if login_status == "True":
-        return render_template('homepage/home.html', categories=categories.json)
+        return redirect('/')
     else:
         return render_template('signup/signup.html', categories=categories.json, error ="True")
 
@@ -309,7 +311,7 @@ def sellerAccountRegistration():
     print("seller Login status")
     print(seller_login_status)
     if seller_login_status == "True":
-        return render_template('seller-account/selleraccount.html', categories=categories.json, loginStatus=seller_login_status)
+        return redirect('/sellerAccount')
     else:
         return render_template('seller-signup/sellersignup.html', categories=categories.json, loginStatus=seller_login_status)
 
@@ -337,15 +339,12 @@ def sellerAccountLogin():
     username = request.form['username']
     password = request.form['password']
     user = validateSellerCredentails(username, password)
-    for item in user:
-        session[item]=user[item]
-    loginStatus = session["seller_login_status"]
-    print(loginStatus)
-    categories = getAllCategories()
-    if loginStatus == "True":
-        return render_template('seller-account/selleraccount.html', categories=categories.json)
+    if user != "False":
+        for item in user:
+            session[item] = user[item]
+        return redirect('/sellerAccount')
     else:
-        return render_template('seller-login/seller-login.html', categories=categories.json, error="True")
+        return render_template('seller-login/seller-login.html', error="True")
 
 @app.route('/sellerAccount')
 def sellerAccount():
@@ -354,7 +353,8 @@ def sellerAccount():
     else:
         loginStatus = session["seller_login_status"]
     if loginStatus == "True":
-        return render_template('seller-account/selleraccount.html')
+        products = getSellerProducts(session["seller_id"])
+        return render_template('seller-account/selleraccount.html', products=products)
     else:
         return render_template('seller-login/seller-login.html')
 
@@ -452,9 +452,23 @@ def addNewProduct():
     status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
     status = "True"
     if status == "True":
-        return render_template('seller-account/selleraccount.html', addProdError="False")
+        return redirect(url_for('sellerAccount', addProdError="False"))
     else:
-        return render_template('seller-account/selleraccount.html', addProdError="True")
+        return redirect(url_for('sellerAccount', addProdError="True"))
+
+@app.route('/updateOffer', methods=['POST'])   
+def updateOffer():
+    product_serial_number = request.form['product_serial_number']
+    offer_percent = request.form['offerpercent']
+    if float(offer_percent) > 0:
+        offer_flag = True
+    else:
+        offer_flag = False
+    status = updateProductOffers(product_serial_number, offer_flag, offer_percent)
+    if status == True:
+        return redirect(url_for('sellerAccount', addOfferError="False"))
+    else:
+        return redirect(url_for('sellerAccount', addOfferError="True"))
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity, readOrderByOrderId, getStock, updateOrderStatus, readPlacedOrder
+from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity, readOrderByOrderId, getStock, updateOrderStatus, readPlacedOrder, getUserRating
 from flask import session
 import random
 from datetime import datetime
@@ -155,7 +155,7 @@ def getStockValue(product_serial_number):
 
 def getPlacedOrder(orderid):
     order = readPlacedOrder(orderid)
-    keyList = ["order_id", "user_id", "ship_address", "order_date", "quantity", "selling_price", "order_status", "product_serial_number", "image_id", "item_total", "order_total", "product_name", "product_url"]
+    keyList = ["order_id", "user_id", "ship_address", "order_date", "quantity", "selling_price", "order_status", "product_serial_number", "image_id", "item_total", "order_total", "product_name", "product_url", "rating"]
     cart = []
     i = 1
     order_total = 0
@@ -177,6 +177,9 @@ def getPlacedOrder(orderid):
             item['product_name'].append(url["product_name"])
             p_url = "http://127.0.0.1:5000/product?categoryid=" + str(url["category_id"]) + "&subcategoryid=" +  str(url["sub_category_id"]) + "&productid=" + str(url["product_id"])
             item['product_url'].append(p_url)
+        rating = getUserRating(row["product_serial_number"], row["user_id"])
+        for rr in rating:
+            item['rating'].append(rr["rating_score"])
         cart.append(item)
         i += 1
         order_total += item_total
