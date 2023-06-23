@@ -140,8 +140,8 @@ def readUserAccount(username):
 
 def readSellerAccount(username):
     conn = get_db_connection()
-    print(username)
     sqlquery = "SELECT * from SELLER where seller_email='" + username + "'"
+    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
 
@@ -381,14 +381,54 @@ def insertNewProduct(productName, productDescription, seller_id, date, offerflag
         status = False
     return status
 
+
 def getCategoryId(category):
     conn = get_db_connection()
     sqlquery = "SELECT category_id from category where category_name='" + category + "'"
     data = conn.execute(sqlquery)
     return data
 
+
 def getSubCategoryId(subcategory):
     conn = get_db_connection()
     sqlquery = "SELECT sub_serial_number from sub_category where sub_category_name='" + subcategory + "'"
     data = conn.execute(sqlquery)
     return data
+
+
+def readSellerProducts(sellerid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from product where seller_id=" + str(sellerid[0]) 
+    print(sqlquery)
+    data = conn.execute(sqlquery)
+    return data
+
+
+def getUserRating(sn, userid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from ratings where product_serial_number=" + str(sn) + " and user_id=" + str(userid)
+    print(sqlquery)
+    data = conn.execute(sqlquery)
+    return data
+
+
+def getProductRating(sn):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from ratings where product_serial_number=" + str(sn) 
+    print(sqlquery)
+    data = conn.execute(sqlquery)
+    return data
+
+
+def writeProductOffers(product_serial_number, offer_flag, offer_percent):
+    conn = get_db_connection()
+    sqlquery = "UPDATE PRODUCT SET offer_flag=" + str(offer_flag) + ", offer_percent= " + str(offer_percent) + " where product_serial_number=" + str(product_serial_number)
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery)
+        conn.close()
+        status = True
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = False
+    return status
