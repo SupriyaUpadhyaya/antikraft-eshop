@@ -146,12 +146,12 @@ def readSellerAccount(username):
     return data
 
 
-def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber):
+def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber,  address, securityquestion):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone ) VALUES (?, ?, ?, ?, ?, ?)"
+    sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone,  user_address, security_question ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     print(sqlquery)
     try:
-        conn.execute(sqlquery, (firstname, lastname, salutation, email, password, phonenumber ))
+        conn.execute(sqlquery, (firstname, lastname, salutation, email, password, phonenumber, address, securityquestion ))
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
@@ -160,12 +160,12 @@ def insertUserAccount(salutation, firstname, lastname, email, password, phonenum
     return status
 
 
-def insertSellerAccount(sellername, email, password, address):
+def insertSellerAccount(sellername, email, password, address, securityquestion):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address ) VALUES (?, ?, ?, ?)"
+    sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address, security_question ) VALUES (?, ?, ?, ?, ?)"
     print(sqlquery)
     try:
-        conn.execute(sqlquery, (sellername, email, password, address ))
+        conn.execute(sqlquery, (sellername, email, password, address, securityquestion ))
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
@@ -366,3 +366,29 @@ def insertNewRatings(rating_score, product_serial_number, user_id, comments=""):
         print(error)
         status = False
     return status
+
+
+def insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images):
+    conn = get_db_connection()
+    sqlquery = "INSERT INTO PRODUCT (product_name, product_description, seller_id, posted_date, offer_flag, offer_percent, product_price, sub_category_id, stock, image_id, category_id, product_id, secondary_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery, (productName, productDescription, int(seller_id), date, offerflag, float(offerpercent), float(productPrice), subcategory, int(stock), image_id, int(category), int(product_id), secondary_images))
+        conn.close()
+        status = True
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = False
+    return status
+
+def getCategoryId(category):
+    conn = get_db_connection()
+    sqlquery = "SELECT category_id from category where category_name='" + category + "'"
+    data = conn.execute(sqlquery)
+    return data
+
+def getSubCategoryId(subcategory):
+    conn = get_db_connection()
+    sqlquery = "SELECT sub_serial_number from sub_category where sub_category_name='" + subcategory + "'"
+    data = conn.execute(sqlquery)
+    return data

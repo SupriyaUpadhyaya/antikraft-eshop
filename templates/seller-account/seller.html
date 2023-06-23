@@ -1,5 +1,20 @@
-<div class="container">
-    <h2 style="text-align: left;" >User Account<h2>
+<div class="container" onload="hideLoadingDiv()">
+    <div class="row">
+      <div class="col-3">
+        <h2 style="text-align: left;" >Seller Account<h2></h2>
+      </div>
+    
+    {% if addProdError == "True" %}
+      <div class="col-4 msg-panel">
+          <h5 style="color: red; background-color: grey;">Error adding product. Please try again later.</h5>
+        </div>
+      {%endif%}
+      {% if addProdError == "False" %}
+      <div class="col-4 msg-panel">
+          <h5 style="color: black; background-color: grey;">Product added successfully</h5>
+        </div>
+      {%endif%}
+    </div>
     <hr>
     <style>
         #key{text-align: right;}
@@ -28,13 +43,13 @@
               <a class="nav-link accInfo" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Awards</a>
             </div>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <div class="tab-content" id="v-pills-tabContent">
               <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <div class="row">
                     <div class="col-1"> </div>  
                     <div class="col-2">
-                    <h5 id="key">Firstname:</h5>
+                    <h5 id="key">Seller Name:</h5>
                     </div>
                     <div class="col-1"> </div>  
                     <div class="col-4">
@@ -44,7 +59,7 @@
                 <div class="row">
                     <div class="col-1"> </div>  
                     <div class="col-2">
-                    <h5 id="key">lastname:</h5>
+                    <h5 id="key">Email :</h5>
                     </div>
                     <div class="col-1"> </div> 
                     <div class="col-6">
@@ -54,7 +69,7 @@
                 <div class="row">
                     <div class="col-1"> </div>  
                     <div class="col-2">
-                    <h5 id="key">Email:</h5>
+                    <h5 id="key">Address :</h5>
                     </div>
                     <div class="col-1"> </div> 
                     <div class="col-6">
@@ -63,8 +78,7 @@
                 </div>
             </div>
               <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                <h1>Order History</h1>
-                <p>Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est eu aliqua occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt excepteur ea incididunt minim occaecat.</p>
+                {% include 'seller-account/addNewProduct.html' %}
               </div>
               <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                 <h1>Wishlist</h1>
