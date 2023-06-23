@@ -146,12 +146,12 @@ def readSellerAccount(username):
     return data
 
 
-def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber):
+def insertUserAccount(salutation, firstname, lastname, email, password, phonenumber,  address, securityquestion):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone ) VALUES (?, ?, ?, ?, ?, ?)"
+    sqlquery = "INSERT INTO USER (user_firstname, user_lastname, user_salutation, user_email, user_password, user_phone,  user_address, security_question ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     print(sqlquery)
     try:
-        conn.execute(sqlquery, (firstname, lastname, salutation, email, password, phonenumber ))
+        conn.execute(sqlquery, (firstname, lastname, salutation, email, password, phonenumber, address, securityquestion ))
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
@@ -160,12 +160,12 @@ def insertUserAccount(salutation, firstname, lastname, email, password, phonenum
     return status
 
 
-def insertSellerAccount(sellername, email, password, address):
+def insertSellerAccount(sellername, email, password, address, securityquestion):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address ) VALUES (?, ?, ?, ?)"
+    sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address, security_question ) VALUES (?, ?, ?, ?, ?)"
     print(sqlquery)
     try:
-        conn.execute(sqlquery, (sellername, email, password, address ))
+        conn.execute(sqlquery, (sellername, email, password, address, securityquestion ))
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:

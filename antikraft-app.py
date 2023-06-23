@@ -267,7 +267,9 @@ def userAccountRegistration():
     email = request.form['email']
     password = request.form['password']
     phonenumber = request.form['phonenumber']
-    user = validateRegistration(salutation, firstname, lastname, email, password, phonenumber)
+    address = request.form['address']
+    securityquestion = request.form['security-question']
+    user = validateRegistration(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion)
     for item in user:
         session[item] = user[item]
     login_status = session["login_status"]
@@ -285,7 +287,8 @@ def sellerAccountRegistration():
     email = request.form['email']
     password = request.form['password']
     address = request.form['address']
-    seller = validateSellerRegistration(sellername, email, password, address)
+    securityquestion = request.form['security-question']
+    seller = validateSellerRegistration(sellername, email, password, address, securityquestion)
     for item in seller:
         session[item] = seller[item]
     seller_login_status = session["seller_login_status"]
@@ -296,6 +299,7 @@ def sellerAccountRegistration():
         return render_template('seller-account/selleraccount.html', categories=categories.json, loginStatus=seller_login_status)
     else:
         return render_template('seller-signup/sellersignup.html', categories=categories.json, loginStatus=seller_login_status)
+
 
 
 @app.route('/logout')
