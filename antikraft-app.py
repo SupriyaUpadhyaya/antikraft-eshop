@@ -14,7 +14,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route("/")
 def home():
-    if len(session) == 0:
+    if 'login_status' not in session:
         session["login_status"] = 'False'
     categories = getAllCategories()
     return render_template('homepage/home.html', categories=categories.json, user="None")
