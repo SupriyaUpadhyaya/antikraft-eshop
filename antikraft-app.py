@@ -79,7 +79,8 @@ def getSpecificSubCategory():
                            product_id_list = sub_cat_json['product_id'], \
                            sub_category_id = sub_category_id, \
                            category_id = category_id, \
-                           range=range)
+                           range=range, \
+                           len=len)
 
 def getSubCategoryJson(category_id, sub_category_id):
     spec_cat = getSubCategoryProductList(category_id, sub_category_id)
