@@ -34,7 +34,9 @@ def getUserAccount(username):
     user = {key: [] for key in keyList}
     user["order_id"] = order_id
     user["total_items"] = item_count
+    count = 0
     for row in data:
+        count += 1
         user['user_id'].append(row["user_id"])
         user['user_firstname'].append(row["user_firstname"])
         user['user_lastname'].append(row["user_lastname"])
@@ -46,8 +48,8 @@ def getUserAccount(username):
         user['user_phone'].append(row["user_phone"])
         user['user_address'].append(row["user_address"])
         user['user_salutation'].append(row["user_salutation"])
-
-    if user is not None:
+    print("len(data.fetchall())", len(data.fetchall()))
+    if count != 0:
         return user
     else:
         return "ERROR"
@@ -56,7 +58,7 @@ def getUserAccount(username):
 def validateCredentails(username, password):
     user = getUserAccount(username)
     if user == "ERROR":
-        return "ERROR: Username does not exist"
+        return "False"
     else:
         if password == cipher.decrypt(user["user_password"][0]).decode("ascii"):
             status = "True"
@@ -85,26 +87,25 @@ def addUserAccount(salutation, firstname, lastname, email, password, phonenumber
   
 def getSellerAccount(username):
     data = readSellerAccount(username)
-
+    count = 0
     keyList = ["seller_id", "seller_name", "seller_email", "seller_password", "seller_address", "seller_address", "seller_login_status"]
     seller = {key: [] for key in keyList}
     for row in data:
+        count += 1
         seller['seller_id'].append(row["seller_id"])
         seller['seller_name'].append(row["seller_name"])
         seller['seller_email'].append(row["seller_email"])
         seller['seller_password'].append(row["seller_password"])
         seller['seller_address'].append(row["seller_address"])
-    if seller is not None:
+    if count != 0:
         return seller
     else:
         return "ERROR"
     
 def validateSellerCredentails(username, password):
     seller = getSellerAccount(username)
-    print(cipher.decrypt(seller["seller_password"][0]).decode("ascii"))
-    print(password)
     if seller == "ERROR":
-        return "ERROR: Username does not exist"
+        return "False"
     else:
         if password == cipher.decrypt(seller["seller_password"][0]).decode("ascii"):
             status = "True"
