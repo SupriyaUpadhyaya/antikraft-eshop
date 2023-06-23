@@ -9,16 +9,28 @@ from backend.controllers.product import addNewProductFromSeller, uploadImageToDr
 from backend.model import insertNewRatings
 import time
 
+import nltk
+# nltk.download('punkt')
+from backend.chat import get_response
+
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-@app.route("/")
+# @app.route("/")
+@app.route('/',  methods=['GET'])
 def home():
     if 'login_status' not in session:
         session["login_status"] = 'False'
     categories = getAllCategories()
     return render_template('homepage/home.html', categories=categories.json, user="None")
 
+@app.route('/predict',  methods=['POST'])
+def predict():
+    text = request.get_json().get('message')
+    response = get_response(text)
+    message = {"answer": response}
+    print(message)
+    return json.dumps(message)
 
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
