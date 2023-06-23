@@ -1,0 +1,10 @@
+client_config_backend: settings
+client_config:
+   client_id: "344402185162-uqlc1rodlsumkh6js80309bd00md0bn7.apps.googleusercontent.com"
+   client_secret: "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"
+   redirect_uri: "http://127.0.0.1:5000/oauth2callback"
+save_credentials: True
+save_credentials_backend: file
+save_credentials_file: cred.json
+oauth_scope:
+  - “https://www.googleapis.com/auth/drive"
