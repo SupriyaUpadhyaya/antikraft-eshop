@@ -66,17 +66,18 @@ def validateCredentails(username, password):
     return user
 
 
-def validateRegistration(salutation, firstname, lastname, email, password, phonenumber):
+def validateRegistration(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion):
     encrypted_password = cipher.encrypt(password).decode("ascii")
-    status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber)
+    status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber, address, securityquestion)
+    print(status)
     if status == "True":
         user = getUserAccount(email)
     user["login_status"] = status
     return user
     
 
-def addUserAccount(salutation, firstname, lastname, email, password, phonenumber):
-    status = insertUserAccount(salutation, firstname, lastname, email, password, phonenumber)
+def addUserAccount(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion):
+    status = insertUserAccount(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion)
     if status == "True":
         return "True"
     else:
@@ -113,9 +114,9 @@ def validateSellerCredentails(username, password):
     return seller
     
    
-def validateSellerRegistration(sellername, email, password, address):
+def validateSellerRegistration(sellername, email, password, address, securityquestion):
     encrypted_spassword = cipher.encrypt(password).decode("ascii")
-    status = addSellerAccount(sellername, email, encrypted_spassword, address)
+    status = addSellerAccount(sellername, email, encrypted_spassword, address, securityquestion)
     seller = {}
     if status == "True":
         seller = getSellerAccount(email)
@@ -123,12 +124,13 @@ def validateSellerRegistration(sellername, email, password, address):
     return seller
 
 
-def addSellerAccount(sellername, email, password, address):
-    status = insertSellerAccount(sellername, email, password, address)
+def addSellerAccount(sellername, email, password, address, securityquestion):
+    status = insertSellerAccount(sellername, email, password, address, securityquestion)
     if status == "True":
         return "True"
     else:
         return "False"
+
 
 
 def getOrderHistory(userid):
