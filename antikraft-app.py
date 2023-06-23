@@ -1,9 +1,11 @@
+from datetime import datetime
 import json
-from statistics import mean, math
-from flask import Flask, jsonify, redirect, render_template, request, session, render_template_string
+from statistics import mean
+from flask import Flask, redirect, render_template, request, session
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive
 from backend.model import insertNewRatings
 import time
 
@@ -12,7 +14,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route("/")
 def home():
-    if len(session) == 0:
+    if 'login_status' not in session:
         session["login_status"] = 'False'
     categories = getAllCategories()
     return render_template('homepage/home.html', categories=categories.json, user="None")
@@ -328,6 +330,17 @@ def sellerAccountLogin():
     else:
         return render_template('seller-login/seller-login.html', categories=categories.json, error="True")
 
+@app.route('/sellerAccount')
+def sellerAccount():
+    if "seller_login_status" not in session:
+        loginStatus = "False"
+    else:
+        loginStatus = session["seller_login_status"]
+    if loginStatus == "True":
+        return render_template('seller-account/selleraccount.html')
+    else:
+        return render_template('seller-login/seller-login.html')
+
 
 @app.route('/sellerPasswordReset')
 def sellerPasswordReset():
@@ -398,6 +411,34 @@ def submit_ratings():
         
     time.sleep(1)
     return redirect('useraccount') #render_template_string('<script>alert("{{ message }}");</script>', message=message)
+
+
+@app.route('/addNewProduct', methods=['POST'])
+def addNewProduct():
+    productName = request.form['productName']
+    productDescription = request.form['productDescription']
+    category = request.form['topic']
+    subcategory = request.form['chapter']
+    productPrice = request.form['productPrice']
+    stock = request.form['stock']
+    offerpercent = request.form['offerpercent']
+    inputFile = request.files.getlist('image')
+    image_id, secondary_images = uploadImageToDrive(inputFile)
+    if offerpercent == "0":
+        offerflag = False
+    else: 
+        offerflag = True
+    seller_id = session["seller_id"][0]
+    date = datetime.now().strftime("%d-%m-%Y")  
+    product_id = 6 
+    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
+    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
+    status = "True"
+    if status == "True":
+        return render_template('seller-account/selleraccount.html', addProdError="False")
+    else:
+        return render_template('seller-account/selleraccount.html', addProdError="True")
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
