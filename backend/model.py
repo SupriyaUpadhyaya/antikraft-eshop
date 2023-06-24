@@ -160,6 +160,19 @@ def insertUserAccount(salutation, firstname, lastname, email, password, phonenum
         status = "False"
     return status
 
+def updateUserAccount(salutation, firstname, lastname, email, phonenumber,  address, securityquestion):
+    conn = get_db_connection()
+    sqlquery = "UPDATE USER SET user_firstname='" + str(firstname) + "', user_lastname='" + str(lastname) + "', user_salutation='" + str(salutation) + "', user_phone=" + str(phonenumber) + ", user_address='" + str(address) + "', security_question='" + str(securityquestion) + "' where user_email='" + str(email) +"'"
+    print(sqlquery)
+    try:
+        conn.execute(sqlquery)
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
+
 
 def insertSellerAccount(sellername, email, password, address, securityquestion):
     conn = get_db_connection()

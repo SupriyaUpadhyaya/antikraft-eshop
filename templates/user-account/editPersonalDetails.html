@@ -77,19 +77,20 @@
       font-weight: bold;
     }
   </style>
-  
+  <script>
+    function GetURLParameter(sParam)
+var errorval = GetURLParameter('error')​
+  </script>
   <div class="container">
     <h2>Update Personal Information</h2>
+    {% if errorval == "True" %}
+      <h6 style="color: red; text-align: left;">Error: Registration was not successful. Please try again.</h6>
+      {% endif %}
     <form action="/updatePersonalInfo" method="POST" onsubmit="return validateForm()">
-      <div class="row">
-        {% if error == "True" %}
-        <h6 style="color: red; text-align: left;">Error: Registration was not successful. Please try again.</h6>
-        {% endif %}
-      </div>
       <div class="form-group">
         <label for="salutation">Salutation*:</label>
-        <select class="form-control" id="salutation" name="salutation" value="{{session['user_salutation'][0]}}" required>
-          <option value="">Select Salutation</option>
+        <select class="form-control" id="salutation" name="salutation" required>
+          <option value="">{{session['user_salutation'][0]}}</option>
           <option value="Mr.">Mr</option>
           <option value="Mrs.">Mrs</option>
           <option value="Miss">Miss</option>
@@ -106,7 +107,7 @@
       </div>
       <div class="form-group">
         <label for="email">Email*:</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{session['user_email'][0]}}" required>
+        <input type="email" class="form-control" id="email" name="email" value="{{session['user_email'][0]}}" readonly>
       </div>
       <div class="form-group">
         <label for="address">Address*:</label>
