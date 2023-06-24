@@ -63,24 +63,18 @@ def getSpecificSubCategory():
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
     
-    sub_cat_product_json = getSubCategoryJson(category_id, sub_category_id)
+    sub_cat_product_json = getSubCategoryProductList(category_id, sub_category_id)
     category_table_row = getSpecificCategoryRow(category_id)
-    sub_cat_json = sub_cat_product_json.json
     sub_cat_name = getSpecificCategoryImages(category_id)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]
     categories = getAllCategories()
     return render_template('subcategory/subcategory_landing_page.html', categories = categories.json, \
                            category_name = category_table_row.json['category_name'], \
                            sub_category_name = sub_cat_name, \
-                           product_count = len(sub_cat_json['category_id']), \
-                           product_name_list = sub_cat_json['product_name'], \
-                           product_image_list = sub_cat_json['image_id'], \
-                           product_price_list = sub_cat_json['product_price'], \
-                           product_id_list = sub_cat_json['product_id'], \
                            sub_category_id = sub_category_id, \
                            category_id = category_id, \
                            range=range, \
-                           len=len)
+                           len=len, sub_cat_product_json=sub_cat_product_json)
 
 def getSubCategoryJson(category_id, sub_category_id):
     spec_cat = getSubCategoryProductList(category_id, sub_category_id)
@@ -100,7 +94,7 @@ def getSpecificProduct():
         session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
-    product_id = request.args.get('productid')
+    product_serial_number = request.args.get('product_serial_number')
     categories = getAllCategories()
     category_table_row = getSpecificCategoryRow(category_id)
     cat_name = category_table_row.json['category_name']
@@ -108,8 +102,7 @@ def getSpecificProduct():
     sub_cat_name = getSpecificCategoryImages(category_id)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]    
 
-    product_json = getProductJson(category_id, sub_category_id, product_id)
-    product_json = product_json.json
+    product_json = getProductData(category_id, sub_category_id, product_serial_number)
 
     sec_images = product_json['secondary_images'][0]
     li_sec_images = sec_images.split(';')
