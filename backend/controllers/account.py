@@ -49,7 +49,6 @@ def getUserAccount(username):
         user['user_address'].append(row["user_address"])
         user['user_salutation'].append(row["user_salutation"])
         user['security_question'].append(row["security_question"])
-    print("len(data.fetchall())", len(data.fetchall()))
     if count != 0:
         return user
     else:
@@ -148,12 +147,11 @@ def addSellerAccount(sellername, email, password, address, securityquestion):
         return "False"
 
 def verifyUserAccount(email, security_answer):
-    status = getUserAccount( email)
+    status = getUserAccount(email)
     if status == "ERROR":
         return False
     else:
-        
-        if status["security_question"] == security_answer:
+        if status['security_question'][0] == security_answer:
             return True
         else:
             return False
