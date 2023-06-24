@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updateUserAccount
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -151,3 +151,17 @@ def addSellerAccount(sellername, email, password, address, securityquestion):
 def getOrderHistory(userid):
     order = readOrderHistory(userid)
     return order
+
+
+def updatePersonalDetails(salutation, firstname, lastname, email, phonenumber, address, securityquestion):
+    userexists = getUserAccount(email)
+    if userexists != "ERROR":
+        status = updateUserAccount(salutation, firstname, lastname, email, phonenumber, address, securityquestion)
+        print(status)
+        if status == "True":
+            user = getUserAccount(email)
+            return user
+        else:
+            return "False"
+    else:
+        return "False"

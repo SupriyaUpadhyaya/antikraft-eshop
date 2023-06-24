@@ -3,7 +3,7 @@ import json, subprocess
 from statistics import mean
 from flask import Flask, redirect, render_template, request, session, url_for
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
-from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
 from backend.model import insertNewRatings
@@ -465,6 +465,27 @@ def updateOffer():
 def editUserProfile():
     categories = getAllCategories()
     return render_template('user-account/editPersonalInfo.html', error="False", categories=categories)
+
+@app.route('/updatePersonalInfo', methods=['POST'])
+def updatePersonalInfo():
+    salutation = request.form['salutation']
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
+    email = request.form['email']
+    phonenumber = request.form['phonenumber']
+    address = request.form['address']
+    securityquestion = request.form['security-question']
+    user = updatePersonalDetails(salutation, firstname, lastname, email, phonenumber, address, securityquestion)
+    if user == "False":
+        return redirect(url_for('editUserProfile', error="True"))
+    else:
+        print("user ", user["user_address"])
+        session["user_address"] = user["user_address"]
+        session["user_firstname"] = user["user_firstname"]
+        session["user_lastname"] = user["user_lastname"]
+        session["user_phone"] = user["user_phone"]
+        session["user_salutation"] = user["user_salutation"]
+        return redirect('useraccount')
 
 
 if __name__ == '__main__':
