@@ -192,6 +192,273 @@
                     </div>
                 </div>
             </div>
+            {% if len(product_price_list) > 5 %}
+                {% if len(product_price_list) == 6 %}
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[5]}}"
+                        data-name="{{product_name_list[5]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[5]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[5]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[5]}}</span>
+                            <span>{{product_name_list[5]}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if len(product_price_list) == 7 %}
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[5]}}"
+                        data-name="{{product_name_list[5]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[5]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[5]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[5]}}</span>
+                            <span>{{product_name_list[5]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[6]}}"
+                        data-name="{{product_name_list[6]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[6]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[6]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[6]}}</span>
+                            <span>{{product_name_list[6]}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if len(product_price_list) == 8 %}
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[5]}}"
+                        data-name="{{product_name_list[5]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[5]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[5]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[5]}}</span>
+                            <span>{{product_name_list[5]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[6]}}"
+                        data-name="{{product_name_list[6]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[6]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[6]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[6]}}</span>
+                            <span>{{product_name_list[6]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[7]}}"
+                        data-name="{{product_name_list[7]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[7]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[7]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[7]}}</span>
+                            <span>{{product_name_list[7]}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if len(product_price_list) == 9 %}
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[5]}}"
+                        data-name="{{product_name_list[5]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[5]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[5]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[5]}}</span>
+                            <span>{{product_name_list[5]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[6]}}"
+                        data-name="{{product_name_list[6]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[6]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[6]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[6]}}</span>
+                            <span>{{product_name_list[6]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[7]}}"
+                        data-name="{{product_name_list[7]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[7]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[7]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[7]}}</span>
+                            <span>{{product_name_list[7]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[8]}}"
+                        data-name="{{product_name_list[8]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[8]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[8]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[8]}}</span>
+                            <span>{{product_name_list[8]}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if len(product_price_list) == 10 %}
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[5]}}"
+                        data-name="{{product_name_list[5]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[5]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[5]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[5]}}</span>
+                            <span>{{product_name_list[5]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[6]}}"
+                        data-name="{{product_name_list[6]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[6]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[6]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[6]}}</span>
+                            <span>{{product_name_list[6]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[7]}}"
+                        data-name="{{product_name_list[7]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[7]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[7]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[7]}}</span>
+                            <span>{{product_name_list[7]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[8]}}"
+                        data-name="{{product_name_list[8]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[8]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[8]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[8]}}</span>
+                            <span>{{product_name_list[8]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 grid-item">
+                    <div class="card p-3 product-card" style="border: none;" data-price="{{product_price_list[9]}}"
+                        data-name="{{product_name_list[9]}}">
+                        <div class="text-center">
+                            <a class="nav-link"
+                                href="http://127.0.0.1:5000/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&productid={{product_id_list[9]}}"
+                                style="text-align: center; margin-right: auto; margin-left: auto; ">
+                                <img src={{product_image_list[9]}} width="200">
+                            </a>
+                        </div>
+                        <div class="product-details text-center"
+                            style="text-align: center; font-size: large; font-weight: bold;">
+                            <span class="font-weight-bold d-block">€{{product_price_list[9]}}</span>
+                            <span>{{product_name_list[9]}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
         </div>
 
     </div>

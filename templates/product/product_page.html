@@ -155,16 +155,17 @@
             <div class="col-7" style="margin-top: 25px; margin-left: 100px;">
                 <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:xx-large;">
                     {{product_name[0]}}</h3>
-                    {% if offer_flag == 0 %}
+                {% if offer_flag == 0 %}
                 <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger;">Price:
                     €{{product_price[0]}}
                 </h3>
                 {% endif %}
                 {% if offer_flag == 1 %}
-                <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger; color: red;">Save {{offer_percent}}%
+                <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger; color: red;">Save
+                    {{offer_percent}}%
                 </h3>
                 <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger;"><del>Price :
-                    €{{product_price[0]}}</del> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Offer Price : {{offer_price}} 
+                        €{{product_price[0]}}</del> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Offer Price : {{offer_price}}
                 </h3>
                 {% endif %}
 
@@ -221,14 +222,15 @@
                 <div>
                     {% if product_stock[0] == 0 %}
                     <button class="button"
-                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger; background-color: lightgray; border-color: lightgray;" disabled>Add
+                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger; background-color: lightgray; border-color: lightgray;"
+                        disabled>Add
                         to Cart</button>
-                        {% endif %}
+                    {% endif %}
                     {% if product_stock[0] != 0 %}
                     <button class="button"
                         style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Add
                         to Cart</button>
-                        {% endif %}
+                    {% endif %}
                 </div>
                 </form>
                 <a href="http://127.0.0.1:5000/checkout">
