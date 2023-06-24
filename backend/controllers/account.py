@@ -1,10 +1,6 @@
 
 from flask import Flask
-<<<<<<< Updated upstream
-from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updateUserAccount
-=======
-from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updatepassword
->>>>>>> Stashed changes
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updateUserAccount, updatepassword
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
