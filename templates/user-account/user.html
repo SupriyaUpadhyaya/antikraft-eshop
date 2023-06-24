@@ -61,6 +61,12 @@
             <div class="tab-content" id="v-pills-tabContent">
               <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <div class="row">
+                  <div class="col-8"></div>
+                  <div class="col-3">
+                    <a href="http://127.0.0.1:5000/editUserProfile" class="btn btn-dark rounded" role="button" aria-disabled="true" style="font-size: small;">Edit</a>
+                  </div>
+                </div>
+                <div class="row">
                     <div class="col-1"> </div>  
                     <div class="col-2">
                     <h5 id="key">First Name:</h5>
@@ -128,13 +134,13 @@
                             <div class="col-7">
                                 {% for item in orderWithItems[order['order_id']] %}
                                 <div class="row">
-                                    <div class="col-5">
+                                    <div class="col-4">
                     
                                         <a class="link-dark" href={{item['product_url'][0]}}><img class="tile-image"
                                                 src={{item['image_id'][0]}}></img></a>
                     
                                     </div>
-                                    <div class="col-7">
+                                    <div class="col-8">
                                         <div class="row">
                                             <div class="col-12">
                                                 <a href={{item['product_url'][0]}} class="badge badge-dark" style="color: black;">
@@ -143,29 +149,53 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-4">
                                                 <h6 class="tile-text" style="text-align: right;">Product Id : </h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-8">
                                                 <h6 class="tile-text" style="text-align: left;">{{item["product_serial_number"][0]}}</h6>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-4">
                                                 <h6 class="tile-text" style="text-align: right;">Quantity : </h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-8">
                                                 <h6 class="tile-text" style="text-align: left;">{{item["quantity"][0]}}</h6>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-4">
                                                 <h6 class="tile-text" style="text-align: right;">Price : </h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-8">
                                                 <h6 class="tile-text" style="text-align: left;">&euro;{{item["selling_price"][0]}}</h6>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                          <div class="col-4">
+                                              <h6 class="tile-text" style="text-align: right;">Seller : </h6>
+                                          </div>
+                                          <div class="col-8">
+                                              <h6 class="tile-text" style="text-align: left;">{{item["seller_name"][0]}}</h6>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-4">
+                                            <h6 class="tile-text" style="text-align: right;">Seller email : </h6>
+                                        </div>
+                                        <div class="col-8">
+                                            <h6 class="tile-text" style="text-align: left;">{{item["seller_email"][0]}}</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-4">
+                                          <h6 class="tile-text" style="text-align: right;">Seller Address : </h6>
+                                      </div>
+                                      <div class="col-8">
+                                          <h6 class="tile-text" style="text-align: left;">{{item["seller_address"][0]}}</h6>
+                                      </div>
+                                  </div>
                                         <div class="row">
                                           <form action="submitRatings" method="POST">
                                             <div class="col-1 input-group x-small">
@@ -184,6 +214,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br>
                                 {%endfor%}
                             </div> 
                             <div class="col-5">
