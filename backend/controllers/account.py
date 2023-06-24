@@ -30,7 +30,7 @@ def getUserAccount(username):
             item_count = i['item_count']
             print("order id is")
             print(order_id)
-    keyList = ["user_id", "user_firstname", "user_lastname", "user_email", "user_password", "user_city", "user_state", "user_zip", "user_phone", "user_address", "login_status", "user_salutation", "order_id", "total_items"]
+    keyList = ["user_id", "user_firstname", "user_lastname", "user_email", "user_password", "user_city", "user_state", "user_zip", "user_phone", "user_address", "login_status", "user_salutation", "order_id", "total_items", "security_question"]
     user = {key: [] for key in keyList}
     user["order_id"] = order_id
     user["total_items"] = item_count
@@ -48,6 +48,7 @@ def getUserAccount(username):
         user['user_phone'].append(row["user_phone"])
         user['user_address'].append(row["user_address"])
         user['user_salutation'].append(row["user_salutation"])
+        user['security_question'].append(row["security_question"])
     print("len(data.fetchall())", len(data.fetchall()))
     if count != 0:
         return user
@@ -69,13 +70,19 @@ def validateCredentails(username, password):
 
 
 def validateRegistration(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion):
-    encrypted_password = cipher.encrypt(password).decode("ascii")
-    status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber, address, securityquestion)
-    print(status)
-    if status == "True":
-        user = getUserAccount(email)
-    user["login_status"] = status
-    return user
+    userexists = getUserAccount(email)
+    if userexists == "ERROR":
+        encrypted_password = cipher.encrypt(password).decode("ascii")
+        status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber, address, securityquestion)
+        print(status)
+        if status == "True":
+            user = getUserAccount(email)
+            user["login_status"] = status
+            return user
+        else:
+            return "False"
+    else:
+        return "exists"
     
 
 def addUserAccount(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion):
@@ -84,7 +91,8 @@ def addUserAccount(salutation, firstname, lastname, email, password, phonenumber
         return "True"
     else:
         return "False"
-  
+
+
 def getSellerAccount(username):
     data = readSellerAccount(username)
     count = 0
@@ -101,7 +109,8 @@ def getSellerAccount(username):
         return seller
     else:
         return "ERROR"
-    
+
+
 def validateSellerCredentails(username, password):
     seller = getSellerAccount(username)
     if seller == "ERROR":
@@ -113,16 +122,22 @@ def validateSellerCredentails(username, password):
             status = "False"
     seller["seller_login_status"] = status
     return seller
-    
-   
+
+
 def validateSellerRegistration(sellername, email, password, address, securityquestion):
-    encrypted_spassword = cipher.encrypt(password).decode("ascii")
-    status = addSellerAccount(sellername, email, encrypted_spassword, address, securityquestion)
-    seller = {}
-    if status == "True":
-        seller = getSellerAccount(email)
-    seller["seller_login_status"] = status
-    return seller
+    sellerexists = getSellerAccount(email)
+    if sellerexists == "ERROR":
+        encrypted_password = cipher.encrypt(password).decode("ascii")
+        status = addSellerAccount(sellername, email, encrypted_password, address, securityquestion)
+        print(status)
+        if status == "True":
+            seller = getSellerAccount(email)
+            seller["seller_login_status"] = status
+            return seller
+        else:
+            return "False"
+    else:
+        return "exists"
 
 
 def addSellerAccount(sellername, email, password, address, securityquestion):
@@ -131,7 +146,6 @@ def addSellerAccount(sellername, email, password, address, securityquestion):
         return "True"
     else:
         return "False"
-
 
 
 def getOrderHistory(userid):

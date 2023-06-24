@@ -5,7 +5,7 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
-from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
 from backend.model import insertNewRatings
 import time
 
@@ -223,9 +223,6 @@ def userAccountLogin():
         print(loginStatus)
         return redirect('/')
     
-       
-
-
 @app.route("/signup")
 def signup():
     return render_template('signup/signup.html')
@@ -236,18 +233,23 @@ def sellersignup():
 
 @app.route("/useraccount")
 def useraccount():
-    categories = getAllCategories()
-    orders = getOrderHistory(session['user_id'][0])
-    neworders = getOrderHistory(session['user_id'][0])
-    orderWithItems = {}
-    total = {}
-    for i in neworders:
-        print(i['order_id'])
-        owi, order_total = getPlacedOrder(i['order_id'])
-        orderWithItems[i['order_id']] = owi
-        total[i['order_id']] = order_total
+    if "login_status" not in session:
+        return redirect("/login")
+    elif session["login_status"] == "False":
+        return redirect("/login")
+    else:
+        categories = getAllCategories()
+        orders = getOrderHistory(session['user_id'][0])
+        neworders = getOrderHistory(session['user_id'][0])
+        orderWithItems = {}
+        total = {}
+        for i in neworders:
+            print(i['order_id'])
+            owi, order_total = getPlacedOrder(i['order_id'])
+            orderWithItems[i['order_id']] = owi
+            total[i['order_id']] = order_total
 
-    return render_template('user-account/useraccount.html', categories=categories.json, user="None", orders=orders, orderWithItems=orderWithItems, total=total)
+        return render_template('user-account/useraccount.html', categories=categories.json, user="None", orders=orders, orderWithItems=orderWithItems, total=total)
 
 @app.route("/sellerpasswordreset")
 def sellerpasswordreset():
@@ -280,16 +282,15 @@ def userAccountRegistration():
     address = request.form['address']
     securityquestion = request.form['security-question']
     user = validateRegistration(salutation, firstname, lastname, email, password, phonenumber, address, securityquestion)
-    for item in user:
-        session[item] = user[item]
-    login_status = session["login_status"]
-    categories = getAllCategories()
-    print("Login status")
-    print(login_status)
-    if login_status == "True":
+    print("user value", user)
+    if user == "exists":
+        return render_template('signup/signup.html', userexists="True")
+    elif user["login_status"] == "True":
+        for item in user:
+            session[item] = user[item]
         return redirect('/')
     else:
-        return render_template('signup/signup.html', categories=categories.json, error ="True")
+        return render_template('signup/signup.html', error="True")
 
 @app.route('/sellerregister', methods=['POST'])
 def sellerAccountRegistration():
@@ -299,18 +300,12 @@ def sellerAccountRegistration():
     address = request.form['address']
     securityquestion = request.form['security-question']
     seller = validateSellerRegistration(sellername, email, password, address, securityquestion)
-    for item in seller:
-        session[item] = seller[item]
-    seller_login_status = session["seller_login_status"]
-    categories = getAllCategories()
-    print("seller Login status")
-    print(seller_login_status)
-    if seller_login_status == "True":
-        return redirect('/sellerAccount')
+    if seller == "exists" or seller == "False":
+        return render_template('seller-signup/sellersignup.html', sellerexists="True")
     else:
-        return render_template('seller-signup/sellersignup.html', categories=categories.json, loginStatus=seller_login_status)
-
-
+        for item in seller:
+            session[item] = seller[item]
+        return redirect('/sellerAccount')
 
 @app.route('/logout')
 def logout():
@@ -349,9 +344,10 @@ def sellerAccount():
         loginStatus = session["seller_login_status"]
     if loginStatus == "True":
         products = getSellerProducts(session["seller_id"])
-        return render_template('seller-account/selleraccount.html', products=products)
+        history = getSellerProductsHistory(session["seller_id"])
+        return render_template('seller-account/selleraccount.html', products=products, history=history)
     else:
-        return render_template('seller-login/seller-login.html')
+        return redirect('/seller-login')
 
 
 @app.route('/sellerPasswordReset')
@@ -464,6 +460,11 @@ def updateOffer():
         return redirect(url_for('sellerAccount', addOfferError="False"))
     else:
         return redirect(url_for('sellerAccount', addOfferError="True"))
+    
+@app.route('/editUserProfile')
+def editUserProfile():
+    categories = getAllCategories()
+    return render_template('user-account/editPersonalInfo.html', error="False", categories=categories)
 
 
 if __name__ == '__main__':

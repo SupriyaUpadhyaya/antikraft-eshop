@@ -1,0 +1,111 @@
+<div class="row">
+    <div class="col-12">
+        <h4>All Listed Products</h4>
+        <hr>
+    </div>
+    <div class="col-12">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Posted Date</th>
+                <th scope="col">Price</th>
+                <th scope="col">Offer</th>
+                <th scope="col">Stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%for product in history%}
+              <tr>
+                <td scope="row">{{product['product_serial_number'][0]}}</th>
+                <td>{{product['product_name'][0]}}</td>
+                <td>{{product['posted_date'][0]}}</td>
+                <td>{{product['product_price'][0]}}</td>
+                {% if product['offer_flag'][0] == 1.0%}
+                <td>{{product['offer_percent'][0]}}</td>
+                {% endif%}
+                {% if product['offer_flag'][0] == 0.0%}
+                <td>None</td>
+                {% endif%}
+                <td>{{product['stock'][0]}}</td>
+                <td><button class="btn btn-dark" style="font-size: x-small;" type="button" data-toggle="collapse" data-target="#product{{product['product_serial_number'][0]}}" aria-expanded="false" aria-controls="collapseExample">
+                  View Details
+                </button></td>
+                <tr>
+                  <td colspan="4">
+                  <div class="collapse" id="product{{product['product_serial_number'][0]}}">
+                    <div class="row">
+                      <div class="col-9">
+                          
+                          <div class="row">
+                              <div class="col-5">
+              
+                                  <a class="link-dark" href={{product['product_url'][0]}}><img class="tile-image"
+                                          src={{product['image_id'][0]}}></img></a>
+              
+                              </div>
+                              <div class="col-7">
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <a href={{product['product_url'][0]}} class="badge badge-dark" style="color: black;">
+                                              <h6 class="tile-text" style="text-align: left;">{{product["product_name"][0]}}</h6>
+                                          </a>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-6">
+                                          <h6 class="tile-text" style="text-align: right;">Product Id : </h6>
+                                      </div>
+                                      <div class="col-6">
+                                          <h6 class="tile-text" style="text-align: left;">{{product["product_serial_number"][0]}}</h6>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-6">
+                                          <h6 class="tile-text" style="text-align: right;">Stock : </h6>
+                                      </div>
+                                      <div class="col-6">
+                                          <h6 class="tile-text" style="text-align: left;">{{product["stock"][0]}}</h6>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-6">
+                                          <h6 class="tile-text" style="text-align: right;">Price : </h6>
+                                      </div>
+                                      <div class="col-6">
+                                          <h6 class="tile-text" style="text-align: left;">&euro;{{product["product_price"][0]}}</h6>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="tile-text" style="text-align: right;">Average Rating : </h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="tile-text" style="text-align: left;">{{product["rating"][0]}}</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="tile-text" style="text-align: right;">Offer Percentage : </h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="tile-text" style="text-align: left;">{{product["offer_percent"][0]}}</h6>
+                                    </div>
+                                </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                      </div> 
+                      
+                  </div>
+                  </div>
+                  </td>
+                </tr>
+              </tr>
+              {%endfor%}
+            </tbody>
+          </table>
+    </div>
+</div>

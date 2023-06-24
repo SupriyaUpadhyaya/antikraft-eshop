@@ -1,4 +1,4 @@
-from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity, readOrderByOrderId, getStock, updateOrderStatus, readPlacedOrder, getUserRating
+from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity, readOrderByOrderId, getStock, updateOrderStatus, readPlacedOrder, getUserRating, getSellerById
 from flask import session
 import random
 from datetime import datetime
@@ -155,7 +155,7 @@ def getStockValue(product_serial_number):
 
 def getPlacedOrder(orderid):
     order = readPlacedOrder(orderid)
-    keyList = ["order_id", "user_id", "ship_address", "order_date", "quantity", "selling_price", "order_status", "product_serial_number", "image_id", "item_total", "order_total", "product_name", "product_url", "rating"]
+    keyList = ["order_id", "user_id", "ship_address", "order_date", "quantity", "selling_price", "order_status", "product_serial_number", "image_id", "item_total", "order_total", "product_name", "product_url", "rating", "seller_name", "seller_email", "seller_address", "seller_id"]
     cart = []
     i = 1
     order_total = 0
@@ -173,10 +173,17 @@ def getPlacedOrder(orderid):
         item['item_total'].append(item_total)
         image_id = getImageUrl(row["product_serial_number"])
         for url in image_id:
+            item['seller_id'].append(url["seller_id"])
             item['image_id'].append(url["image_id"])
             item['product_name'].append(url["product_name"])
             p_url = "http://127.0.0.1:5000/product?categoryid=" + str(url["category_id"]) + "&subcategoryid=" +  str(url["sub_category_id"]) + "&product_serial_number=" + str(url["product_serial_number"])
             item['product_url'].append(p_url)
+        seller = getSellerById(item["seller_id"][0])
+        for ss in seller:
+            print("ss['seller_name']", ss["seller_name"])
+            item["seller_name"].append(ss["seller_name"])
+            item["seller_email"].append(ss["seller_email"])
+            item["seller_address"].append(ss["seller_address"])
         rating = getUserRating(row["product_serial_number"], row["user_id"])
         for rr in rating:
             item['rating'].append(rr["rating_score"])

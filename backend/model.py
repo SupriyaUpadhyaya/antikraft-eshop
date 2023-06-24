@@ -192,7 +192,7 @@ def addItemToNewOrder(orderid, userid, productid, selling_price, quantity):
 
 def getOrderID(userid):
     conn = get_db_connection()
-    sqlquery = "SELECT order_id from ORDER where user_id=" + int(userid)
+    sqlquery = "SELECT order_id from ORDER where user_id=" + int(userid) + " ORDER BY order_id"
     orderid = conn.execute(sqlquery)
     return orderid
 
@@ -413,7 +413,14 @@ def getSubCategoryId(subcategory):
 
 def readSellerProducts(sellerid):
     conn = get_db_connection()
-    sqlquery = "SELECT * from product where seller_id=" + str(sellerid[0]) 
+    sqlquery = "SELECT * from product where seller_id=" + str(sellerid[0]) + " and stock != 0 ORDER BY product_serial_number"
+    print(sqlquery)
+    data = conn.execute(sqlquery)
+    return data
+
+def readSellerProductsHistory(sellerid):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from product where seller_id=" + str(sellerid[0]) + " and stock == 0 ORDER BY product_serial_number"
     print(sqlquery)
     data = conn.execute(sqlquery)
     return data
@@ -447,3 +454,10 @@ def writeProductOffers(product_serial_number, offer_flag, offer_percent):
         print(error)
         status = False
     return status
+
+def getSellerById(id):
+    conn = get_db_connection()
+    sqlquery = "SELECT * from SELLER where seller_id='" + str(id) + "'"
+    print(sqlquery)
+    data = conn.execute(sqlquery)
+    return data

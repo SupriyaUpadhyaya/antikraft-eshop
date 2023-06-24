@@ -1,4 +1,4 @@
-from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers
+from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
@@ -56,6 +56,48 @@ def uploadImageToDrive(inputFile) :
 
 def getSellerProducts(sellerid):
     data = readSellerProducts(sellerid)
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating"]
+    products_list = []
+    for row in data:
+        products = {key: [] for key in keyList}
+        products['product_serial_number'].append(row["product_serial_number"])
+        products['product_name'].append(row["product_name"])
+        products['product_description'].append(row["product_description"])
+        products['posted_date'].append(row["posted_date"])
+        products['offer_flag'].append(row["offer_flag"])
+        products['offer_percent'].append(row["offer_percent"])
+        products['product_price'].append(row["product_price"])
+        products['sub_category_id'].append(row["sub_category_id"])
+        products['stock'].append(row["stock"])
+        products['image_id'].append(row["image_id"])
+        products['category_id'].append(row["category_id"])
+        products['product_id'].append(row["product_id"])
+        url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
+        products['product_url'].append(url)
+        rating = getProductRating(row["product_serial_number"])
+        print("rating.rowcount")
+        print(rating.rowcount)
+        avg = 0
+        total = 0
+        i = 0
+        for rr in rating:
+            print("rating")
+            print(rr['rating_score'])
+            total += rr['rating_score']
+            i += 1
+        print(i)
+        print(total)
+        if total != 0:
+            avg = total / i
+        products['rating'].append(avg)
+        products_list.append(products)
+    if products_list is not None:
+        return products_list
+    else:
+        return "ERROR"
+    
+def getSellerProductsHistory(sellerid):
+    data = readSellerProductsHistory(sellerid)
     keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating"]
     products_list = []
     for row in data:

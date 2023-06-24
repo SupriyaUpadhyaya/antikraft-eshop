@@ -136,6 +136,12 @@ body {
 
 <div class="container">
 <h2>Sign Up</h2>
+{% if error == "True" %}
+<h6 style="color: red; text-align: left;">Error: Registration was not successful. Please try again.</h6>
+{% endif %}
+{% if sellerexists == "True" %}
+<h6 style="color: red; text-align: left;">Seller already exists. Please try with a different email address!</h6>
+{% endif%}
 <form action="/sellerregister" method="POST" onsubmit="return validateForm()">
   <div class="form-group">
     <label for="sellername">Seller Name*:</label>
@@ -168,7 +174,7 @@ body {
     <label for="confirm-password">Security Question: What is your mother’s maiden name?* (Needed for password reset)</label>
     <input type="security-question" class="form-control" id="security-question" name="security-question" required>
   </div>
-  <button type="submit" class="btn">Register</button>
+  <button type="submit" class="btn btn-dark">Register</button>
 </form>
 <script>
   var newPasswordInput = document.getElementById("password");
