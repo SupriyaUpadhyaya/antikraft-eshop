@@ -132,9 +132,10 @@ def searchProductList(query):
 
 
 def readUserAccount(username):
+    print("HEllo")
     conn = get_db_connection()
-    print(username)
     sqlquery = "SELECT * from USER where user_email='" + username + "'"
+    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
 
@@ -477,7 +478,7 @@ def getSellerById(id):
 
 def updatepassword(username, encrypted_password):
     conn = get_db_connection()
-    sqlquery =  "UPDATE USER SET user_password='" + encrypted_password[item].replace("'", "''") + "' WHERE username='" + item.replace("'", "''") + "';"
+    sqlquery = "UPDATE USER SET user_password='" + str(encrypted_password) + "' where user_email='" + str(username) + "'"
     try:
         conn.execute(sqlquery)
         conn.close()

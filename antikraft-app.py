@@ -1,19 +1,20 @@
 from datetime import datetime
 import json, subprocess
 from statistics import mean
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, jsonify, request
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
-from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
 from backend.model import insertNewRatings
 import time
 
-import nltk
+#import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
 
-subprocess.run(f"python backend/train.py")
+
+#subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -486,6 +487,27 @@ def updatePersonalInfo():
         session["user_phone"] = user["user_phone"]
         session["user_salutation"] = user["user_salutation"]
         return redirect('useraccount')
+    
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    username = request.form['email']
+    security_answer = request.form['security_question']
+    new_password = request.form['newPassword']
+
+    # Check if the user exists and retrieve their account information
+    user = verifyUserAccount(username, security_answer)
+    print(user)
+    if user is False:
+        return jsonify({'message': 'User not found or security answer is wrong'})
+
+
+    # Update the user's password in the database
+    success = updateUserPassword(username, new_password)
+    
+    if success is "True":
+        return redirect('/login')
+    else:
+        return redirect(redirect_url)
 
 
 if __name__ == '__main__':
