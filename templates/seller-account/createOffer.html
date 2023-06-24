@@ -7,7 +7,7 @@
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">Product ID</th>
+                <th scope="col">ID</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Posted Date</th>
                 <th scope="col">Price</th>
@@ -18,7 +18,7 @@
             <tbody>
               {%for product in products%}
               <tr>
-                <th scope="row">{{product['product_serial_number'][0]}}</th>
+                <td scope="row">{{product['product_serial_number'][0]}}</th>
                 <td>{{product['product_name'][0]}}</td>
                 <td>{{product['posted_date'][0]}}</td>
                 <td>{{product['product_price'][0]}}</td>

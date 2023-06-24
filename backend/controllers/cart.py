@@ -76,7 +76,7 @@ def getOrder(userid):
         for url in image_id:
             item['image_id'].append(url["image_id"])
             item['product_name'].append(url["product_name"])
-            p_url = "http://127.0.0.1:5000/product?categoryid=" + str(url["category_id"]) + "&subcategoryid=" +  str(url["sub_category_id"]) + "&productid=" + str(url["product_id"])
+            p_url = "http://127.0.0.1:5000/product?categoryid=" + str(url["category_id"]) + "&subcategoryid=" +  str(url["sub_category_id"]) + "&product_serial_number=" + str(url["product_serial_number"])
             item['product_url'].append(p_url)
         cart.append(item)
         i += 1
@@ -175,7 +175,7 @@ def getPlacedOrder(orderid):
         for url in image_id:
             item['image_id'].append(url["image_id"])
             item['product_name'].append(url["product_name"])
-            p_url = "http://127.0.0.1:5000/product?categoryid=" + str(url["category_id"]) + "&subcategoryid=" +  str(url["sub_category_id"]) + "&productid=" + str(url["product_id"])
+            p_url = "http://127.0.0.1:5000/product?categoryid=" + str(url["category_id"]) + "&subcategoryid=" +  str(url["sub_category_id"]) + "&product_serial_number=" + str(url["product_serial_number"])
             item['product_url'].append(p_url)
         rating = getUserRating(row["product_serial_number"], row["user_id"])
         for rr in rating:

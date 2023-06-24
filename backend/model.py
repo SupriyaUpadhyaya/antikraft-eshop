@@ -56,10 +56,10 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
     
     data = conn.execute(query)
   
-    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_price", "product_description", "image_id", "url"]
-    sub_category_row = {key: [] for key in keyList}
-
+    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_price", "product_description", "image_id", "url", "product_serial_number"]
+    products = []
     for row in data:
+        sub_category_row = {key: [] for key in keyList}
         url = "http://127.0.0.1:5000/subcategory?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"])
         sub_category_row['category_id'].append(row["category_id"])
         sub_category_row['sub_category_id'].append(row["sub_category_id"])
@@ -68,14 +68,15 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
         sub_category_row['product_description'].append(row["product_description"])
         sub_category_row['product_price'].append(row["product_price"])
         sub_category_row['image_id'].append(row["image_id"])
+        sub_category_row['product_serial_number'].append(row["product_serial_number"])
         sub_category_row['url'].append(url)
+        products.append(sub_category_row)
     
-    if sub_category_row is not None:
-        return sub_category_row
+    return products
 
-def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, PRODUCT_ID:int):
+def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_serial_number:int):
     conn = get_db_connection()
-    query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " and sub_category_id=" + str(SUB_CAT_ID) + " and product_id=" + str(PRODUCT_ID)
+    query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " and sub_category_id=" + str(SUB_CAT_ID) + " and product_serial_number=" + str(product_serial_number)
     
     data = conn.execute(query)
   
@@ -84,7 +85,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, PRODUCT_
     product_row = {key: [] for key in keyList}
 
     for row in data:
-        url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"]) + "&productid=" + str(row["product_id"])
+        url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
         product_row['category_id'].append(row["category_id"])
         product_row['sub_category_id'].append(row["sub_category_id"])
         product_row['product_id'].append(row["product_id"])

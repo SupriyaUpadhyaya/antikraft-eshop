@@ -110,7 +110,6 @@
                       <th scope="col">Order ID</th>
                       <th scope="col">Date</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Shipping Address</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -118,7 +117,7 @@
                     <tr>
                       <th scope="row">{{order['order_id']}}</th>
                       <td>{{order['order_date']}}</td>
-                      <td>{{order['ship_address']}}</td>
+                      <td>{{order['order_status']}}</td>
                       <td><button class="btn btn-dark" style="font-size: x-small;" type="button" data-toggle="collapse" data-target="#order{{order['order_id']}}" aria-expanded="false" aria-controls="collapseExample">
                         View Details
                       </button></td>

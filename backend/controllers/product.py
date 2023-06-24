@@ -72,7 +72,7 @@ def getSellerProducts(sellerid):
         products['image_id'].append(row["image_id"])
         products['category_id'].append(row["category_id"])
         products['product_id'].append(row["product_id"])
-        url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&productid=" + str(products['product_id'][0])
+        url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
         print("rating.rowcount")
