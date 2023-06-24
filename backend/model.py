@@ -474,3 +474,15 @@ def getSellerById(id):
     print(sqlquery)
     data = conn.execute(sqlquery)
     return data
+
+def updatepassword(username, encrypted_password):
+    conn = get_db_connection()
+    sqlquery =  "UPDATE USER SET user_password='" + encrypted_password[item].replace("'", "''") + "' WHERE username='" + item.replace("'", "''") + "';"
+    try:
+        conn.execute(sqlquery)
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        print(error)
+        status = "False"
+    return status
