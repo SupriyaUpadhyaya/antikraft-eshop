@@ -13,7 +13,7 @@ import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
 
-subprocess.run(f"python backend/train.py")
+#subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -431,6 +431,11 @@ def addNewProduct():
     stock = request.form['stock']
     offerpercent = request.form['offerpercent']
     inputFile = request.files.getlist('image')
+    sponsor = request.form['sponsor']
+    if sponsor == "on":
+        sponsored = 1
+    else:
+        sponsored = 0
     image_id, secondary_images = uploadImageToDrive(inputFile)
     if offerpercent == "0":
         offerflag = False
@@ -439,8 +444,8 @@ def addNewProduct():
     seller_id = session["seller_id"][0]
     date = datetime.now().strftime("%d-%m-%Y")  
     product_id = 6 
-    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
-    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
+    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
+    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
     status = "True"
     if status == "True":
         return redirect(url_for('sellerAccount', addProdError="False"))

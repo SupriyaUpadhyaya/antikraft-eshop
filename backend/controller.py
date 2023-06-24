@@ -54,6 +54,7 @@ def getSearch(query):
             block["product_description"] = row["product_description"]
             block["image_id"] = row["image_id"]
             block["product_price"] = row["product_price"]
+            block["sponsored"] = row["sponsored"]
             block["url"] = url
             products[i] = block
             i += 1
