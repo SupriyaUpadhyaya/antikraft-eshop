@@ -49,7 +49,6 @@ def getUserAccount(username):
         user['user_address'].append(row["user_address"])
         user['user_salutation'].append(row["user_salutation"])
         user['security_question'].append(row["security_question"])
-    print("Count", count)
     if count != 0:
         return user
     else:
