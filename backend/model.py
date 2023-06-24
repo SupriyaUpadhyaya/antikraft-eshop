@@ -126,7 +126,7 @@ def readOperationProductRatings(TABLE_NAME: str, PRODUCT_S_N:int):
     
 def searchProductList(query):
     conn = get_db_connection()
-    sqlquery = "SELECT * from PRODUCT where product_description LIKE '%" + str(query) + "%' OR product_name LIKE '%" + str(query) + "%'"
+    sqlquery = "SELECT * from PRODUCT where product_description LIKE '%" + str(query) + "%' OR product_name LIKE '%" + str(query) + "%' ORDER BY sponsored DESC"
     data = conn.execute(sqlquery)
     return data
 
@@ -360,25 +360,12 @@ def insertNewRatings(rating_score, product_serial_number, user_id, comments=""):
     return status
 
 
-def insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images):
+def insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored):
     conn = get_db_connection()
-    
-    checkquery = "SELECT product_id FROM PRODUCT WHERE category_id = " + str(category) + " AND sub_category_id = " + str(subcategory)
-    # print(checkquery)
-    conn.execute(checkquery)
-    counts = conn.fetchall()
-    content_list = []
-    for row in counts:
-        content_list.append(list(row)[0])
-    # print("content_list", content_list)
-
-    max_pid = max(content_list)
-    product_id =  max_pid + 1
-    # print("product_id", product_id)
-
-    sqlquery = "INSERT INTO PRODUCT (product_name, product_description, seller_id, posted_date, offer_flag, offer_percent, product_price, sub_category_id, stock, image_id, category_id, product_id, secondary_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    sqlquery = "INSERT INTO PRODUCT (product_name, product_description, seller_id, posted_date, offer_flag, offer_percent, product_price, sub_category_id, stock, image_id, category_id, product_id, secondary_images, sponsored) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    print(sqlquery)
     try:
-        conn.execute(sqlquery, (productName, productDescription, int(seller_id), date, offerflag, float(offerpercent), float(productPrice), subcategory, int(stock), image_id, int(category), int(product_id), secondary_images))
+        conn.execute(sqlquery, (productName, productDescription, int(seller_id), date, offerflag, float(offerpercent), float(productPrice), subcategory, int(stock), image_id, int(category), int(product_id), secondary_images, sponsored))
         conn.close()
         status = True
     except sqlite3.IntegrityError as error:

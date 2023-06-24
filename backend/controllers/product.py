@@ -5,14 +5,14 @@ from googleapiclient.discovery import build
 from io import BytesIO
 
 
-def addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images):
+def addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored):
     category_ids = getCategoryId(category)
     for i in category_ids:
         category_id = i["category_id"]
     subcategory_ids = getSubCategoryId(subcategory)
     for i in subcategory_ids:
         subcategory_id = i["sub_serial_number"]
-    status = insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory_id, stock, image_id, category_id, product_id, secondary_images)
+    status = insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory_id, stock, image_id, category_id, product_id, secondary_images, sponsored)
     return status
 
 
@@ -54,7 +54,7 @@ def uploadImageToDrive(inputFile) :
 
 def getSellerProducts(sellerid):
     data = readSellerProducts(sellerid)
-    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating"]
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored"]
     products_list = []
     for row in data:
         products = {key: [] for key in keyList}
@@ -70,6 +70,7 @@ def getSellerProducts(sellerid):
         products['image_id'].append(row["image_id"])
         products['category_id'].append(row["category_id"])
         products['product_id'].append(row["product_id"])
+        products['sponsored'].append(row['sponsored'])
         url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
@@ -90,7 +91,7 @@ def getSellerProducts(sellerid):
     
 def getSellerProductsHistory(sellerid):
     data = readSellerProductsHistory(sellerid)
-    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating"]
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored"]
     products_list = []
     for row in data:
         products = {key: [] for key in keyList}
@@ -106,6 +107,7 @@ def getSellerProductsHistory(sellerid):
         products['image_id'].append(row["image_id"])
         products['category_id'].append(row["category_id"])
         products['product_id'].append(row["product_id"])
+        products['sponsored'].append(row['sponsored'])
         url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
