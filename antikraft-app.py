@@ -1,5 +1,5 @@
 from datetime import datetime
-import json
+import json, subprocess
 from statistics import mean
 from flask import Flask, redirect, render_template, request, session, url_for
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
@@ -12,6 +12,8 @@ import time
 import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
+
+subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
