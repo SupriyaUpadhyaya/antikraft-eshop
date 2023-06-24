@@ -23,7 +23,6 @@ def uploadImageToDrive(inputFile) :
     image_link = []
     for uploaded_file in inputFile:
         if uploaded_file.filename != '':
-            print(uploaded_file.filename)
             buffer_memory = BytesIO()
             uploaded_file.save(buffer_memory)
             media_body = MediaIoBaseUpload(uploaded_file, uploaded_file.mimetype, resumable=True)
@@ -41,7 +40,6 @@ def uploadImageToDrive(inputFile) :
                 media_body=media_body,  
                 fields=returned_fields
             ).execute()
-            print(upload_response)
             url = "https://drive.google.com/uc?export=view&id=" + upload_response['id']
             image_link.append(url)
             permission = {
@@ -76,18 +74,12 @@ def getSellerProducts(sellerid):
         url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
-        print("rating.rowcount")
-        print(rating.rowcount)
         avg = 0
         total = 0
         i = 0
         for rr in rating:
-            print("rating")
-            print(rr['rating_score'])
             total += rr['rating_score']
             i += 1
-        print(i)
-        print(total)
         if total != 0:
             avg = total / i
         products['rating'].append(avg)
@@ -119,18 +111,12 @@ def getSellerProductsHistory(sellerid):
         url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
-        print("rating.rowcount")
-        print(rating.rowcount)
         avg = 0
         total = 0
         i = 0
         for rr in rating:
-            print("rating")
-            print(rr['rating_score'])
             total += rr['rating_score']
             i += 1
-        print(i)
-        print(total)
         if total != 0:
             avg = total / i
         products['rating'].append(avg)

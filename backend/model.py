@@ -133,7 +133,6 @@ def searchProductList(query):
 
 def readUserAccount(username):
     conn = get_db_connection()
-    print(username)
     sqlquery = "SELECT * from USER where user_email='" + username + "'"
     data = conn.execute(sqlquery)
     return data
@@ -163,13 +162,11 @@ def insertUserAccount(salutation, firstname, lastname, email, password, phonenum
 def updateUserAccount(salutation, firstname, lastname, email, phonenumber,  address, securityquestion):
     conn = get_db_connection()
     sqlquery = "UPDATE USER SET user_firstname='" + str(firstname) + "', user_lastname='" + str(lastname) + "', user_salutation='" + str(salutation) + "', user_phone=" + str(phonenumber) + ", user_address='" + str(address) + "', security_question='" + str(securityquestion) + "' where user_email='" + str(email) +"'"
-    print(sqlquery)
     try:
         conn.execute(sqlquery)
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
-        print(error)
         status = "False"
     return status
 
@@ -177,13 +174,11 @@ def updateUserAccount(salutation, firstname, lastname, email, phonenumber,  addr
 def insertSellerAccount(sellername, email, password, address, securityquestion):
     conn = get_db_connection()
     sqlquery = "INSERT INTO SELLER (seller_name, seller_email, seller_password, seller_address, security_question ) VALUES (?, ?, ?, ?, ?)"
-    print(sqlquery)
     try:
         conn.execute(sqlquery, (sellername, email, password, address, securityquestion ))
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
-        print(error)
         status = "False"
     return status
 
@@ -193,12 +188,10 @@ def addItemToNewOrder(orderid, userid, productid, selling_price, quantity):
     status_s = "incomplete"
     sqlquery = "INSERT INTO ORDERS (order_id, user_id, quantity, selling_price, order_status, product_serial_number) VALUES (" + str(orderid) + ", " + str(userid) + ", " + str(quantity) + ", " + str(selling_price) + ", " + "'" + status_s + "'" + ", " + str(productid)+ ")"
     try:
-        print(sqlquery)
         conn.execute(sqlquery)
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
-        print(error)
         status = "False"
     return status
 
@@ -227,17 +220,11 @@ def getProductsFromOrder(orderid, productid):
 def updateExistingItem(orderid, productid, selling_price, quantity):
     conn = get_db_connection()
     sqlquery = "UPDATE ORDERS SET quantity=" + str(quantity) + ", selling_price=" + str(selling_price)  + " where order_id=" + str(orderid) + " AND product_serial_number=" + productid
-    print(sqlquery)
-    print("Quanity from update:")
-    print(quantity)
-    print("product number")
-    print(productid)
     try:
         conn.execute(sqlquery)
         conn.close()
         status = "True"    
     except sqlite3.IntegrityError as error:
-        print(error)
         status = "False"
     return status
 
@@ -250,7 +237,6 @@ def addNewItemToOrder(orderid, userid, productid, selling_price, quantity):
         conn.close()
         status = "True" 
     except sqlite3.IntegrityError as error:
-        print(error)
         status = "False"
     return status
 
@@ -258,13 +244,11 @@ def addNewItemToOrder(orderid, userid, productid, selling_price, quantity):
 def deleteItemFromOrder(orderid, userid, productid):
     conn = get_db_connection()
     sqlquery = "DELETE FROM ORDERS where order_id=" + str(orderid) + " AND user_id=" + str(userid) + " AND product_serial_number=" + str(productid)
-    print(sqlquery)
     try:
         conn.execute(sqlquery)
         conn.close()
         status = "True" 
     except sqlite3.IntegrityError as error:
-        print(error)
         status = "False"
     return status
 
@@ -300,7 +284,6 @@ def getImageUrl(productid):
     conn = get_db_connection()
     sqlquery = "SELECT * from PRODUCT where product_serial_number='" + str(productid) + "'"
     url = conn.execute(sqlquery)
-    print(url)
     return url
 
 
@@ -308,7 +291,6 @@ def getQuantity(productid, orderid):
     conn = get_db_connection()
     sqlquery = "SELECT quantity from ORDERS where product_serial_number='" + str(productid) + "' and order_id=" + str(orderid)
     url = conn.execute(sqlquery)
-    print(url)
     return url
 
 
@@ -321,14 +303,12 @@ def getStock(product_serial_number):
 
 def updateOrderStatus(orderid, new_stock, date, address):
     conn = get_db_connection()
-    print(address)
     sqlquery = "UPDATE ORDERS SET order_status='completed'" + ", ship_address='" + str(address) + "', order_date='" + str(date) + "' where order_id=" + str(orderid)
     query = []
     k = new_stock.keys()
     for item in k:
         item_query = "UPDATE PRODUCT SET stock=" + str(new_stock[item]) + " where product_serial_number=" + str(item)
         query.append(item_query)
-    print(sqlquery)
     try:
         conn.execute(sqlquery)
         for q in query:
@@ -336,7 +316,6 @@ def updateOrderStatus(orderid, new_stock, date, address):
         conn.close()
         status = True  
     except sqlite3.IntegrityError as error:
-        print(error)
         status = False
     return status
 
@@ -377,7 +356,6 @@ def insertNewRatings(rating_score, product_serial_number, user_id, comments=""):
         conn.close()
         status = True
     except sqlite3.IntegrityError as error:
-        print(error)
         status = False
     return status
 
@@ -391,7 +369,6 @@ def insertNewProduct(productName, productDescription, seller_id, date, offerflag
         conn.close()
         status = True
     except sqlite3.IntegrityError as error:
-        print(error)
         status = False
     return status
 
@@ -413,14 +390,12 @@ def getSubCategoryId(subcategory):
 def readSellerProducts(sellerid):
     conn = get_db_connection()
     sqlquery = "SELECT * from product where seller_id=" + str(sellerid[0]) + " and stock != 0 ORDER BY product_serial_number"
-    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
 
 def readSellerProductsHistory(sellerid):
     conn = get_db_connection()
     sqlquery = "SELECT * from product where seller_id=" + str(sellerid[0]) + " and stock == 0 ORDER BY product_serial_number"
-    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
 
@@ -428,7 +403,6 @@ def readSellerProductsHistory(sellerid):
 def getUserRating(sn, userid):
     conn = get_db_connection()
     sqlquery = "SELECT * from ratings where product_serial_number=" + str(sn) + " and user_id=" + str(userid)
-    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
 
@@ -436,7 +410,6 @@ def getUserRating(sn, userid):
 def getProductRating(sn):
     conn = get_db_connection()
     sqlquery = "SELECT * from ratings where product_serial_number=" + str(sn) 
-    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
 
@@ -444,19 +417,27 @@ def getProductRating(sn):
 def writeProductOffers(product_serial_number, offer_flag, offer_percent):
     conn = get_db_connection()
     sqlquery = "UPDATE PRODUCT SET offer_flag=" + str(offer_flag) + ", offer_percent= " + str(offer_percent) + " where product_serial_number=" + str(product_serial_number)
-    print(sqlquery)
     try:
         conn.execute(sqlquery)
         conn.close()
         status = True
     except sqlite3.IntegrityError as error:
-        print(error)
         status = False
     return status
 
 def getSellerById(id):
     conn = get_db_connection()
     sqlquery = "SELECT * from SELLER where seller_id='" + str(id) + "'"
-    print(sqlquery)
     data = conn.execute(sqlquery)
     return data
+
+def updatepassword(username, encrypted_password):
+    conn = get_db_connection()
+    sqlquery = "UPDATE USER SET user_password='" + str(encrypted_password) + "' where user_email='" + str(username) + "'"
+    try:
+        conn.execute(sqlquery)
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        status = "False"
+    return status
