@@ -9,12 +9,12 @@ from backend.controllers.product import addNewProductFromSeller, uploadImageToDr
 from backend.model import insertNewRatings
 import time
 
-#import nltk
+import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
 
 
-#subprocess.run(f"python backend/train.py")
+subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
