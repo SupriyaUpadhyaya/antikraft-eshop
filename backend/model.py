@@ -81,7 +81,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     data = conn.execute(query)
   
     keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "seller_id", "stock", 
-               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller"]
+               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller", "badge"]
     product_row = {key: [] for key in keyList}
 
     for row in data:
@@ -106,6 +106,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     seller = conn.execute(sellerquery)
     for item in seller:
         product_row['seller'].append(item['seller_name'])
+        product_row['badge'].append("static/badge/b" + str(item['badge']) + ".png")
 
     if product_row is not None:
         return product_row
@@ -462,7 +463,6 @@ def getSellerAwardData(sellerid):
     df_award_data = df_award_data[(df_award_data.order_status == 'complete') | (df_award_data.order_status == 'completed')]
 
     df_award_data = df_award_data[['product_serial_number', 'product_name', 'quantity', 'seller_id']]
-    df_award_data.to_csv('result.csv', index=False)
     df_award_data2 = df_award_data.groupby(['product_name'])['quantity'].sum().reset_index()
     df_award_data2.rename(columns={'quantity': 'total_quantity'}, inplace=True)
 
