@@ -16,23 +16,19 @@ def addItemToCart(productid, quantity):
         offer_flag = i['offer_flag']
         offer_percent = i['offer_percent']
     if offer_flag == 1:
-        selling_price = (product_price - (product_price * offer_percent) / 100)
+        selling_price = round((product_price - (product_price * offer_percent) / 100),2)
     else:
-        selling_price = product_price
+        selling_price = round(product_price, 2)
     
-    print("Selling price : ", selling_price)
 
-    print(orderid)
     if orderid == "None":
         orderid = 0
         orderExists = "True"
         while orderExists == "True":
             orderid = random.randint(1111,9999)
-            print(orderid)
             val = validateOrderId(orderid)
             for i in val:
                 count = i[0]
-                print(count)
             if count == 0:
                 orderExists = "False" 
         addItemToNewOrder(orderid, userid, productid, selling_price, quantity)
@@ -70,7 +66,7 @@ def getOrder(userid):
         item['selling_price'].append(row["selling_price"])
         item['order_status'].append(row["order_status"])
         item['product_serial_number'].append(row["product_serial_number"])
-        item_total = float(int(row["quantity"]) * int(row["selling_price"]))
+        item_total = round(float(row["quantity"]) * float(row["selling_price"]), 2)
         item['item_total'].append(item_total)
         image_id = getImageUrl(row["product_serial_number"])
         for url in image_id:
@@ -169,7 +165,7 @@ def getPlacedOrder(orderid):
         item['selling_price'].append(row["selling_price"])
         item['order_status'].append(row["order_status"])
         item['product_serial_number'].append(row["product_serial_number"])
-        item_total = float(int(row["quantity"]) * int(row["selling_price"]))
+        item_total = round(float(row["quantity"]) * float(row["selling_price"]), 2)
         item['item_total'].append(item_total)
         image_id = getImageUrl(row["product_serial_number"])
         for url in image_id:

@@ -77,11 +77,10 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
 def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_serial_number:int):
     conn = get_db_connection()
     query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " and sub_category_id=" + str(SUB_CAT_ID) + " and product_serial_number=" + str(product_serial_number)
-    
     data = conn.execute(query)
   
     keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "seller_id", "stock", 
-               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url"]
+               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller"]
     product_row = {key: [] for key in keyList}
 
     for row in data:
@@ -101,6 +100,11 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
         product_row['image_id'].append(row["image_id"])
         product_row['secondary_images'].append(row["secondary_images"])
         product_row['url'].append(url)
+    
+    sellerquery = "select * from seller where seller_id = " +  str(product_row['seller_id'][0])
+    seller = conn.execute(sellerquery)
+    for item in seller:
+        product_row['seller'].append(item['seller_name'])
 
     if product_row is not None:
         return product_row
@@ -382,7 +386,7 @@ def getCategoryId(category):
 
 def getSubCategoryId(subcategory):
     conn = get_db_connection()
-    sqlquery = "SELECT sub_serial_number from sub_category where sub_category_name='" + subcategory + "'"
+    sqlquery = "SELECT sub_category_id from sub_category where sub_category_name='" + subcategory + "'"
     data = conn.execute(sqlquery)
     return data
 
