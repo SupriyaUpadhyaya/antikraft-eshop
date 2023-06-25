@@ -6,7 +6,7 @@ from backend.controller import getAllCategoriesList, getSearch, getSpecificCateg
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
-from backend.model import insertNewRatings
+from backend.model import insertNewRatings, getSellerAwardData
 import time
 
 import nltk
@@ -352,7 +352,9 @@ def sellerAccount():
     if loginStatus == "True":
         products = getSellerProducts(session["seller_id"])
         history = getSellerProductsHistory(session["seller_id"])
-        return render_template('seller-account/selleraccount.html', products=products, history=history)
+        award_data, total_sold = getSellerAwardData(session["seller_id"][0])
+                
+        return render_template('seller-account/selleraccount.html', products=products, history=history, award_data=award_data, total_sold=total_sold)
     else:
         return redirect('/seller-login')
 
@@ -417,15 +419,11 @@ def placeOrder():
 def submit_ratings():
     rating_score = int(request.form['quantity'])
     product_serial_number = request.form['product_serial_number']
-    # print(rating_score)
-    # print(product_serial_number)
     user_id = session["user_id"][0]
-    # print(user_id)
-    
+       
     insertNewRatings(rating_score, product_serial_number, user_id, comments="")
-        
     time.sleep(1)
-    return redirect('useraccount') #render_template_string('<script>alert("{{ message }}");</script>', message=message)
+    return redirect('useraccount') 
 
 
 @app.route('/addNewProduct', methods=['POST'])
