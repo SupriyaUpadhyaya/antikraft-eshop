@@ -15,10 +15,13 @@
             {%for values in productList.items()%}
             <div class="col-sm-3 tile">
                 <li>
+                    
                     <a class="link-dark" href={{values[1].url}}><img class="tile-image" src={{values[1].image_id}}></img>
-                        <h6>Price: &euro;{{values[1].product_price}}</h6>
+                        
                         <h6>{{values[1].product_name}}</h6>
                     </a>
+                    <h6>Price: &euro;{{values[1].product_price}}</h6>
+                    <h6 style="color: grey; font-size: small;">{% if values[1].sponsored == 1.0 %} Sponsored {% endif %}</h6>
                 </li>
             </div>
             {%endfor%}

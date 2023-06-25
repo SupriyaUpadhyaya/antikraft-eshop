@@ -6,7 +6,7 @@ from backend.controller import getAllCategoriesList, getSearch, getSpecificCateg
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
-from backend.model import insertNewRatings
+from backend.model import insertNewRatings, getSellerAwardData
 import time
 
 import nltk
@@ -38,6 +38,8 @@ def predict():
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
 def getSpecificCategory():
+    if 'login_status' not in session:
+        session["login_status"] = 'False'
     qTerm = request.args.get('categoryid')
     row_val = getSpecificCategoryRow(qTerm)
     row_json = row_val.json
@@ -63,6 +65,8 @@ def getSpecificCategoryRow(qTerm):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/subcategory")
 def getSpecificSubCategory():
+    if 'login_status' not in session:
+        session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
     
@@ -93,7 +97,7 @@ def getSubCategoryJson(category_id, sub_category_id):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/product")
 def getSpecificProduct():
-    if len(session) == 0:
+    if 'login_status' not in session:
         session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
@@ -101,8 +105,9 @@ def getSpecificProduct():
     categories = getAllCategories()
     category_table_row = getSpecificCategoryRow(category_id)
     cat_name = category_table_row.json['category_name']
-
+    print(sub_category_id)
     sub_cat_name = getSpecificCategoryImages(category_id)
+    print(sub_cat_name)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]    
 
     product_json = getProductData(category_id, sub_category_id, product_serial_number)
@@ -143,7 +148,7 @@ def getSpecificProduct():
 
     offer_price = 'None'
     if product_json['offer_flag'][0] == 1:
-        offer_price = (product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100)
+        offer_price = round((product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100), 2)
         print(offer_price)
         
     return render_template('product/product_page.html', categories = categories.json, orderquantity=quant, \
@@ -165,6 +170,8 @@ def getSpecificProduct():
                            avg_rating_score = avg_rating_score,\
                            no_of_ratings = no_of_ratings, \
                            range=range,\
+                           seller = product_json['seller'],\
+                           badge = product_json['badge'],\
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
                            offer_percent = int(product_json['offer_percent'][0]))
@@ -346,7 +353,9 @@ def sellerAccount():
     if loginStatus == "True":
         products = getSellerProducts(session["seller_id"])
         history = getSellerProductsHistory(session["seller_id"])
-        return render_template('seller-account/selleraccount.html', products=products, history=history)
+        award_data, total_sold = getSellerAwardData(session["seller_id"][0])
+                
+        return render_template('seller-account/selleraccount.html', products=products, history=history, award_data=award_data, total_sold=total_sold)
     else:
         return redirect('/seller-login')
 
@@ -411,15 +420,11 @@ def placeOrder():
 def submit_ratings():
     rating_score = int(request.form['quantity'])
     product_serial_number = request.form['product_serial_number']
-    # print(rating_score)
-    # print(product_serial_number)
     user_id = session["user_id"][0]
-    # print(user_id)
-    
+       
     insertNewRatings(rating_score, product_serial_number, user_id, comments="")
-        
     time.sleep(1)
-    return redirect('useraccount') #render_template_string('<script>alert("{{ message }}");</script>', message=message)
+    return redirect('useraccount') 
 
 
 @app.route('/addNewProduct', methods=['POST'])
@@ -432,6 +437,11 @@ def addNewProduct():
     stock = request.form['stock']
     offerpercent = request.form['offerpercent']
     inputFile = request.files.getlist('image')
+    sponsor = request.form['sponsor']
+    if sponsor == "on":
+        sponsored = 1
+    else:
+        sponsored = 0
     image_id, secondary_images = uploadImageToDrive(inputFile)
     if offerpercent == "0":
         offerflag = False
@@ -440,8 +450,8 @@ def addNewProduct():
     seller_id = session["seller_id"][0]
     date = datetime.now().strftime("%d-%m-%Y")  
     product_id = 6 
-    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
-    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
+    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
+    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
     status = "True"
     if status == "True":
         return redirect(url_for('sellerAccount', addProdError="False"))
