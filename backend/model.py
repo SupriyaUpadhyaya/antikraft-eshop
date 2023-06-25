@@ -451,14 +451,17 @@ def updatepassword(username, encrypted_password):
 def getSellerAwardData(sellerid):
     conn = get_db_connection()
     
-    sqlquery = "SELECT ORDERS.*, PRODUCT.product_serial_number, PRODUCT.product_name, PRODUCT.seller_id FROM ORDERS JOIN PRODUCT ON ORDERS.product_serial_number = PRODUCT.product_serial_number;"
-    # print(sqlquery)
-    result = conn.execute(sqlquery)
+    sqlquery1 = "SELECT * FROM ORDERS"
+    result1 = conn.execute(sqlquery1)
+    columns1 = [column[0] for column in conn.description]
+    df_order = pd.DataFrame(result1.fetchall(), columns=columns1)
 
-    columns = [column[0] for column in conn.description]
+    sqlquery2 = "SELECT PRODUCT.product_serial_number, PRODUCT.product_name, PRODUCT.seller_id  FROM PRODUCT"
+    result2 = conn.execute(sqlquery2)
+    columns2 = [column[0] for column in conn.description]
+    df_product = pd.DataFrame(result2.fetchall(), columns=columns2)
 
-    df_award_data = pd.DataFrame(result.fetchall(), columns=columns)
-
+    df_award_data = df_order.merge(df_product, how='left', on='product_serial_number')
     df_award_data = df_award_data[df_award_data.seller_id == sellerid]
     df_award_data = df_award_data[(df_award_data.order_status == 'complete') | (df_award_data.order_status == 'completed')]
 
@@ -469,8 +472,7 @@ def getSellerAwardData(sellerid):
     df_award_data = df_award_data.merge(df_award_data2, how='left', on='product_name')
     df_award_data = df_award_data[['product_serial_number','product_name','seller_id','total_quantity']]
     df_award_data.drop_duplicates(subset=['product_serial_number', 'product_name'], inplace=True)
-    df_award_data = df_award_data.T.drop_duplicates().T
-
+    
     total_sold = df_award_data['total_quantity'].sum()
 
     badge = ""
