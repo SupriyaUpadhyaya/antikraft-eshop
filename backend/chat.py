@@ -49,7 +49,7 @@ def get_response(msg):
             if tag == intent["tag"]:
                 return random.choice(intent['responses'])
     
-    return "I do not understand..."
+    return "I apologize, but I don't have the information you're looking for.\n Please send an email to antiqkraft_app.service \n @yahoo.com and our team will be happy to assist you further."
 
 
 if __name__ == "__main__":
