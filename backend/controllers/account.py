@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updateUserAccount, updatepassword
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -49,7 +49,6 @@ def getUserAccount(username):
         user['user_address'].append(row["user_address"])
         user['user_salutation'].append(row["user_salutation"])
         user['security_question'].append(row["security_question"])
-    print("len(data.fetchall())", len(data.fetchall()))
     if count != 0:
         return user
     else:
@@ -65,6 +64,7 @@ def validateCredentails(username, password):
             status = "True"
         else:
             status = "False"
+            return "False"
     user["login_status"] = status
     return user
 
@@ -147,7 +147,35 @@ def addSellerAccount(sellername, email, password, address, securityquestion):
     else:
         return "False"
 
+def verifyUserAccount(email, security_answer):
+    status = getUserAccount(email)
+    if status == "ERROR":
+        return False
+    else:
+        if status['security_question'][0] == security_answer:
+            return True
+        else:
+            return False
+     
+def updateUserPassword(username, new_password):
+    encrypted_password = cipher.encrypt(new_password).decode("ascii")
+    status = updatepassword(username, encrypted_password)
+    return status
 
 def getOrderHistory(userid):
     order = readOrderHistory(userid)
     return order
+
+
+def updatePersonalDetails(salutation, firstname, lastname, email, phonenumber, address, securityquestion):
+    userexists = getUserAccount(email)
+    if userexists != "ERROR":
+        status = updateUserAccount(salutation, firstname, lastname, email, phonenumber, address, securityquestion)
+        print(status)
+        if status == "True":
+            user = getUserAccount(email)
+            return user
+        else:
+            return "False"
+    else:
+        return "False"

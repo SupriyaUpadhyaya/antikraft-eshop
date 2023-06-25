@@ -1,9 +1,9 @@
 from datetime import datetime
 import json, subprocess
 from statistics import mean
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, jsonify, request
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
-from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
 from backend.model import insertNewRatings, getSellerAwardData
@@ -12,6 +12,7 @@ import time
 import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
+
 
 subprocess.run(f"python backend/train.py")
 
@@ -37,6 +38,8 @@ def predict():
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
 def getSpecificCategory():
+    if 'login_status' not in session:
+        session["login_status"] = 'False'
     qTerm = request.args.get('categoryid')
     row_val = getSpecificCategoryRow(qTerm)
     row_json = row_val.json
@@ -62,6 +65,8 @@ def getSpecificCategoryRow(qTerm):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/subcategory")
 def getSpecificSubCategory():
+    if 'login_status' not in session:
+        session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
     
@@ -92,7 +97,7 @@ def getSubCategoryJson(category_id, sub_category_id):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/product")
 def getSpecificProduct():
-    if len(session) == 0:
+    if 'login_status' not in session:
         session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
@@ -100,8 +105,9 @@ def getSpecificProduct():
     categories = getAllCategories()
     category_table_row = getSpecificCategoryRow(category_id)
     cat_name = category_table_row.json['category_name']
-
+    print(sub_category_id)
     sub_cat_name = getSpecificCategoryImages(category_id)
+    print(sub_cat_name)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]    
 
     product_json = getProductData(category_id, sub_category_id, product_serial_number)
@@ -142,7 +148,7 @@ def getSpecificProduct():
 
     offer_price = 'None'
     if product_json['offer_flag'][0] == 1:
-        offer_price = (product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100)
+        offer_price = round((product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100), 2)
         print(offer_price)
         
     return render_template('product/product_page.html', categories = categories.json, orderquantity=quant, \
@@ -164,6 +170,7 @@ def getSpecificProduct():
                            avg_rating_score = avg_rating_score,\
                            no_of_ratings = no_of_ratings, \
                            range=range,\
+                           seller = product_json['seller'],\
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
                            offer_percent = int(product_json['offer_percent'][0]))
@@ -429,6 +436,11 @@ def addNewProduct():
     stock = request.form['stock']
     offerpercent = request.form['offerpercent']
     inputFile = request.files.getlist('image')
+    sponsor = request.form['sponsor']
+    if sponsor == "on":
+        sponsored = 1
+    else:
+        sponsored = 0
     image_id, secondary_images = uploadImageToDrive(inputFile)
     if offerpercent == "0":
         offerflag = False
@@ -437,8 +449,8 @@ def addNewProduct():
     seller_id = session["seller_id"][0]
     date = datetime.now().strftime("%d-%m-%Y")  
     product_id = 6 
-    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
-    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images)
+    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
+    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
     status = "True"
     if status == "True":
         return redirect(url_for('sellerAccount', addProdError="False"))
@@ -463,6 +475,48 @@ def updateOffer():
 def editUserProfile():
     categories = getAllCategories()
     return render_template('user-account/editPersonalInfo.html', error="False", categories=categories)
+
+@app.route('/updatePersonalInfo', methods=['POST'])
+def updatePersonalInfo():
+    salutation = request.form['salutation']
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
+    email = request.form['email']
+    phonenumber = request.form['phonenumber']
+    address = request.form['address']
+    securityquestion = request.form['security-question']
+    user = updatePersonalDetails(salutation, firstname, lastname, email, phonenumber, address, securityquestion)
+    if user == "False":
+        return redirect(url_for('editUserProfile', error="True"))
+    else:
+        print("user ", user["user_address"])
+        session["user_address"] = user["user_address"]
+        session["user_firstname"] = user["user_firstname"]
+        session["user_lastname"] = user["user_lastname"]
+        session["user_phone"] = user["user_phone"]
+        session["user_salutation"] = user["user_salutation"]
+        return redirect('useraccount')
+    
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    username = request.form['email']
+    security_answer = request.form['security_question']
+    new_password = request.form['newPassword']
+
+    # Check if the user exists and retrieve their account information
+    user = verifyUserAccount(username, security_answer)
+    print(user)
+    if user is False:
+        return jsonify({'message': 'User not found or security answer is wrong'})
+
+
+    # Update the user's password in the database
+    success = updateUserPassword(username, new_password)
+    
+    if success is "True":
+        return redirect('/login')
+    else:
+        return redirect(redirect_url)
 
 
 if __name__ == '__main__':
