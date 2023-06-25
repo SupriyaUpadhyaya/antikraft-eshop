@@ -3,7 +3,7 @@ import json, subprocess
 from statistics import mean
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify, request
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
-from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword
+from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
 from backend.model import insertNewRatings
@@ -498,16 +498,36 @@ def reset_password():
     user = verifyUserAccount(username, security_answer)
     print(user)
     if user is False:
-        return jsonify({'message': 'User not found or security answer is wrong'})
+        error_message = 'User not found or security answer is wrong, please try again.'
+        return render_template('password-reset/user-password-reset.html', error_message=error_message)
 
 
     # Update the user's password in the database
     success = updateUserPassword(username, new_password)
     
-    if success is "True":
+    if success == "True":
         return redirect('/login')
     else:
         return redirect(redirect_url)
+    
+@app.route('/seller-reset-password', methods=['POST'])
+def reset_seller_password():
+    username = request.form['email']
+    security_answer = request.form['security_question']
+    new_password = request.form['newPassword']
+
+    # Check if the user exists and retrieve their account information
+    user = verifySellerAccount(username, security_answer)
+    if user is False:
+        error_message = 'Seller not found or security answer is wrong, please try again.'
+        return render_template('password-reset/seller-password-reset.html', error_message=error_message)
+
+    success = updateSellerPassword(username, new_password)
+    
+    if success == "True":
+        return redirect('/login')
+    else:
+        return redirect(redirect_url())
 
 
 if __name__ == '__main__':
