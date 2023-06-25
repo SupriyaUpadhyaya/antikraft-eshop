@@ -507,3 +507,15 @@ def getSellerAwardData(sellerid):
         return products_list, total_sold
     else:
         return "ERROR"
+
+def updatepasswordseller(username, encrypted_password):
+    conn = get_db_connection()
+    sqlquery = "UPDATE SELLER SET seller_password='" + str(encrypted_password) + "' where seller_email='" + str(username) + "'"
+    try:
+        conn.execute(sqlquery)
+        conn.close()
+        status = "True"    
+    except sqlite3.IntegrityError as error:
+        status = "False"
+    return status
+

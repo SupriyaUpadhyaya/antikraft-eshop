@@ -1,6 +1,6 @@
 
 from flask import Flask
-from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updateUserAccount, updatepassword
+from backend.model import readUserAccount, insertUserAccount, insertSellerAccount, readSellerAccount, readOrderForHeaderCart, readOrderHistory, updateUserAccount, updatepassword, updatepasswordseller
 from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
@@ -74,7 +74,6 @@ def validateRegistration(salutation, firstname, lastname, email, password, phone
     if userexists == "ERROR":
         encrypted_password = cipher.encrypt(password).decode("ascii")
         status = addUserAccount(salutation, firstname, lastname, email, encrypted_password, phonenumber, address, securityquestion)
-        print(status)
         if status == "True":
             user = getUserAccount(email)
             user["login_status"] = status
@@ -96,7 +95,7 @@ def addUserAccount(salutation, firstname, lastname, email, password, phonenumber
 def getSellerAccount(username):
     data = readSellerAccount(username)
     count = 0
-    keyList = ["seller_id", "seller_name", "seller_email", "seller_password", "seller_address", "seller_address", "seller_login_status"]
+    keyList = ["seller_id", "seller_name", "seller_email", "seller_password", "seller_address", "seller_address", "seller_login_status", "security_question"]
     seller = {key: [] for key in keyList}
     for row in data:
         count += 1
@@ -105,6 +104,7 @@ def getSellerAccount(username):
         seller['seller_email'].append(row["seller_email"])
         seller['seller_password'].append(row["seller_password"])
         seller['seller_address'].append(row["seller_address"])
+        seller['security_question'].append(row["security_question"])
     if count != 0:
         return seller
     else:
@@ -129,7 +129,6 @@ def validateSellerRegistration(sellername, email, password, address, securityque
     if sellerexists == "ERROR":
         encrypted_password = cipher.encrypt(password).decode("ascii")
         status = addSellerAccount(sellername, email, encrypted_password, address, securityquestion)
-        print(status)
         if status == "True":
             seller = getSellerAccount(email)
             seller["seller_login_status"] = status
@@ -160,6 +159,22 @@ def verifyUserAccount(email, security_answer):
 def updateUserPassword(username, new_password):
     encrypted_password = cipher.encrypt(new_password).decode("ascii")
     status = updatepassword(username, encrypted_password)
+    return status
+
+def verifySellerAccount(username, security_answer):
+    status = getSellerAccount(username)
+    if status == "ERROR":
+        return False
+    else:
+        if status['security_question'][0] == security_answer:
+        
+            return True
+        else:
+            return False
+     
+def updateSellerPassword(username, new_password):
+    encrypted_password = cipher.encrypt(new_password).decode("ascii")
+    status = updatepasswordseller(username, encrypted_password)
     return status
 
 def getOrderHistory(userid):
