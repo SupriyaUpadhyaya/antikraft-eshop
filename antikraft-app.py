@@ -171,6 +171,7 @@ def getSpecificProduct():
                            no_of_ratings = no_of_ratings, \
                            range=range,\
                            seller = product_json['seller'],\
+                           badge = product_json['badge'],\
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
                            offer_percent = int(product_json['offer_percent'][0]))
