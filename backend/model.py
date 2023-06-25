@@ -458,8 +458,6 @@ def getSellerAwardData(sellerid):
 
     df_award_data = pd.DataFrame(result.fetchall(), columns=columns)
 
-    conn.close()
-
     df_award_data = df_award_data[df_award_data.seller_id == sellerid]
     df_award_data = df_award_data[(df_award_data.order_status == 'complete') | (df_award_data.order_status == 'completed')]
 
@@ -475,6 +473,24 @@ def getSellerAwardData(sellerid):
 
     total_sold = df_award_data['total_quantity'].sum()
 
+    badge = ""
+    if (total_sold < 10):
+        badge = "5"
+    elif (total_sold >= 10) and (total_sold < 20):
+        badge = "4"
+    elif (total_sold >= 20) and (total_sold < 30):
+        badge = "3"
+    elif (total_sold >= 30) and (total_sold < 40):
+        badge = "2"
+    elif (total_sold >= 40):
+        badge = "1"
+
+    update_sqlquery = "UPDATE SELLER set badge='" + badge + "' WHERE seller_id=" + str(sellerid)
+    # print(update_sqlquery)
+
+    conn.execute(update_sqlquery)
+    conn.close()
+        
     keyList = ["product_serial_number", "product_name", "seller_id", "total_quantity"]
     products_list = []
     for index,row in df_award_data.iterrows():
