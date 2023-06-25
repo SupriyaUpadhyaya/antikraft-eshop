@@ -64,6 +64,7 @@ def validateCredentails(username, password):
             status = "True"
         else:
             status = "False"
+            return "False"
     user["login_status"] = status
     return user
 

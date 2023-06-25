@@ -11,7 +11,7 @@ def addNewProductFromSeller(productName, productDescription, seller_id, date, of
         category_id = i["category_id"]
     subcategory_ids = getSubCategoryId(subcategory)
     for i in subcategory_ids:
-        subcategory_id = i["sub_serial_number"]
+        subcategory_id = i["sub_category_id"]
     status = insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory_id, stock, image_id, category_id, product_id, secondary_images, sponsored)
     return status
 

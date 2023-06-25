@@ -14,7 +14,7 @@ import nltk
 from backend.chat import get_response
 
 
-subprocess.run(f"python backend/train.py")
+#subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -38,6 +38,8 @@ def predict():
 # To render category HTML page when user clicks on category in top nav 
 @app.route("/category")
 def getSpecificCategory():
+    if 'login_status' not in session:
+        session["login_status"] = 'False'
     qTerm = request.args.get('categoryid')
     row_val = getSpecificCategoryRow(qTerm)
     row_json = row_val.json
@@ -63,6 +65,8 @@ def getSpecificCategoryRow(qTerm):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/subcategory")
 def getSpecificSubCategory():
+    if 'login_status' not in session:
+        session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
     
@@ -93,7 +97,7 @@ def getSubCategoryJson(category_id, sub_category_id):
 # To render sub category HTML page when user clicks on category page tiles
 @app.route("/product")
 def getSpecificProduct():
-    if len(session) == 0:
+    if 'login_status' not in session:
         session["login_status"] = 'False'
     sub_category_id = request.args.get('subcategoryid')
     category_id = request.args.get('categoryid')
@@ -101,8 +105,9 @@ def getSpecificProduct():
     categories = getAllCategories()
     category_table_row = getSpecificCategoryRow(category_id)
     cat_name = category_table_row.json['category_name']
-
+    print(sub_category_id)
     sub_cat_name = getSpecificCategoryImages(category_id)
+    print(sub_cat_name)
     sub_cat_name = sub_cat_name['sub_category_name'][int(sub_category_id)-1]    
 
     product_json = getProductData(category_id, sub_category_id, product_serial_number)
@@ -143,7 +148,7 @@ def getSpecificProduct():
 
     offer_price = 'None'
     if product_json['offer_flag'][0] == 1:
-        offer_price = (product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100)
+        offer_price = round((product_json['product_price'][0] - (product_json['product_price'][0] * product_json['offer_percent'][0]) / 100), 2)
         print(offer_price)
         
     return render_template('product/product_page.html', categories = categories.json, orderquantity=quant, \
@@ -165,6 +170,7 @@ def getSpecificProduct():
                            avg_rating_score = avg_rating_score,\
                            no_of_ratings = no_of_ratings, \
                            range=range,\
+                           seller = product_json['seller'],\
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
                            offer_percent = int(product_json['offer_percent'][0]))
