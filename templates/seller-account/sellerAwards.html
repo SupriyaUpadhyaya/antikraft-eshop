@@ -1,0 +1,120 @@
+<style>
+    .star {
+        height: 100px;
+        width: 100px;
+        -webkit-clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        text-align: center;
+        background: rgb(255, 215, 0);
+        color: black;
+        font-weight: bold;
+    }
+
+    .star::before {
+        display: inline-block;
+        height: 100%;
+        background: blue;
+        vertical-align: middle;
+        content: '';
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <h4>Total Products Sold = {{total_sold}}</h4>
+
+        </div>
+        <div class="col-2">
+            <h4>Your Badge:</h4>
+        </div>
+        <div class="col-4">
+            {% if total_sold < 10 %} <img src='static/badge/b5.png' width="50px" height="50px"
+                style="margin-bottom: 10px;"></img>
+                {% endif %}
+                {% if total_sold >= 10 and total_sold < 20 %} <img src='static/badge/b4.png' width="50px" height="50px"
+                    style="margin-bottom: 10px;"></img>
+                    {% endif %}
+                    {% if total_sold >= 20 and total_sold < 30 %} <img src='static/badge/b3.png' width="50px"
+                        height="50px" style="margin-bottom: 10px;"></img>
+                        {% endif %}
+                        {% if total_sold >= 30 and total_sold < 40 %} <img src='static/badge/b2.png' width="50px"
+                            height="50px" style="margin-bottom: 10px;"></img>
+                            {% endif %}
+                            {% if total_sold >= 40 %}
+                            <img src='static/badge/b1.png' width="50px" height="50px"
+                                style="margin-bottom: 10px;"></img>
+                            {% endif %}
+        </div>
+        <hr>
+        <div class="col-12">
+            <h5 style="text-align: left;">All Sold Products</h5>
+            <hr>
+        </div>
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Quantity Sold</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for product in award_data%}
+                    <tr>
+                        <td scope="row">{{product['product_serial_number'][0]}}</th>
+                        <td>{{product['product_name'][0]}}</td>
+                        <td>{{product['total_quantity'][0]}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="col-12" style="margin-top: 100px;">
+            <h6 style="text-align: left;">Legend</h6>
+            <hr>
+        </div>
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Badge</th>
+                        <th scope="col">Criteria</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row"><img src='static/badge/b1.png' width="50px" height="50px"
+                                style="margin-bottom: 10px;"></th>
+                        <td>Total Products Sold >= 40 </td>
+                    </tr>
+                    <tr>
+                        <td scope="row"><img src='static/badge/b2.png' width="50px" height="50px"
+                                style="margin-bottom: 10px;"></th>
+                        <td>Total Products Sold >= 30 and Total Products Sold < 40</td>
+                    </tr>
+                    <tr>
+                        <td scope="row"><img src='static/badge/b3.png' width="50px" height="50px"
+                                style="margin-bottom: 10px;"></th>
+                        <td>Total Products Sold >= 20 and Total Products Sold < 30</td>
+                    </tr>
+                    <tr>
+                        <td scope="row"><img src='static/badge/b4.png' width="50px" height="50px"
+                                style="margin-bottom: 10px;"></th>
+                        <td>Total Products Sold >= 10 and Total Products Sold < 20</td>
+                    </tr>
+                    <tr>
+                        <td scope="row"><img src='static/badge/b5.png' width="50px" height="50px"
+                                style="margin-bottom: 10px;"></th>
+                        <td>Total Products Sold < 10</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

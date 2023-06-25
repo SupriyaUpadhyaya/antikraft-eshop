@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 def get_db_connection():
     conn = sqlite3.connect('antiqkraft-database.db', isolation_level=None)
@@ -461,3 +462,46 @@ def getSellerById(id):
     print(sqlquery)
     data = conn.execute(sqlquery)
     return data
+
+def getSellerAwardData(sellerid):
+    conn = get_db_connection()
+    
+    sqlquery = "SELECT ORDERS.*, PRODUCT.product_serial_number, PRODUCT.product_name, PRODUCT.seller_id FROM ORDERS JOIN PRODUCT ON ORDERS.product_serial_number = PRODUCT.product_serial_number;"
+    # print(sqlquery)
+    result = conn.execute(sqlquery)
+
+    columns = [column[0] for column in conn.description]
+
+    df_award_data = pd.DataFrame(result.fetchall(), columns=columns)
+
+    conn.close()
+
+    df_award_data = df_award_data[df_award_data.seller_id == sellerid]
+    df_award_data = df_award_data[(df_award_data.order_status == 'complete') | (df_award_data.order_status == 'completed')]
+
+    df_award_data = df_award_data[['product_serial_number', 'product_name', 'quantity', 'seller_id']]
+    df_award_data.to_csv('result.csv', index=False)
+    df_award_data2 = df_award_data.groupby(['product_name'])['quantity'].sum().reset_index()
+    df_award_data2.rename(columns={'quantity': 'total_quantity'}, inplace=True)
+
+    df_award_data = df_award_data.merge(df_award_data2, how='left', on='product_name')
+    df_award_data = df_award_data[['product_serial_number','product_name','seller_id','total_quantity']]
+    df_award_data.drop_duplicates(subset=['product_serial_number', 'product_name'], inplace=True)
+    df_award_data = df_award_data.T.drop_duplicates().T
+
+    total_sold = df_award_data['total_quantity'].sum()
+
+    keyList = ["product_serial_number", "product_name", "seller_id", "total_quantity"]
+    products_list = []
+    for index,row in df_award_data.iterrows():
+        products = {key: [] for key in keyList}
+        products['product_serial_number'].append(row["product_serial_number"])
+        products['product_name'].append(row["product_name"])
+        products['seller_id'].append(row["seller_id"])
+        products['total_quantity'].append(row["total_quantity"])
+        products_list.append(products)
+     
+    if products_list is not None:
+        return products_list, total_sold
+    else:
+        return "ERROR"
