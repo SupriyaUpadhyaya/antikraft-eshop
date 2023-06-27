@@ -1,7 +1,7 @@
 from datetime import datetime
 import json, subprocess
 from statistics import mean
-from flask import Flask, redirect, render_template, request, session, url_for, jsonify, request
+from flask import Flask, redirect, render_template, request, session, url_for, jsonify, request, abort
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
@@ -14,7 +14,7 @@ import nltk
 from backend.chat import get_response
 
 
-subprocess.run(f"python backend/train.py")
+#subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -213,7 +213,11 @@ def getAllCategories():
 
 @app.route('/login')
 def login():
-    return render_template('login/login.html', error="False")
+    if request.args.get('error') is None:
+        error = "False"
+    else:
+        error = request.args['error']
+    return render_template('login/login.html', error=error)
 
 
 @app.route('/userAccountLogin', methods=['POST'])
@@ -221,9 +225,8 @@ def userAccountLogin():
     username = request.form['username']
     password = request.form['password']
     user = validateCredentails(username, password)
-    categories = getAllCategories()
     if user == "False":
-        return render_template('login/login.html', categories=categories.json, error="True")
+        return redirect(url_for('login', error="True")) 
     else: 
         for item in user:
             session[item]=user[item]
@@ -241,6 +244,10 @@ def sellersignup():
 
 @app.route("/useraccount")
 def useraccount():
+    if request.args.get('messages') is None:
+        messages = ""
+    else:
+        messages = request.args['messages']
     if "login_status" not in session:
         return redirect("/login")
     elif session["login_status"] == "False":
@@ -257,7 +264,7 @@ def useraccount():
             orderWithItems[i['order_id']] = owi
             total[i['order_id']] = order_total
 
-        return render_template('user-account/useraccount.html', categories=categories.json, user="None", orders=orders, orderWithItems=orderWithItems, total=total)
+        return render_template('user-account/useraccount.html', categories=categories.json, user="None", orders=orders, orderWithItems=orderWithItems, total=total, messages=messages)
 
 @app.route("/sellerpasswordreset")
 def sellerpasswordreset():
@@ -351,11 +358,15 @@ def sellerAccount():
     else:
         loginStatus = session["seller_login_status"]
     if loginStatus == "True":
+        if request.args.get('messages') is None:
+            messages = ""
+        else:
+            messages = request.args['messages']
         products = getSellerProducts(session["seller_id"])
         history = getSellerProductsHistory(session["seller_id"])
         award_data, total_sold = getSellerAwardData(session["seller_id"][0])
                 
-        return render_template('seller-account/selleraccount.html', products=products, history=history, award_data=award_data, total_sold=total_sold)
+        return render_template('seller-account/selleraccount.html', products=products, history=history, award_data=award_data, total_sold=total_sold, messages=messages)
     else:
         return redirect('/seller-login')
 
@@ -424,7 +435,7 @@ def submit_ratings():
        
     insertNewRatings(rating_score, product_serial_number, user_id, comments="")
     time.sleep(1)
-    return redirect('useraccount') 
+    return redirect(url_for('useraccount', messages="Successfully updated ratings!")) 
 
 
 @app.route('/addNewProduct', methods=['POST'])
@@ -437,8 +448,7 @@ def addNewProduct():
     stock = request.form['stock']
     offerpercent = request.form['offerpercent']
     inputFile = request.files.getlist('image')
-    sponsor = request.form['sponsor']
-    if sponsor == "on":
+    if request.form.get("sponsor"):
         sponsored = 1
     else:
         sponsored = 0
@@ -454,9 +464,9 @@ def addNewProduct():
     status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
     status = "True"
     if status == "True":
-        return redirect(url_for('sellerAccount', addProdError="False"))
+        return redirect(url_for('sellerAccount', messages="Product added successfully!"))
     else:
-        return redirect(url_for('sellerAccount', addProdError="True"))
+        return redirect(url_for('sellerAccount', messages="Failed to add product, please try again!"))
 
 @app.route('/updateOffer', methods=['POST'])   
 def updateOffer():
@@ -468,9 +478,9 @@ def updateOffer():
         offer_flag = False
     status = updateProductOffers(product_serial_number, offer_flag, offer_percent)
     if status == True:
-        return redirect(url_for('sellerAccount', addOfferError="False"))
+        return redirect(url_for('sellerAccount', messages="Offer updated successfully!"))
     else:
-        return redirect(url_for('sellerAccount', addOfferError="True"))
+        return redirect(url_for('sellerAccount', messages="Failed to update offer, please try again!"))
     
 @app.route('/editUserProfile')
 def editUserProfile():
@@ -496,7 +506,7 @@ def updatePersonalInfo():
         session["user_lastname"] = user["user_lastname"]
         session["user_phone"] = user["user_phone"]
         session["user_salutation"] = user["user_salutation"]
-        return redirect('useraccount')
+        return redirect(url_for('useraccount', messages="Successfully updated personal infoamtion"))
     
 @app.route('/reset-password', methods=['POST'])
 def reset_password():
@@ -539,6 +549,29 @@ def reset_seller_password():
     else:
         return redirect(redirect_url())
 
+@app.route('/messages')
+def messages():
+    if request.args.get('idx') is None:
+        idx = 0
+    else:
+        idx = int(request.args['idx'])
+    messages = ['Page Not Found!', 'Something went wrong, please try again later!', 'BadRequestKeyError: 400 Bad Request. Please provide all the details in the form!']
+    try:
+        return render_template('error-pages/messages.html', message=messages[idx])
+    except IndexError:
+        abort(404)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return redirect(url_for('messages', idx=0))
+
+@app.errorhandler(500)
+def page_not_found(error):
+    return redirect(url_for('messages', idx=1))
+
+@app.errorhandler(400)
+def page_not_found(error):
+    return redirect(url_for('messages', idx=2))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
