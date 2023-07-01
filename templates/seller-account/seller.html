@@ -1,29 +1,11 @@
 <div class="container" onload="hideLoadingDiv()">
     <div class="row">
-      <div class="col-3">
+      <div class="col-4">
         <h2 style="text-align: left;" >Seller Account<h2></h2>
       </div>
-    
-    {% if addProdError == "True" %}
-      <div class="col-4 msg-panel">
-          <h5 style="color: red; background-color: grey;">Error adding product. Please try again later.</h5>
-        </div>
-      {%endif%}
-      {% if addProdError == "False" %}
-      <div class="col-4 msg-panel">
-          <h5 style="color: black; background-color: grey;">Product added successfully</h5>
-        </div>
-      {%endif%}
-      {% if addOfferError == "True" %}
-      <div class="col-4 msg-panel">
-          <h5 style="color: red; background-color: grey;">Error adding offer. Please try again later.</h5>
-        </div>
-      {%endif%}
-      {% if addOfferError == "False" %}
-      <div class="col-4 msg-panel">
-          <h5 style="color: black; background-color: grey;">Offer added successfully</h5>
-        </div>
-      {%endif%}
+      <div class="col-8">
+        <h5 class="msg-panel" style="text-align: left; color: grey;" >{{messages}}</5>
+    </div>
     </div>
     <hr>
     <style>
