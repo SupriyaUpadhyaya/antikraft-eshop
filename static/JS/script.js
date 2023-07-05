@@ -95,6 +95,27 @@ function myFunction() {
     }
 }
 
+function offersFileValidation() {
+  var fileInput = document.getElementById('image');
+  
+  for (var i = 0; i < fileInput.files.length; ++i) {
+    var ext = fileInput.files[i].name.substr(-3);
+    console.log(ext)
+    if(ext!== "jpg" && ext!== "png")  {
+      alert('Not an accepted file extension. Only JPG and PNG files accepted');
+      fileInput.value = '';
+      return false;
+    }
+  }
+  
+  console.log(fileInput.files.length)
+  if(fileInput.files.length != 1){
+    alert("Please upload 5 images");
+    fileInput.value = '';
+    return false;
+  }
+}
+
 $(function() {
   $(".msg-panel").show()
   setTimeout(function() {

@@ -5,7 +5,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, j
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
-from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive
 from backend.model import insertNewRatings, getSellerAwardData
 import time
 
@@ -14,7 +14,7 @@ import nltk
 from backend.chat import get_response
 
 
-subprocess.run(f"python backend/train.py")
+#subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -448,11 +448,13 @@ def addNewProduct():
     stock = request.form['stock']
     offerpercent = request.form['offerpercent']
     inputFile = request.files.getlist('image')
+    offerinputFile = request.files.getlist('offerimage')
     if request.form.get("sponsor"):
         sponsored = 1
     else:
         sponsored = 0
     image_id, secondary_images = uploadImageToDrive(inputFile)
+    offer_image_id = uploadOffersImageToDrive(offerinputFile)
     if offerpercent == "0":
         offerflag = False
     else: 
@@ -460,10 +462,9 @@ def addNewProduct():
     seller_id = session["seller_id"][0]
     date = datetime.now().strftime("%d-%m-%Y")  
     product_id = 6 
-    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
-    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
-    status = "True"
-    if status == "True":
+    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_image_id)
+    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_image_id)
+    if status is True:
         return redirect(url_for('sellerAccount', messages="Product added successfully!"))
     else:
         return redirect(url_for('sellerAccount', messages="Failed to add product, please try again!"))
