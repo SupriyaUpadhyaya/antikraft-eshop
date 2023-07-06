@@ -33,19 +33,19 @@
                   View Details
                 </button></td>
                 <tr>
-                  <td colspan="4">
+                  <td colspan="12">
                   <div class="collapse" id="product{{product['product_serial_number'][0]}}">
                     <div class="row">
-                      <div class="col-9">
+                      <div class="col-12">
                           
                           <div class="row">
-                              <div class="col-5">
+                              <div class="col-3">
               
                                   <a class="link-dark" href={{product['product_url'][0]}}><img class="tile-image"
                                           src={{product['image_id'][0]}}></img></a>
               
                               </div>
-                              <div class="col-7">
+                              <div class="col-9">
                                   <div class="row">
                                       <div class="col-12">
                                           <a href={{product['product_url'][0]}} class="badge badge-dark" style="color: black;">
@@ -92,6 +92,40 @@
                                     <div class="col-6">
                                         <h6 class="tile-text" style="text-align: left;">{{product["offer_percent"][0]}}</h6>
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6 class="tile-text" style="text-align: left;">Old Offers : </h6>
+                                    </div>
+                                    {% if product["old_offers"][0] %}
+                                    <div class="col-12">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                  <th scope="col" style="width: 10%">Offer ID</th>
+                                                  <th scope="col" style="width: 30%">Offer percentage</th>
+                                                  <th scope="col" style="width: 60%">Offer image</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                
+                                                    {%for offers in product["old_offers"][0]%}
+                                                    <tr>
+                                                    <td scope="row">{{offers['offer_id'][0]}}</th>
+                                                        <td>{{offers['offer_percent'][0]}}</td>
+                                                        <td><img class="img-fluid" style="height: 150px; width:auto" src={{offers['offer_image_id'][0]}}></img</td>
+                                                    </tr>
+                                                        {%endfor%}
+                                                
+                                              </tbody>
+                                        </table>
+                                    </div>
+                                    {% endif %}
+                                    {% if not product["old_offers"][0] %}
+                                    <div class="col-12">
+                                        <h6 class="tile-text" style="text-align: center;">None</h6>
+                                    </div>
+                                    {% endif %}
                                 </div>
                                   </div>
                               </div>

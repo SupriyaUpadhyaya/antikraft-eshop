@@ -1,3 +1,7 @@
 Flask
 gunicorn
 flask-simple-crypt
+nltk
+pydrive
+torch
+torchvision

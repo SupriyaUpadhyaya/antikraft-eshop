@@ -5,14 +5,13 @@ from flask import Flask, redirect, render_template, request, session, url_for, j
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
-from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive
 from backend.model import insertNewRatings, getSellerAwardData, create_chat_table, get_db_connection, getAllSellers
 import time
 
 import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
-
 
 subprocess.run(f"python backend/train.py")
 
@@ -174,6 +173,8 @@ def getSpecificProduct():
                            badge = product_json['badge'],\
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
+                           offer_image_url = product_json['offer_image_id'][0], \
+                           recommendation = product_json['recommendation'][0], \
                            offer_percent = int(product_json['offer_percent'][0]))
 
 
@@ -332,6 +333,7 @@ def logout():
     for item in key:
         session.pop(item, None)
     session["login_status"] = 'False'
+    session["seller_login_status"] = 'False'
     return redirect('http://127.0.0.1:5000/')
 
 @app.route('/seller-login')
@@ -382,9 +384,12 @@ def userPasswordReset():
 
 @app.route('/checkout')
 def checkout():
-    categories = getAllCategories()
-    order, order_total = getOrder(session["user_id"])
-    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total, error=False)
+    if session["login_status"] == "True":
+        categories = getAllCategories()
+        order, order_total = getOrder(session["user_id"])
+        return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total, error=False)
+    else:
+        return redirect('login')
 
 
 @app.route('/updateQuantity',  methods=['POST'])
@@ -399,7 +404,7 @@ def updateQuantity():
         addItemToCart(product_serial_number, quantity)
         return redirect(redirect_url())
     else:
-        return render_template('login/login.html', error="False")
+        return redirect('login')
 
 
 @app.route('/deleteItem',  methods=['POST'])
@@ -448,6 +453,7 @@ def addNewProduct():
     stock = request.form['stock']
     offerpercent = request.form['offerpercent']
     inputFile = request.files.getlist('image')
+    offerinputFile = request.files.getlist('offerimage')
     if request.form.get("sponsor"):
         sponsored = 1
     else:
@@ -455,15 +461,16 @@ def addNewProduct():
     image_id, secondary_images = uploadImageToDrive(inputFile)
     if offerpercent == "0":
         offerflag = False
+        offer_image_id = "None"
     else: 
         offerflag = True
+        offer_image_id = uploadOffersImageToDrive(offerinputFile)
     seller_id = session["seller_id"][0]
     date = datetime.now().strftime("%d-%m-%Y")  
     product_id = 6 
-    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
-    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored)
-    status = "True"
-    if status == "True":
+    print("Form values", productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_image_id)
+    status = addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_image_id)
+    if status is True:
         return redirect(url_for('sellerAccount', messages="Product added successfully!"))
     else:
         return redirect(url_for('sellerAccount', messages="Failed to add product, please try again!"))
@@ -471,12 +478,16 @@ def addNewProduct():
 @app.route('/updateOffer', methods=['POST'])   
 def updateOffer():
     product_serial_number = request.form['product_serial_number']
+    offerinputFileNew = request.files.getlist('offerimagenew')
     offer_percent = request.form['offerpercent']
+    print("product_serial_number ", product_serial_number)
     if float(offer_percent) > 0:
         offer_flag = True
+        offer_image_id = uploadOffersImageToDrive(offerinputFileNew)
     else:
         offer_flag = False
-    status = updateProductOffers(product_serial_number, offer_flag, offer_percent)
+        offer_image_id = "None"
+    status = updateProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id)
     if status == True:
         return redirect(url_for('sellerAccount', messages="Offer updated successfully!"))
     else:
