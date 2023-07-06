@@ -1,4 +1,4 @@
-from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers
+from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers, readAllOffers
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
@@ -90,7 +90,7 @@ def uploadOffersImageToDrive(inputFile) :
 
 def getSellerProducts(sellerid):
     data = readSellerProducts(sellerid)
-    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_id", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored", "offer_image_id", "offer_percent"]
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_id", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored", "offer_image_id", "offer_percent", "old_offers"]
     products_list = []
     for row in data:
         products = {key: [] for key in keyList}
@@ -127,6 +127,16 @@ def getSellerProducts(sellerid):
         else:
             products['offer_percent'].append(0)
             products['offer_image_id'].append(0)
+        allOffers = readAllOffers(str(products['product_serial_number'][0]))
+        allOldOffers = []
+        keys = ["offer_id", "offer_percent", "offer_image_id"]
+        for items in allOffers:
+            offers = {k: [] for k in keys}
+            offers['offer_id'].append(items['offer_id'])
+            offers['offer_percent'].append(items['offer_percent'])
+            offers['offer_image_id'].append(items['offer_image_id'])
+            allOldOffers.append(offers)
+        products['old_offers'].append(allOldOffers)
         products_list.append(products)
     if products_list is not None:
         return products_list
@@ -135,7 +145,7 @@ def getSellerProducts(sellerid):
     
 def getSellerProductsHistory(sellerid):
     data = readSellerProductsHistory(sellerid)
-    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored", "offer_id", "offer_image_id"]
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored", "offer_id", "offer_image_id", "old_offers"]
     products_list = []
     for row in data:
         products = {key: [] for key in keyList}
@@ -172,6 +182,16 @@ def getSellerProductsHistory(sellerid):
         else:
             products['offer_percent'].append(0)
             products['offer_image_id'].append(0)
+        allOffers = readAllOffers(str(products['product_serial_number'][0]))
+        allOldOffers = []
+        keys = ["offer_id", "offer_percent", "offer_image_id"]
+        for items in allOffers:
+            offers = {k: [] for k in keys}
+            offers['offer_id'].append(items['offer_id'])
+            offers['offer_percent'].append(items['offer_percent'])
+            offers['offer_image_id'].append(items['offer_image_id'])
+            allOldOffers.append(offers)
+        products['old_offers'].append(allOldOffers)
         products_list.append(products)
     if products_list is not None:
         return products_list

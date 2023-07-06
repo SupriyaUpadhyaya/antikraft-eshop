@@ -175,6 +175,7 @@ def getSpecificProduct():
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
                            offer_image_url = product_json['offer_image_id'][0], \
+                           recommendation = product_json['recommendation'][0], \
                            offer_percent = int(product_json['offer_percent'][0]))
 
 

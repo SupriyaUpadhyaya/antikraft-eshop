@@ -121,27 +121,6 @@ function offersFileValidation() {
   }
 }
 
-function offersFileValidationnew() {
-  var fileInputnew = document.getElementById('offerimagenew');
-  console.log(fileInputnew)
-  for (var i = 0; i < fileInputnew.files.length; ++i) {
-    var ext = fileInputnew.files[i].name.substr(-3);
-    console.log(ext)
-    if(ext!== "jpg" && ext!== "png")  {
-      alert('Not an accepted file extension. Only JPG and PNG files accepted');
-      fileInputnew.value = '';
-      return false;
-    }
-  }
-  
-  console.log(fileInputnew.files.length)
-  if(fileInputnew.files.length != 1){
-    alert("Please upload 1 images");
-    fileInputnew.value = '';
-    return false;
-  }
-}
-
 $(function() {
   $(".msg-panel").show()
   setTimeout(function() {
