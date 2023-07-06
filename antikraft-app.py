@@ -14,7 +14,7 @@ import nltk
 from backend.chat import get_response
 
 
-#subprocess.run(f"python backend/train.py")
+subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -576,9 +576,9 @@ def page_not_found(error):
 def page_not_found(error):
     return redirect(url_for('messages', idx=1))
 
-# @app.errorhandler(400)
-# def page_not_found(error):
-#     return redirect(url_for('messages', idx=2))
+@app.errorhandler(400)
+def page_not_found(error):
+    return redirect(url_for('messages', idx=2))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
