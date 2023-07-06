@@ -172,6 +172,11 @@ def searchProductList(query):
     data = conn.execute(sqlquery)
     return data
 
+def specialCategoryProductList(query):
+    conn = get_db_connection()
+    data = conn.execute(query)
+    return data
+
 
 def readUserAccount(username):
     conn = get_db_connection()
