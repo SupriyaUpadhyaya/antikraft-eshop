@@ -594,7 +594,7 @@ def reset_seller_password():
     success = updateSellerPassword(username, new_password)
     
     if success == "True":
-        return redirect('/login')
+        return redirect('/seller-login')
     else:
         return redirect(redirect_url())
 
