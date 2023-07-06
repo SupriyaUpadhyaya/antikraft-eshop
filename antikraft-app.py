@@ -334,6 +334,7 @@ def logout():
     for item in key:
         session.pop(item, None)
     session["login_status"] = 'False'
+    session["seller_login_status"] = 'False'
     return redirect('http://127.0.0.1:5000/')
 
 @app.route('/seller-login')
@@ -384,9 +385,12 @@ def userPasswordReset():
 
 @app.route('/checkout')
 def checkout():
-    categories = getAllCategories()
-    order, order_total = getOrder(session["user_id"])
-    return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total, error=False)
+    if session["login_status"] == "True":
+        categories = getAllCategories()
+        order, order_total = getOrder(session["user_id"])
+        return render_template('checkout/checkout.html', categories=categories.json, order=order, order_total=order_total, error=False)
+    else:
+        return redirect('login')
 
 
 @app.route('/updateQuantity',  methods=['POST'])
@@ -401,7 +405,7 @@ def updateQuantity():
         addItemToCart(product_serial_number, quantity)
         return redirect(redirect_url())
     else:
-        return render_template('login/login.html', error="False")
+        return redirect('login')
 
 
 @app.route('/deleteItem',  methods=['POST'])
