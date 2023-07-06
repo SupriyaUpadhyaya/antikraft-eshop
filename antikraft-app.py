@@ -6,7 +6,7 @@ from backend.controller import getAllCategoriesList, getSearch, getSpecificCateg
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory
-from backend.model import insertNewRatings, getSellerAwardData
+from backend.model import insertNewRatings, getSellerAwardData, create_chat_table, get_db_connection, getAllSellers
 import time
 
 import nltk
@@ -572,6 +572,77 @@ def page_not_found(error):
 @app.errorhandler(400)
 def page_not_found(error):
     return redirect(url_for('messages', idx=2))
+
+@app.route('/chat_session', methods=['GET', 'POST'])
+def index():
+    conn, cursor = create_chat_table()
+    cursor = get_db_connection()
+    
+    cursor.execute("SELECT * FROM CHAT ORDER BY timestamp DESC")
+    chat_messages = cursor.fetchall()
+    chat_list = [list(message) for message in chat_messages]
+
+    categories = getAllCategories()
+    sellers = getAllSellers()
+    
+    try:
+        if len(chat_list) == 0:
+            message = ''
+            seller_id = ''
+            seller_name = ''
+        else:
+            if 'message' not in request.form:
+                seller_id = int(request.form.get('selected_seller_id'))
+                seller_name = str(request.form.get('selected_seller_name'))
+                print("seller_id here2", seller_id)
+                print("seller_name here2", seller_name)
+                print(type(seller_id))
+                print(type(seller_name))
+                message = ''
+            else:
+                seller_id = int(request.form.get('selected_seller_id'))
+                seller_name = str(request.form.get('selected_seller_name'))
+                message = request.form['message']            
+    except:
+        message = ''
+        seller_id = 0
+        seller_name = ''
+
+    # Insert the message into the database
+    user_id = int(session['user_id'][0])
+    user_name = str(session['user_firstname'][0]) + ' ' + str(session['user_lastname'][0])
+    sender = user_name
+
+    cursor.execute("INSERT INTO CHAT (user_id, user_name, seller_id, seller_name, sender, message) VALUES (?, ?, ?, ?, ?, ?)", (user_id, user_name, seller_id, seller_name, sender, message))
+    conn.commit()
+    
+    chat_list = []
+    try:
+        select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT WHERE seller_id=" + str(seller_id) + " ORDER BY timestamp DESC"
+        cursor.execute(select_query)
+        chat_messages = cursor.fetchall()
+        chat_messages = chat_messages[:-1]
+    except:
+        select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT ORDER BY timestamp DESC"
+        print(select_query)
+        cursor.execute(select_query)
+        chat_messages = cursor.fetchall()
+        chat_messages = chat_messages[:-1]
+
+    chat_list = [list(message) for message in chat_messages]
+    seen = set()
+    unique_chat_list = [message for message in chat_list if tuple(message[:6]) not in seen and not seen.add(tuple(message[:6]))]
+    chat_list = [message for message in unique_chat_list if message[5] != '']
+    # print('chat_messages:', chat_list)   
+    
+    return render_template('chat_session/chat_session.html', categories=categories.json, \
+                            chat_messages=chat_list, \
+                            sellers=sellers, \
+                            len=len, \
+                            user_name=user_name, \
+                            datetime=datetime, \
+                            current_seller_id=seller_id)
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
