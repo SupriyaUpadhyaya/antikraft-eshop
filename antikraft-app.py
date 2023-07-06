@@ -585,7 +585,7 @@ def page_not_found(error):
     return redirect(url_for('messages', idx=2))
 
 @app.route('/chat_session', methods=['GET', 'POST'])
-def index():
+def chat_session_user():
     conn, cursor = create_chat_table()
     cursor = get_db_connection()
     
