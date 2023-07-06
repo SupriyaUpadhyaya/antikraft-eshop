@@ -1,18 +1,18 @@
-from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory
+from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
 from io import BytesIO
 
 
-def addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored):
+def addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_iamge_id):
     category_ids = getCategoryId(category)
     for i in category_ids:
         category_id = i["category_id"]
     subcategory_ids = getSubCategoryId(subcategory)
     for i in subcategory_ids:
         subcategory_id = i["sub_category_id"]
-    status = insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory_id, stock, image_id, category_id, product_id, secondary_images, sponsored)
+    status = insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory_id, stock, image_id, category_id, product_id, secondary_images, sponsored, offer_iamge_id)
     return status
 
 
@@ -52,9 +52,45 @@ def uploadImageToDrive(inputFile) :
     return image_id, secondary_images
 
 
+def uploadOffersImageToDrive(inputFile) :
+    scope = ["https://www.googleapis.com/auth/drive"]
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("isee-390607-511411524749.json", scope)
+    drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
+    image_link = []
+    for uploaded_file in inputFile:
+        print("uploaded_file.filename ", uploaded_file.filename)
+        if uploaded_file.filename != '':
+            buffer_memory = BytesIO()
+            uploaded_file.save(buffer_memory)
+            media_body = MediaIoBaseUpload(uploaded_file, uploaded_file.mimetype, resumable=True)
+            folderid = '14CMpny02eYL2o-dzBuDDrBk2bxGMCw3I'
+            file_metadata = {
+                "name": uploaded_file.filename,
+                'type': 'anyone',
+                'value': 'anyone',
+                'role': 'reader',
+                'parents': [folderid]
+            }
+            returned_fields = "id, name, mimeType, webViewLink, exportLinks, webContentLink, parents"
+            upload_response = drive_service.files().create(
+                body=file_metadata, 
+                media_body=media_body,  
+                fields=returned_fields
+            ).execute()
+            url = "https://drive.google.com/uc?export=view&id=" + upload_response['id']
+            image_link.append(url)
+            permission = {
+                'type': 'anyone',
+                'value': 'anyone',
+                'role': 'reader'}
+            drive_service.permissions().create(fileId=upload_response['id'],body=permission).execute()
+    image_id = image_link[0]
+    return image_id
+
+
 def getSellerProducts(sellerid):
     data = readSellerProducts(sellerid)
-    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored"]
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_id", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored", "offer_image_id", "offer_percent"]
     products_list = []
     for row in data:
         products = {key: [] for key in keyList}
@@ -63,7 +99,7 @@ def getSellerProducts(sellerid):
         products['product_description'].append(row["product_description"])
         products['posted_date'].append(row["posted_date"])
         products['offer_flag'].append(row["offer_flag"])
-        products['offer_percent'].append(row["offer_percent"])
+        products['offer_id'].append(row["offer_id"])
         products['product_price'].append(row["product_price"])
         products['sub_category_id'].append(row["sub_category_id"])
         products['stock'].append(row["stock"])
@@ -83,6 +119,14 @@ def getSellerProducts(sellerid):
         if total != 0:
             avg = total / i
         products['rating'].append(avg)
+        if products['offer_flag'][0] != 0:
+            offers = readOffers(str(products['product_serial_number'][0]), str(products['offer_id'][0]))
+            for item in offers:
+                products['offer_percent'].append(item['offer_percent'])
+                products['offer_image_id'].append(str(item['offer_image_id']))
+        else:
+            products['offer_percent'].append(0)
+            products['offer_image_id'].append(0)
         products_list.append(products)
     if products_list is not None:
         return products_list
@@ -91,7 +135,7 @@ def getSellerProducts(sellerid):
     
 def getSellerProductsHistory(sellerid):
     data = readSellerProductsHistory(sellerid)
-    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored"]
+    keyList = ["product_serial_number", "product_name", "product_description", "seller_id", "posted_date", "offer_flag", "offer_percent", "product_price", "sub_category_id", "stock", "image_id", "category_id", "product_id", "product_url", "rating", "sponsored", "offer_id", "offer_image_id"]
     products_list = []
     for row in data:
         products = {key: [] for key in keyList}
@@ -100,7 +144,7 @@ def getSellerProductsHistory(sellerid):
         products['product_description'].append(row["product_description"])
         products['posted_date'].append(row["posted_date"])
         products['offer_flag'].append(row["offer_flag"])
-        products['offer_percent'].append(row["offer_percent"])
+        products['offer_id'].append(row["offer_id"])
         products['product_price'].append(row["product_price"])
         products['sub_category_id'].append(row["sub_category_id"])
         products['stock'].append(row["stock"])
@@ -120,12 +164,20 @@ def getSellerProductsHistory(sellerid):
         if total != 0:
             avg = total / i
         products['rating'].append(avg)
+        if products['offer_flag'][0] != 0:
+            offers = readOffers(str(products['product_serial_number'][0]), str(products['offer_id'][0]))
+            for item in offers:
+                products['offer_percent'].append(item['offer_percent'])
+                products['offer_image_id'].append(str(item['offer_image_id']))
+        else:
+            products['offer_percent'].append(0)
+            products['offer_image_id'].append(0)
         products_list.append(products)
     if products_list is not None:
         return products_list
     else:
         return "ERROR"
     
-def updateProductOffers(product_serial_number, offer_flag, offer_percent):
-    status = writeProductOffers(product_serial_number, offer_flag, offer_percent)
+def updateProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id):
+    status = writeProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id)
     return status

@@ -81,7 +81,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     data = conn.execute(query)
   
     keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "seller_id", "stock", 
-               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller", "badge"]
+               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller", "badge", "offer_image_id", "offer_id"]
     product_row = {key: [] for key in keyList}
 
     for row in data:
@@ -96,7 +96,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
         product_row['stock'].append(row["stock"])
         product_row['posted_date'].append(row["posted_date"])
         product_row['offer_flag'].append(row["offer_flag"])
-        product_row['offer_percent'].append(row["offer_percent"])
+        product_row['offer_id'].append(row["offer_id"])
         product_row['product_serial_number'].append(row["product_serial_number"])
         product_row['image_id'].append(row["image_id"])
         product_row['secondary_images'].append(row["secondary_images"])
@@ -107,6 +107,16 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     for item in seller:
         product_row['seller'].append(item['seller_name'])
         product_row['badge'].append("static/badge/b" + str(item['badge']) + ".png")
+
+    if product_row['offer_flag'][0] != 0:
+        offerquery = "select * from offers where product_serial_number = " + str(product_row['product_serial_number'][0]) + " and offer_id=" + str(product_row['offer_id'][0])
+        offers = conn.execute(offerquery)
+        for item in offers:
+            product_row['offer_percent'].append(item['offer_percent'])
+            product_row['offer_image_id'].append(str(item['offer_image_id']))
+    else:
+        product_row['offer_percent'].append(0)
+        product_row['offer_image_id'].append(0)
 
     if product_row is not None:
         return product_row
@@ -366,15 +376,24 @@ def insertNewRatings(rating_score, product_serial_number, user_id, comments=""):
     return status
 
 
-def insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored):
+def insertNewProduct(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_image_id):
     conn = get_db_connection()
-    sqlquery = "INSERT INTO PRODUCT (product_name, product_description, seller_id, posted_date, offer_flag, offer_percent, product_price, sub_category_id, stock, image_id, category_id, product_id, secondary_images, sponsored) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    offer_id = 0
+    sqlquery = "INSERT INTO PRODUCT (product_name, product_description, seller_id, posted_date, offer_flag, offer_id, product_price, sub_category_id, stock, image_id, category_id, product_id, secondary_images, sponsored) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     print(sqlquery)
     try:
-        conn.execute(sqlquery, (productName, productDescription, int(seller_id), date, offerflag, float(offerpercent), float(productPrice), subcategory, int(stock), image_id, int(category), int(product_id), secondary_images, sponsored))
+        data = conn.execute(sqlquery, (productName, productDescription, int(seller_id), date, offerflag, int(offer_id), float(productPrice), subcategory, int(stock), image_id, int(category), int(product_id), secondary_images, sponsored))
+        newProdID = data.lastrowid
+        print("New prod id ", newProdID)
+        offerQuery = "INSERT INTO OFFERS (product_serial_number, offer_percent, offer_image_id) VALUES (?, ?, ?)"
+        newOfferID = conn.execute(offerQuery, (newProdID, offerpercent, offer_image_id ))
+        print("new offer if ", int(newOfferID.lastrowid))
+        productUpdateQuery = "UPDATE PRODUCT SET offer_id=" + str(newOfferID.lastrowid) + " where product_serial_number=" + str(newProdID)
+        conn.execute(productUpdateQuery)
         conn.close()
         status = True
     except sqlite3.IntegrityError as error:
+        print(error)
         status = False
     return status
 
@@ -420,9 +439,11 @@ def getProductRating(sn):
     return data
 
 
-def writeProductOffers(product_serial_number, offer_flag, offer_percent):
+def writeProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id):
     conn = get_db_connection()
-    sqlquery = "UPDATE PRODUCT SET offer_flag=" + str(offer_flag) + ", offer_percent= " + str(offer_percent) + " where product_serial_number=" + str(product_serial_number)
+    offerQuery = "INSERT INTO OFFERS (product_serial_number, offer_percent, offer_image_id) VALUES (?, ?, ?)"
+    newOfferID = conn.execute(offerQuery, (product_serial_number, offer_percent, offer_image_id ))
+    sqlquery = "UPDATE PRODUCT SET offer_flag=" + str(offer_flag) + ", offer_id= " + str(newOfferID.lastrowid) + " where product_serial_number=" + str(product_serial_number)
     try:
         conn.execute(sqlquery)
         conn.close()
@@ -508,6 +529,7 @@ def getSellerAwardData(sellerid):
     else:
         return "ERROR"
 
+
 def updatepasswordseller(username, encrypted_password):
     conn = get_db_connection()
     sqlquery = "UPDATE SELLER SET seller_password='" + str(encrypted_password) + "' where seller_email='" + str(username) + "'"
@@ -519,3 +541,9 @@ def updatepasswordseller(username, encrypted_password):
         status = "False"
     return status
 
+
+def readOffers(product_serial_number, offer_id):
+    conn = get_db_connection()
+    offerquery = "select * from offers where product_serial_number = " + product_serial_number + " and offer_id=" + offer_id
+    data = conn.execute(offerquery)
+    return data

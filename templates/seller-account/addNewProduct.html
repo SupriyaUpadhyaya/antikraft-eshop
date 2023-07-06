@@ -45,6 +45,8 @@
         <label>Select to add offer &nbsp;&nbsp;&nbsp;</label>
         <input type="checkbox" id="offerflag" name="offerflag" onclick="offerPercent()">
         <input type="number" class="form-control" id="offerpercent" name="offerpercent" placeholder="Enter offer percentage" style="display:none" value="0"/>
+        <label id="imageLabel" style="display:none">Upload image for offer</label>
+        <input type="file" class="form-control" id="offerimage" name="offerimage" type="image/jpg,image/png" onchange="return offersFileValidation()" style="display:none" placeholder="Add 1 image for offers" multiple>
     </div>
     <div class="form-group col-6" style="margin-bottom: 10px;">
         <label>Select to sponsor product &nbsp;&nbsp;&nbsp;</label>

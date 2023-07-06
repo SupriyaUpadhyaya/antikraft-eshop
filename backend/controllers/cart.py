@@ -1,4 +1,4 @@
-from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity, readOrderByOrderId, getStock, updateOrderStatus, readPlacedOrder, getUserRating, getSellerById
+from backend.model import getPrice, addItemToNewOrder, getProductsFromOrder, addNewItemToOrder, updateExistingItem, getOrderID, deleteItemFromOrder, readOrder, validateOrderId, getImageUrl, readOrderForHeaderCart, getQuantity, readOrderByOrderId, getStock, updateOrderStatus, readPlacedOrder, getUserRating, getSellerById, readOffers
 from flask import session
 import random
 from datetime import datetime
@@ -14,8 +14,12 @@ def addItemToCart(productid, quantity):
     for i in sp:
         product_price = i['product_price']
         offer_flag = i['offer_flag']
-        offer_percent = i['offer_percent']
+        offer_id = i['offer_id']
     if offer_flag == 1:
+        if offer_flag != 0:
+            offers = readOffers(productid, offer_id)
+            for item in offers:
+                offer_percent = item['offer_percent']
         selling_price = round((product_price - (product_price * offer_percent) / 100),2)
     else:
         selling_price = round(product_price, 2)

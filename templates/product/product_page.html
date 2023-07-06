@@ -100,7 +100,12 @@
     <div class="container banner">
         <div class="row">
             <div class="col-4">
-
+                {% if offer_flag == 1 %}
+                    <div style="margin-top: 10px; margin-bottom: 10px;">
+                        <a><img class="w-100 img-fluid" id="banner" style="height: 100px; width: 350px;"
+                            src={{offer_image_url}}></img></a>
+                    </div>
+                    {% endif %}
                 <div id="product-banner" class="carousel slide" data-bs-ride="true">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#product-banner" data-bs-slide-to="0" class="active"
