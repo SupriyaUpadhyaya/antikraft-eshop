@@ -14,7 +14,7 @@ import nltk
 from backend.chat import get_response
 
 
-#subprocess.run(f"python backend/train.py")
+subprocess.run(f"python backend/train.py")
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -175,6 +175,7 @@ def getSpecificProduct():
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
                            offer_image_url = product_json['offer_image_id'][0], \
+                           recommendation = product_json['recommendation'][0], \
                            offer_percent = int(product_json['offer_percent'][0]))
 
 

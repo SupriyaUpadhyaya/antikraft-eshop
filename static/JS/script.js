@@ -115,7 +115,7 @@ function offersFileValidation() {
   
   console.log(fileInput.files.length)
   if(fileInput.files.length != 1){
-    alert("Please upload 1 images");
+    alert("Please upload 11 images");
     fileInput.value = '';
     return false;
   }

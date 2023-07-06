@@ -1,3 +1,4 @@
+import random
 import sqlite3
 import pandas as pd
 
@@ -81,7 +82,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     data = conn.execute(query)
   
     keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_description", "product_price", "seller_id", "stock", 
-               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller", "badge", "offer_image_id", "offer_id"]
+               "posted_date", "offer_flag", "offer_percent", "product_serial_number", "image_id", "secondary_images", "url", "seller", "badge", "offer_image_id", "offer_id", "recommendation"]
     product_row = {key: [] for key in keyList}
 
     for row in data:
@@ -117,7 +118,32 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     else:
         product_row['offer_percent'].append(0)
         product_row['offer_image_id'].append(0)
-
+    
+    recQuery = "select * from product where category_id = " + str(product_row['category_id'][0]) + " and product_serial_number != " + str(product_row['product_serial_number'][0])
+    print(recQuery)
+    reclist = conn.execute(recQuery)
+    relevant = []
+    keys = ["product_serial_number", "product_name", "product_price", "url", "image_id"]
+    for item in reclist:
+        data = {key: [] for key in keys}
+        data["product_serial_number"].append(item["product_serial_number"])
+        data["product_name"].append(item["product_name"])
+        data["product_price"].append(item["product_price"])
+        data["image_id"].append(item["image_id"])
+        url = "http://127.0.0.1:5000/product?categoryid=" + str(item["category_id"]) + "&subcategoryid=" + str(item["sub_category_id"]) + "&product_serial_number=" + str(item["product_serial_number"])
+        data["url"].append(url)
+        relevant.append(data)
+    lengthRec = len(relevant)
+    rand5RecList = []
+    i = 1
+    temp = []
+    while i < 5:
+        rand = random.randint(0, lengthRec-1)
+        if rand not in temp:
+            temp.append(rand)
+            rand5RecList.append(relevant[rand])
+            i += 1
+    product_row["recommendation"].append(rand5RecList)
     if product_row is not None:
         return product_row
 
@@ -544,6 +570,12 @@ def updatepasswordseller(username, encrypted_password):
 
 def readOffers(product_serial_number, offer_id):
     conn = get_db_connection()
-    offerquery = "select * from offers where product_serial_number = " + product_serial_number + " and offer_id=" + offer_id
+    offerquery = "select * from offers where product_serial_number = " + str(product_serial_number) + " and offer_id=" + str(offer_id)
+    data = conn.execute(offerquery)
+    return data
+
+def readAllOffers(product_serial_number):
+    conn = get_db_connection()
+    offerquery = "select * from offers where product_serial_number = " + str(product_serial_number)
     data = conn.execute(offerquery)
     return data
