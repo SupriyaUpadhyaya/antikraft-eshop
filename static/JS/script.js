@@ -115,29 +115,8 @@ function offersFileValidation() {
   
   console.log(fileInput.files.length)
   if(fileInput.files.length != 1){
-    alert("Please upload 11 images");
-    fileInput.value = '';
-    return false;
-  }
-}
-
-function offersFileValidationnew() {
-  var fileInputnew = document.getElementById('offerimagenew');
-  console.log(fileInputnew)
-  for (var i = 0; i < fileInputnew.files.length; ++i) {
-    var ext = fileInputnew.files[i].name.substr(-3);
-    console.log(ext)
-    if(ext!== "jpg" && ext!== "png")  {
-      alert('Not an accepted file extension. Only JPG and PNG files accepted');
-      fileInputnew.value = '';
-      return false;
-    }
-  }
-  
-  console.log(fileInputnew.files.length)
-  if(fileInputnew.files.length != 1){
     alert("Please upload 1 images");
-    fileInputnew.value = '';
+    fileInput.value = '';
     return false;
   }
 }
