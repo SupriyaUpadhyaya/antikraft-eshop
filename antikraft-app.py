@@ -174,6 +174,7 @@ def getSpecificProduct():
                            badge = product_json['badge'],\
                            offer_flag = product_json['offer_flag'][0], \
                            offer_price = offer_price, \
+                           offer_image_url = product_json['offer_image_id'][0], \
                            offer_percent = int(product_json['offer_percent'][0]))
 
 
@@ -454,11 +455,12 @@ def addNewProduct():
     else:
         sponsored = 0
     image_id, secondary_images = uploadImageToDrive(inputFile)
-    offer_image_id = uploadOffersImageToDrive(offerinputFile)
     if offerpercent == "0":
         offerflag = False
+        offer_image_id = "None"
     else: 
         offerflag = True
+        offer_image_id = uploadOffersImageToDrive(offerinputFile)
     seller_id = session["seller_id"][0]
     date = datetime.now().strftime("%d-%m-%Y")  
     product_id = 6 
@@ -472,12 +474,16 @@ def addNewProduct():
 @app.route('/updateOffer', methods=['POST'])   
 def updateOffer():
     product_serial_number = request.form['product_serial_number']
+    offerinputFileNew = request.files.getlist('offerimagenew')
     offer_percent = request.form['offerpercent']
+    print("product_serial_number ", product_serial_number)
     if float(offer_percent) > 0:
         offer_flag = True
+        offer_image_id = uploadOffersImageToDrive(offerinputFileNew)
     else:
         offer_flag = False
-    status = updateProductOffers(product_serial_number, offer_flag, offer_percent)
+        offer_image_id = "None"
+    status = updateProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id)
     if status == True:
         return redirect(url_for('sellerAccount', messages="Offer updated successfully!"))
     else:
@@ -570,9 +576,9 @@ def page_not_found(error):
 def page_not_found(error):
     return redirect(url_for('messages', idx=1))
 
-@app.errorhandler(400)
-def page_not_found(error):
-    return redirect(url_for('messages', idx=2))
+# @app.errorhandler(400)
+# def page_not_found(error):
+#     return redirect(url_for('messages', idx=2))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

@@ -36,7 +36,7 @@
                   <td colspan="4">
                   <div class="collapse" id="product{{product['product_serial_number'][0]}}">
                     <div class="row">
-                      <div class="col-9">
+                      <div class="col-12">
                           
                           <div class="row">
                               <div class="col-5">
@@ -94,14 +94,18 @@
                                     </div>
                                 </div>
                                   <div class="row">
-                                    <form action="/updateOffer" method="POST">
-                                      <div class="input-group x-small">
+                                    <form action="/updateOffer" method="POST" enctype="multipart/form-data">
+                                      <div class="form-group x-small">
                                           
-                                      
-                                              <input type="number" id="Number" name="offerpercent" class="form-control rounded" step=0.01 value={{product["offer_percent"][0]}} style="font-size: x-small; opacity: 1"> </input>
+                                      <div class="col-6"> <h6 class="tile-text" style="text-align: right;">Enter new offer percentage: </h6></div>
+                                      <div class="col-2"></div>
+                                              <div class="col-4"><input type="number" id="Number" name="offerpercent" class="form-control rounded" step=0.01 value={{product["offer_percent"][0]}} style="font-size: x-small; opacity: 1" required> </input></div>
+                                              
+                                              <div class="col-6"><input type="file" class="form-control" id="offerimagenew" name="offerimagenew" type="image/jpg,image/png" style="display: block; font-size: x-small;" placeholder="Add 1 image for offers" required> </input></div>
+                                              <div class="col-2"></div>
                                               <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{product["product_serial_number"][0]}} style="font-size: x-small;"> </input>
                                           
-                                      <div class="col-5 input-group-append" style="padding-left: 10px;">
+                                      <div class="col-4" style="padding-left: 10px;">
                                           <button type="submit" class="btn btn-dark" style="font-size: x-small;">Update Offer</button>
                                       </div>
                                   </div>

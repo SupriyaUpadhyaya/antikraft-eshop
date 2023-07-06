@@ -383,12 +383,12 @@ def insertNewProduct(productName, productDescription, seller_id, date, offerflag
     print(sqlquery)
     try:
         data = conn.execute(sqlquery, (productName, productDescription, int(seller_id), date, offerflag, int(offer_id), float(productPrice), subcategory, int(stock), image_id, int(category), int(product_id), secondary_images, sponsored))
-        newProdID = int(data.lastrowid)
+        newProdID = data.lastrowid
         print("New prod id ", newProdID)
         offerQuery = "INSERT INTO OFFERS (product_serial_number, offer_percent, offer_image_id) VALUES (?, ?, ?)"
         newOfferID = conn.execute(offerQuery, (newProdID, offerpercent, offer_image_id ))
         print("new offer if ", int(newOfferID.lastrowid))
-        productUpdateQuery = "UPDATE PRODUCT SET offer_id=" + int(newOfferID.lastrowid) + " where product_serial_number=" + newProdID
+        productUpdateQuery = "UPDATE PRODUCT SET offer_id=" + str(newOfferID.lastrowid) + " where product_serial_number=" + str(newProdID)
         conn.execute(productUpdateQuery)
         conn.close()
         status = True
@@ -439,9 +439,11 @@ def getProductRating(sn):
     return data
 
 
-def writeProductOffers(product_serial_number, offer_flag, offer_percent):
+def writeProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id):
     conn = get_db_connection()
-    sqlquery = "UPDATE PRODUCT SET offer_flag=" + str(offer_flag) + ", offer_percent= " + str(offer_percent) + " where product_serial_number=" + str(product_serial_number)
+    offerQuery = "INSERT INTO OFFERS (product_serial_number, offer_percent, offer_image_id) VALUES (?, ?, ?)"
+    newOfferID = conn.execute(offerQuery, (product_serial_number, offer_percent, offer_image_id ))
+    sqlquery = "UPDATE PRODUCT SET offer_flag=" + str(offer_flag) + ", offer_id= " + str(newOfferID.lastrowid) + " where product_serial_number=" + str(product_serial_number)
     try:
         conn.execute(sqlquery)
         conn.close()

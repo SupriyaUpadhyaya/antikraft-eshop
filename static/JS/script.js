@@ -47,16 +47,21 @@ function myFunction() {
   }
 
   function offerPercent() {
-    // Get the checkbox
     var checkBox = document.getElementById("offerflag");
-    // Get the output text
     var text = document.getElementById("offerpercent");
+    var image = document.getElementById("offerimage");
+    var imageLabel = document.getElementById("imageLabel");
   
-    // If the checkbox is checked, display the output text
     if (checkBox.checked == true){
       text.style.display = "block";
+      image.style.display = "block";
+      image.required = true;
+      imageLabel.style.display = "block";
     } else {
       text.style.display = "none";
+      image.style.display = "none";
+      image.required = false;
+      imageLabel.style.display = "none";
     }
   }
 
@@ -96,7 +101,7 @@ function myFunction() {
 }
 
 function offersFileValidation() {
-  var fileInput = document.getElementById('image');
+  var fileInput = document.getElementById('offerimage');
   
   for (var i = 0; i < fileInput.files.length; ++i) {
     var ext = fileInput.files[i].name.substr(-3);
@@ -110,8 +115,29 @@ function offersFileValidation() {
   
   console.log(fileInput.files.length)
   if(fileInput.files.length != 1){
-    alert("Please upload 5 images");
+    alert("Please upload 1 images");
     fileInput.value = '';
+    return false;
+  }
+}
+
+function offersFileValidationnew() {
+  var fileInputnew = document.getElementById('offerimagenew');
+  console.log(fileInputnew)
+  for (var i = 0; i < fileInputnew.files.length; ++i) {
+    var ext = fileInputnew.files[i].name.substr(-3);
+    console.log(ext)
+    if(ext!== "jpg" && ext!== "png")  {
+      alert('Not an accepted file extension. Only JPG and PNG files accepted');
+      fileInputnew.value = '';
+      return false;
+    }
+  }
+  
+  console.log(fileInputnew.files.length)
+  if(fileInputnew.files.length != 1){
+    alert("Please upload 1 images");
+    fileInputnew.value = '';
     return false;
   }
 }

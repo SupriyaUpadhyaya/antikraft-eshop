@@ -58,6 +58,7 @@ def uploadOffersImageToDrive(inputFile) :
     drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
     image_link = []
     for uploaded_file in inputFile:
+        print("uploaded_file.filename ", uploaded_file.filename)
         if uploaded_file.filename != '':
             buffer_memory = BytesIO()
             uploaded_file.save(buffer_memory)
@@ -177,6 +178,6 @@ def getSellerProductsHistory(sellerid):
     else:
         return "ERROR"
     
-def updateProductOffers(product_serial_number, offer_flag, offer_percent):
-    status = writeProductOffers(product_serial_number, offer_flag, offer_percent)
+def updateProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id):
+    status = writeProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id)
     return status
