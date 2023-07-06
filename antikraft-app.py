@@ -347,7 +347,7 @@ def logout():
         session.pop(item, None)
     session["login_status"] = 'False'
     session["seller_login_status"] = 'False'
-    return redirect('http://127.0.0.1:5000/')
+    return redirect('/')
 
 @app.route('/seller-login')
 def sellerLogin():

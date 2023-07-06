@@ -48,7 +48,7 @@ def getSearch(query):
         i = 1
         for row in data:
             block = {}
-            url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" +  str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
+            url = "/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" +  str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
             block["product_serial_number"] = row["product_serial_number"]
             block["product_name"] = row["product_name"]
             block["product_description"] = row["product_description"]
