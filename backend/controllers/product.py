@@ -1,4 +1,5 @@
-from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers, readAllOffers
+import linecache
+from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers, readAllOffers, specialCategoryProductList
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
@@ -197,6 +198,26 @@ def getSellerProductsHistory(sellerid):
         return products_list
     else:
         return "ERROR"
+
+
+def getspecialcategory(id):
+    query = linecache.getline(r"backend/controllers/queries.txt", int(id))
+    data = specialCategoryProductList(query)
+    products = {}
+    i = 1
+    for row in data:
+        block = {}
+        url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" +  str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
+        block["product_serial_number"] = row["product_serial_number"]
+        block["product_name"] = row["product_name"]
+        block["product_description"] = row["product_description"]
+        block["image_id"] = row["image_id"]
+        block["product_price"] = row["product_price"]
+        block["sponsored"] = row["sponsored"]
+        block["url"] = url
+        products[i] = block
+        i += 1
+    return products
     
 def updateProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id):
     status = writeProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id)
