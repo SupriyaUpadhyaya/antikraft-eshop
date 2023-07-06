@@ -567,7 +567,6 @@ def updatepasswordseller(username, encrypted_password):
         status = "False"
     return status
 
-
 def readOffers(product_serial_number, offer_id):
     conn = get_db_connection()
     offerquery = "select * from offers where product_serial_number = " + str(product_serial_number) + " and offer_id=" + str(offer_id)
@@ -579,3 +578,34 @@ def readAllOffers(product_serial_number):
     offerquery = "select * from offers where product_serial_number = " + str(product_serial_number)
     data = conn.execute(offerquery)
     return data
+
+def create_chat_table():
+    conn = sqlite3.connect('antiqkraft-database.db', isolation_level=None)
+    cursor = conn.cursor()
+    # Create a table to store messages
+    cursor.execute('''CREATE TABLE IF NOT EXISTS CHAT 
+                (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                user_name TEXT,
+                seller_id INTEGER,
+                seller_name TEXT,
+                sender TEXT,
+                message TEXT,
+                timestamp TEXT DEFAULT (strftime('%d-%m-%Y %H:%M:%S', 'now', 'localtime')))''')
+
+    conn.commit()
+    return conn, cursor
+
+def getAllSellers():
+    conn = get_db_connection()
+    sqlquery = "SELECT seller_id, seller_name from SELLER"
+    data = conn.execute(sqlquery)
+    keyList = ["seller_id", "seller_name"]
+    sellers = []
+    for row in data:
+        seller_row = {key: [] for key in keyList}
+        seller_row['seller_id'].append(row["seller_id"])
+        seller_row['seller_name'].append(row["seller_name"])
+        sellers.append(seller_row)
+    
+    return sellers
