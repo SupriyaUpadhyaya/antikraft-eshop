@@ -6,7 +6,7 @@ from backend.controller import getAllCategoriesList, getSearch, getSpecificCateg
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
 from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive
-from backend.model import insertNewRatings, getSellerAwardData, create_chat_table, get_db_connection, getAllSellers
+from backend.model import insertNewRatings, getSellerAwardData, create_chat_table, getAllSellers, getAllUsers
 import time
 
 import nltk
@@ -587,7 +587,6 @@ def page_not_found(error):
 @app.route('/chat_session', methods=['GET', 'POST'])
 def chat_session_user():
     conn, cursor = create_chat_table()
-    cursor = get_db_connection()
     
     cursor.execute("SELECT * FROM CHAT ORDER BY timestamp DESC")
     chat_messages = cursor.fetchall()
@@ -605,10 +604,6 @@ def chat_session_user():
             if 'message' not in request.form:
                 seller_id = int(request.form.get('selected_seller_id'))
                 seller_name = str(request.form.get('selected_seller_name'))
-                print("seller_id here2", seller_id)
-                print("seller_name here2", seller_name)
-                print(type(seller_id))
-                print(type(seller_name))
                 message = ''
             else:
                 seller_id = int(request.form.get('selected_seller_id'))
@@ -632,13 +627,11 @@ def chat_session_user():
         select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT WHERE seller_id=" + str(seller_id) + " ORDER BY timestamp DESC"
         cursor.execute(select_query)
         chat_messages = cursor.fetchall()
-        chat_messages = chat_messages[:-1]
     except:
         select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT ORDER BY timestamp DESC"
         print(select_query)
         cursor.execute(select_query)
         chat_messages = cursor.fetchall()
-        chat_messages = chat_messages[:-1]
 
     chat_list = [list(message) for message in chat_messages]
     seen = set()
@@ -650,9 +643,51 @@ def chat_session_user():
                             chat_messages=chat_list, \
                             sellers=sellers, \
                             len=len, \
-                            user_name=user_name, \
-                            datetime=datetime, \
-                            current_seller_id=seller_id)
+                            user_name=user_name)
+
+@app.route('/chat_session_seller', methods=['GET', 'POST'])
+def chat_session_seller():
+    conn, cursor = create_chat_table()
+    
+    users = getAllUsers()
+    
+    try:
+        if 'message' not in request.form:
+            user_id = int(request.form.get('selected_user_id'))
+            user_name = str(request.form.get('selected_user_name'))
+            message = ''
+        else:
+            user_id = int(request.form.get('selected_user_id'))
+            user_name = str(request.form.get('selected_user_name'))
+            message = request.form['message']            
+    except:
+        message = ''
+        user_id = 0
+        user_name = ''
+
+    # Insert the message into the database
+    seller_id = int(session['seller_id'][0])
+    seller_name = str(session['seller_name'][0])
+    sender = seller_name
+
+    cursor.execute("INSERT INTO CHAT (user_id, user_name, seller_id, seller_name, sender, message) VALUES (?, ?, ?, ?, ?, ?)", (user_id, user_name, seller_id, seller_name, sender, message))
+    conn.commit()
+
+    select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT WHERE user_id=" + str(user_id) + " ORDER BY timestamp DESC"
+    cursor.execute(select_query)
+    chat_messages = cursor.fetchall()
+    
+    chat_list = [list(message) for message in chat_messages]
+    seen = set()
+    unique_chat_list = [message for message in chat_list if tuple(message[:6]) not in seen and not seen.add(tuple(message[:6]))]
+    chat_list = [message for message in unique_chat_list if message[5] != '']
+    # print('chat_messages:', chat_list)   
+
+    return render_template('chat_session/chat_session_seller.html', \
+                            chat_messages=chat_list, \
+                            users=users, \
+                            len=len, \
+                            user_name=user_name)
     
 
 if __name__ == '__main__':

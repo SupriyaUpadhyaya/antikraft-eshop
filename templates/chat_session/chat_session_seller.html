@@ -1,31 +1,31 @@
 {% include 'base.html' %}
-{% include 'header/header.html' %}
+{% include 'header/header-without-nav-seller.html' %}
 <script>
     function refreshPage() {
         var activeTab = $('.nav-link.active').attr('id'); // Get the ID of the active tab
-        var activeSeller = activeTab.split("-")[2]; // Extract the seller ID from the active tab ID
+        var activeUser = activeTab.split("-")[2]; // Extract the user ID from the active tab ID
         sessionStorage.setItem('activeTab', activeTab); // Store the active tab in sessionStorage
-        sessionStorage.setItem('activeSeller', activeSeller); // Store the active seller ID in sessionStorage
+        sessionStorage.setItem('activeUser', activeUser); // Store the active user ID in sessionStorage
     }
 
-    // Function to send the seller ID to backend when the tab is clicked
+    // Function to send the user ID to backend when the tab is clicked
     function sendMessage() {
-        var selectedSellerId = $('.nav-link.active').attr('aria-controls').split('-')[2];
-        $('input[name="selected_seller_id"]').val(selectedSellerId);
+        var selectedUserId = $('.nav-link.active').attr('aria-controls').split('-')[2];
+        $('input[name="selected_user_id"]').val(selectedUserId);
         $('#sendMessageForm').submit();
     }
 
     $(document).ready(function () {
         var activeTab = sessionStorage.getItem('activeTab'); // Retrieve the active tab from sessionStorage
-        var activeSeller = sessionStorage.getItem('activeSeller'); // Retrieve the active seller ID from sessionStorage
-        if (activeTab && activeSeller) {
+        var activeUser = sessionStorage.getItem('activeUser'); // Retrieve the active user ID from sessionStorage
+        if (activeTab && activeUser) {
             $('.nav-link').removeClass('active'); // Remove the 'active' class from all tabs
             $('#' + activeTab).addClass('active'); // Add the 'active' class to the retrieved active tab
             $('.tab-pane').removeClass('show active'); // Hide all tab panes
-            $('#v-pills-' + activeSeller).addClass('show active'); // Show the tab pane corresponding to the retrieved active seller
+            $('#v-pills-' + activeUser).addClass('show active'); // Show the tab pane corresponding to the retrieved active user
             
             $('.messages-container').hide(); // Hide all messages containers
-            $('#v-pills-' + activeSeller + ' .messages-container').show(); // Show the messages container of the retrieved active seller
+            $('#v-pills-' + activeUser + ' .messages-container').show(); // Show the messages container of the retrieved active user
         }
     });
 </script>
@@ -61,7 +61,7 @@
 <div class="container">
     <div class="row">
         <div class="col-3">
-            <h2 style="text-align: left;">Seller Chat</h2>
+            <h2 style="text-align: left;">Customer Chat</h2>
         </div>
         <div class="col-9">
             <h5 class="msg-panel" style="text-align: left; color: grey;">{{messages}}</h5>
@@ -74,30 +74,30 @@
     <div class="row">
         <div class="col-md-2">
             <div class="nav flex-column nav-pills accInfo" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                {% for item in sellers %}
+                {% for item in users %}
                 <a class="nav-link {% if loop.first %}active{% endif %} accInfo"
-                    id="v-pills-{{ item['seller_id'][0] }}-tab" data-toggle="pill"
-                    href="#v-pills-{{ item['seller_id'][0] }}" role="tab"
-                    aria-controls="v-pills-{{ item['seller_id'][0] }}"
+                    id="v-pills-{{ item['user_id'][0] }}-tab" data-toggle="pill"
+                    href="#v-pills-{{ item['user_id'][0] }}" role="tab"
+                    aria-controls="v-pills-{{ item['user_id'][0] }}"
                     aria-selected="{% if loop.first %}true{% else %}false{% endif %}" style="margin-top: 20px;">{{
-                    item['seller_name'][0] }}</a>
+                    item['user_name'][0] }}</a>
                 {% endfor %}
             </div>
         </div>
 
         <div class="col-md-10">
             <div class="tab-content" id="v-pills-tabContent">
-                {% for item in sellers %}
+                {% for item in users %}
                 <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
-                    id="v-pills-{{ item['seller_id'][0] }}" role="tabpanel"
-                    aria-labelledby="v-pills-{{ item['seller_id'][0] }}-tab">
+                    id="v-pills-{{ item['user_id'][0] }}" role="tabpanel"
+                    aria-labelledby="v-pills-{{ item['user_id'][0] }}-tab">
                     <div class="col-12">
-                        <h4>Chat with {{ item['seller_name'][0] }}</h4>
+                        <h4>Chat with {{ item['user_name'][0] }}</h4>
                         <hr>
                     </div>
-                    <form action="/chat_session" method="post">
-                        <input type="hidden" name="selected_seller_id" value="{{ item['seller_id'][0] }}"></input>
-                        <input type="hidden" name="selected_seller_name" value="{{ item['seller_name'][0] }}"></input>
+                    <form action="/chat_session_seller" method="post">
+                        <input type="hidden" name="selected_user_id" value="{{ item['user_id'][0] }}"></input>
+                        <input type="hidden" name="selected_user_name" value="{{ item['user_name'][0] }}"></input>
                         <button type="submit" onclick="refreshPage()" style="background-color: #000; color: #fff; border: none; padding: 4px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 20px;">Start/Refresh Chat</button>
                     </form>
                     
@@ -108,9 +108,9 @@
                                 }}</strong></p>
                         {% endfor %}
                         {% endif %}
-                        <form action="/chat_session" method="post">
-                            <input type="hidden" name="selected_seller_id" value="{{ item['seller_id'][0] }}"></input>
-                            <input type="hidden" name="selected_seller_name" value="{{ item['seller_name'][0] }}"></input>
+                        <form action="/chat_session_seller" method="post">
+                            <input type="hidden" name="selected_user_id" value="{{ item['user_id'][0] }}"></input>
+                            <input type="hidden" name="selected_user_name" value="{{ item['user_name'][0] }}"></input>
                             <input type="text" name="message" placeholder="Type your message" required style="width: 400px;"></input>
                             <button type="submit" onclick="refreshPage()"
                                 style="background-color: #000; color: #fff; border: none; padding: 4px 16px; border-radius: 4px; cursor: pointer;">Send</button>
