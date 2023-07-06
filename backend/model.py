@@ -614,3 +614,28 @@ def getAllSellers():
         sellers.append(seller_row)
     
     return sellers
+
+def getAllUsers():
+    conn = get_db_connection()
+    sqlquery = "SELECT user_id, user_name from CHAT"
+    data = conn.execute(sqlquery)
+    keyList = ["user_id", "user_name"]
+    users = []
+    for row in data:
+        user_row = {key: [] for key in keyList}
+        user_row['user_id'].append(row["user_id"])
+        user_row['user_name'].append(row["user_name"])
+        users.append(user_row)
+   
+    users = [user for user in users if user['user_id'][0] != 0]  # Exclude dictionaries with user_id '0'
+
+    # Remove duplicate dictionaries based on user_id and user_name
+    seen = set()
+    unique_users = []
+    for user in users:
+        user_tuple = (user['user_id'][0], user['user_name'][0])
+        if user_tuple not in seen:
+            unique_users.append(user)
+            seen.add(user_tuple)
+          
+    return unique_users
