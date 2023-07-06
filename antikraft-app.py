@@ -5,7 +5,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, j
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
-from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive, getspecialcategory
 from backend.model import insertNewRatings, getSellerAwardData, create_chat_table, getAllSellers, getAllUsers
 import time
 
@@ -287,6 +287,19 @@ def search():
     categories = getAllCategories()
     return render_template('search/search.html', productList=productList.json, categories=categories.json)
 
+@app.route('/specialcategory', methods=['GET'])
+def specialcategory():
+    id = request.args.get('id')
+    print(id)
+    result = getspecialcategory(id)
+    productList = app.response_class(
+        response=json.dumps(result),
+        status=200,
+        mimetype='application/json'
+    )
+    categories = getAllCategories()
+    return render_template('search/search.html', productList=productList.json, categories=categories.json)
+
 @app.route('/register', methods=['POST'])
 def userAccountRegistration():
     salutation = request.form['salutation']
@@ -334,7 +347,7 @@ def logout():
         session.pop(item, None)
     session["login_status"] = 'False'
     session["seller_login_status"] = 'False'
-    return redirect('http://127.0.0.1:5000/')
+    return redirect('/')
 
 @app.route('/seller-login')
 def sellerLogin():
@@ -498,6 +511,31 @@ def editUserProfile():
     categories = getAllCategories()
     return render_template('user-account/editPersonalInfo.html', error="False", categories=categories)
 
+@app.route('/termsofuse')
+def termsofuse():
+    categories = getAllCategories()
+    return render_template('footer/termsofUser.html', error="False", categories=categories)
+
+@app.route('/policy')
+def policy():
+    categories = getAllCategories()
+    return render_template('footer/policy.html', error="False", categories=categories)
+
+@app.route('/help')
+def help():
+    categories = getAllCategories()
+    return render_template('footer/help.html', error="False", categories=categories)
+
+@app.route('/faq')
+def faq():
+    categories = getAllCategories()
+    return render_template('footer/faq.html', error="False", categories=categories)
+
+@app.route('/about')
+def about():
+    categories = getAllCategories()
+    return render_template('footer/about.html', error="False", categories=categories)
+
 @app.route('/updatePersonalInfo', methods=['POST'])
 def updatePersonalInfo():
     salutation = request.form['salutation']
@@ -556,7 +594,7 @@ def reset_seller_password():
     success = updateSellerPassword(username, new_password)
     
     if success == "True":
-        return redirect('/login')
+        return redirect('/seller-login')
     else:
         return redirect(redirect_url())
 

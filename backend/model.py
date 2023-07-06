@@ -47,7 +47,7 @@ def readOperation(TABLE_NAME: str, COLS: str):
     data = conn.execute(query)
     categories = {}
     for row in data:
-        url = "http://127.0.0.1:5000/category?categoryid=" + str(row["category_id"])
+        url = "/category?categoryid=" + str(row["category_id"])
         categories[url] = row["category_name"]
     if categories is not None:
         return categories
@@ -62,7 +62,7 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
     products = []
     for row in data:
         sub_category_row = {key: [] for key in keyList}
-        url = "http://127.0.0.1:5000/subcategory?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"])
+        url = "/subcategory?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"])
         sub_category_row['category_id'].append(row["category_id"])
         sub_category_row['sub_category_id'].append(row["sub_category_id"])
         sub_category_row['product_id'].append(row["product_id"])
@@ -86,7 +86,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
     product_row = {key: [] for key in keyList}
 
     for row in data:
-        url = "http://127.0.0.1:5000/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
+        url = "/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
         product_row['category_id'].append(row["category_id"])
         product_row['sub_category_id'].append(row["sub_category_id"])
         product_row['product_id'].append(row["product_id"])
@@ -130,7 +130,7 @@ def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_
         data["product_name"].append(item["product_name"])
         data["product_price"].append(item["product_price"])
         data["image_id"].append(item["image_id"])
-        url = "http://127.0.0.1:5000/product?categoryid=" + str(item["category_id"]) + "&subcategoryid=" + str(item["sub_category_id"]) + "&product_serial_number=" + str(item["product_serial_number"])
+        url = "/product?categoryid=" + str(item["category_id"]) + "&subcategoryid=" + str(item["sub_category_id"]) + "&product_serial_number=" + str(item["product_serial_number"])
         data["url"].append(url)
         relevant.append(data)
     lengthRec = len(relevant)
@@ -170,6 +170,11 @@ def searchProductList(query):
     conn = get_db_connection()
     sqlquery = "SELECT * from PRODUCT where product_description LIKE '%" + str(query) + "%' OR product_name LIKE '%" + str(query) + "%' ORDER BY sponsored DESC"
     data = conn.execute(sqlquery)
+    return data
+
+def specialCategoryProductList(query):
+    conn = get_db_connection()
+    data = conn.execute(query)
     return data
 
 

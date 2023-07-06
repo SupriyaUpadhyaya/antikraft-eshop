@@ -1,4 +1,5 @@
-from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers, readAllOffers
+import linecache
+from backend.model import insertNewProduct, getCategoryId, getSubCategoryId, readSellerProducts, getProductRating, writeProductOffers, readSellerProductsHistory, readOffers, readAllOffers, specialCategoryProductList
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
@@ -18,7 +19,7 @@ def addNewProductFromSeller(productName, productDescription, seller_id, date, of
 
 def uploadImageToDrive(inputFile) :
     scope = ["https://www.googleapis.com/auth/drive"]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name("isee-390607-511411524749.json", scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("config/isee-390607-511411524749.json", scope)
     drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
     image_link = []
     for uploaded_file in inputFile:
@@ -54,7 +55,7 @@ def uploadImageToDrive(inputFile) :
 
 def uploadOffersImageToDrive(inputFile) :
     scope = ["https://www.googleapis.com/auth/drive"]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name("isee-390607-511411524749.json", scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("config/isee-390607-511411524749.json", scope)
     drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
     image_link = []
     for uploaded_file in inputFile:
@@ -107,7 +108,7 @@ def getSellerProducts(sellerid):
         products['category_id'].append(row["category_id"])
         products['product_id'].append(row["product_id"])
         products['sponsored'].append(row['sponsored'])
-        url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
+        url = "/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
         avg = 0
@@ -162,7 +163,7 @@ def getSellerProductsHistory(sellerid):
         products['category_id'].append(row["category_id"])
         products['product_id'].append(row["product_id"])
         products['sponsored'].append(row['sponsored'])
-        url = "http://127.0.0.1:5000/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
+        url = "/product?categoryid=" + str(products['category_id'][0]) + "&subcategoryid=" + str(products['sub_category_id'][0]) + "&product_serial_number=" + str(products['product_serial_number'][0])
         products['product_url'].append(url)
         rating = getProductRating(row["product_serial_number"])
         avg = 0
@@ -197,6 +198,26 @@ def getSellerProductsHistory(sellerid):
         return products_list
     else:
         return "ERROR"
+
+
+def getspecialcategory(id):
+    query = linecache.getline(r"backend/controllers/queries.txt", int(id))
+    data = specialCategoryProductList(query)
+    products = {}
+    i = 1
+    for row in data:
+        block = {}
+        url = "/product?categoryid=" + str(row["category_id"]) + "&subcategoryid=" +  str(row["sub_category_id"]) + "&product_serial_number=" + str(row["product_serial_number"])
+        block["product_serial_number"] = row["product_serial_number"]
+        block["product_name"] = row["product_name"]
+        block["product_description"] = row["product_description"]
+        block["image_id"] = row["image_id"]
+        block["product_price"] = row["product_price"]
+        block["sponsored"] = row["sponsored"]
+        block["url"] = url
+        products[i] = block
+        i += 1
+    return products
     
 def updateProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id):
     status = writeProductOffers(product_serial_number, offer_flag, offer_percent, offer_image_id)
