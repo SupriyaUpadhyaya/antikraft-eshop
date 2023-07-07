@@ -120,7 +120,15 @@
                     </div>
                     <div class="product-details text-center"
                         style="text-align: center; font-size: large; font-weight: bold;">
+                        {% if item["offer_flag"][0] == 0 %}
                         <span class="font-weight-bold d-block">€ {{item["product_price"][0]}}</span>
+                {% endif %}
+                {% if item["offer_flag"][0] == 1 %}
+                <img class="img-fluid" style="height: 50px; width: 150px;" src={{item['offer_image_id'][0]}} />
+                <span class="font-weight-bold d-block">
+                    <del>€{{item["product_price"][0]}}</del> €{{item["offer_price"][0]}}
+                </span>
+                {% endif %}
                         <span>{{item["product_name"][0]}}</span>
                     </div>
                 </div>
