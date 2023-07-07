@@ -285,7 +285,10 @@ def search():
         mimetype='application/json'
     )
     categories = getAllCategories()
-    return render_template('search/search.html', productList=productList.json, categories=categories.json)
+    if len(result) == 0:
+        return render_template('search/search.html', productList=productList.json, categories=categories.json, results=False)
+    else:
+        return render_template('search/search.html', productList=productList.json, categories=categories.json, results=True)
 
 @app.route('/specialcategory', methods=['GET'])
 def specialcategory():

@@ -58,7 +58,7 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
     
     data = conn.execute(query)
   
-    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_price", "product_description", "image_id", "url", "product_serial_number"]
+    keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_price", "product_description", "image_id", "url", "product_serial_number", "offer_flag", "offer_percent", "offer_price", "offer_image_id"]
     products = []
     for row in data:
         sub_category_row = {key: [] for key in keyList}
@@ -72,6 +72,19 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
         sub_category_row['image_id'].append(row["image_id"])
         sub_category_row['product_serial_number'].append(row["product_serial_number"])
         sub_category_row['url'].append(url)
+        sub_category_row['offer_flag'].append(row["offer_flag"])
+        if sub_category_row['offer_flag'][0] != 0:
+            offerquery = "select * from offers where product_serial_number = " + str(sub_category_row['product_serial_number'][0]) + " and offer_id=" + str(row['offer_id'])
+            offers = conn.execute(offerquery)
+            for item in offers:
+                sub_category_row['offer_percent'].append(item['offer_percent'])
+                sub_category_row['offer_image_id'].append(item['offer_image_id'])
+                offer_price = round((sub_category_row['product_price'][0] - (sub_category_row['product_price'][0] * sub_category_row['offer_percent'][0]) / 100), 2)
+                sub_category_row['offer_price'].append(offer_price)
+        else:
+            sub_category_row['offer_percent'].append(0)
+            sub_category_row['offer_image_id'].append(0)
+            sub_category_row['offer_price'].append('None')
         products.append(sub_category_row)
     
     return products
