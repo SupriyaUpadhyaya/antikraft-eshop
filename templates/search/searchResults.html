@@ -12,6 +12,9 @@
     </div>
     <ul>
         <div class="row">
+            {% if results == False%}
+                <h6 style="text-align: center;">No search results</h6>
+            {% endif %}
             {%for values in productList.items()%}
             <div class="col-sm-3 tile">
                 <li>
