@@ -1,3 +1,10 @@
+<script>
+  function redirectToChat() {
+    window.location.href = "/chat_session_seller";
+  }
+</script>
+
+
 <div class="container" onload="hideLoadingDiv()">
     <div class="row">
       <div class="col-4">
@@ -34,7 +41,7 @@
               <a class="nav-link accInfo" id="v-pills-offer-tab" data-toggle="pill" href="#v-pills-offer" role="tab" aria-controls="v-pills-offer" aria-selected="false">Create Offers</a>
               <a class="nav-link accInfo" id="v-pills-history-tab" data-toggle="pill" href="#v-pills-history" role="tab" aria-controls="v-pills-history" aria-selected="false">Seller History</a>
               <a class="nav-link accInfo" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Awards</a>
-              <a class="nav-link accInfo" id="v-pills-chat-tab" data-toggle="pill" href="#v-pills-chat" role="tab" aria-controls="v-pills-chat" aria-selected="false">Customer Chat</a>
+              <a class="nav-link accInfo" id="v-pills-chat-tab" data-toggle="pill" href="#v-pills-chat" role="tab" aria-controls="v-pills-chat" aria-selected="false" onclick="redirectToChat()">Customer Chat</a>
             </div>
           </div>
           <div class="col-md-10">
@@ -82,9 +89,6 @@
               </div>
               <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                 {% include 'seller-account/sellerAwards.html' %}
-              </div>
-              <div class="tab-pane fade" id="v-pills-chat" role="tabpanel" aria-labelledby="v-pills-chat-tab">
-                TODO
               </div>
             </div>
           </div>

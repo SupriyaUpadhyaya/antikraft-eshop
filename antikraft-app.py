@@ -622,7 +622,7 @@ def page_not_found(error):
 def page_not_found(error):
     return redirect(url_for('messages', idx=2))
 
-@app.route('/chat_session', methods=['GET', 'POST'])
+@app.route('/chat_session_user', methods=['GET', 'POST'])
 def chat_session_user():
     conn, cursor = create_chat_table()
     
@@ -677,7 +677,7 @@ def chat_session_user():
     chat_list = [message for message in unique_chat_list if message[5] != '']
     # print('chat_messages:', chat_list)   
     
-    return render_template('chat_session/chat_session.html', categories=categories.json, \
+    return render_template('chat_session/chat_session_user.html', categories=categories.json, \
                             chat_messages=chat_list, \
                             sellers=sellers, \
                             len=len, \

@@ -95,7 +95,7 @@
                         <h4>Chat with {{ item['seller_name'][0] }}</h4>
                         <hr>
                     </div>
-                    <form action="/chat_session" method="post">
+                    <form action="/chat_session_user" method="post">
                         <input type="hidden" name="selected_seller_id" value="{{ item['seller_id'][0] }}"></input>
                         <input type="hidden" name="selected_seller_name" value="{{ item['seller_name'][0] }}"></input>
                         <button type="submit" onclick="refreshPage()" style="background-color: #000; color: #fff; border: none; padding: 4px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 20px;">Start/Refresh Chat</button>
@@ -108,7 +108,7 @@
                                 }}</strong></p>
                         {% endfor %}
                         {% endif %}
-                        <form action="/chat_session" method="post">
+                        <form action="/chat_session_user" method="post">
                             <input type="hidden" name="selected_seller_id" value="{{ item['seller_id'][0] }}"></input>
                             <input type="hidden" name="selected_seller_name" value="{{ item['seller_name'][0] }}"></input>
                             <input type="text" name="message" placeholder="Type your message" required style="width: 400px;"></input>
