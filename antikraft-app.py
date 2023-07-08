@@ -732,4 +732,8 @@ def chat_session_seller():
     
 
 if __name__ == '__main__':
+    try:
+        nltk.data.find('punkt.zip')
+    except:
+        nltk.download('punkt')
     app.run(host='0.0.0.0', debug=True)
