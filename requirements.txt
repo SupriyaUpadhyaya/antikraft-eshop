@@ -5,3 +5,4 @@ nltk
 pydrive
 torch
 torchvision
+pandas
