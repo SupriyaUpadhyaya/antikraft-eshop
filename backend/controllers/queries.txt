@@ -2,7 +2,7 @@ select * from product order by product_serial_number desc limit 20
 select * from product order by sponsored=1 limit 20
 select * from product where offer_flag=1 limit 20
 select * from product order by product_serial_number desc limit 20
-select * from product where product.offer_flag=True and product.product_serial_number=(select offers.product_serial_number from offers where offers.offer_percent>20)
+select * from product where product.offer_flag=True
 select * from product where stock < 10 limit 20
 SELECT * from PRODUCT where product_description LIKE '%porcelain%' OR product_name LIKE '%porcelain%' ORDER BY sponsored DESC
 SELECT * from PRODUCT where product_description LIKE '%pot%' OR product_name LIKE '%pot%' ORDER BY sponsored DESC

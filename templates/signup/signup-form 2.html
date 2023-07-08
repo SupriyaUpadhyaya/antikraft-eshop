@@ -1,0 +1,215 @@
+<style>
+  .already_section {
+    margin-top: 0px;
+    margin-right: 240px;
+    display: inline-block;
+  }
+
+  .already_section h4 {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .rounded-button {
+    width: 80px;
+    height: 35px;
+    background-color: #000000;
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -10px;
+    margin-left: 10px;
+  }
+</style>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col-12 col-md-auto already_section">
+      <h4>If you are already a member,</h4>
+      <a href="/login">
+        <button type="submit" class="rounded-button">Login</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .signup-section {
+    margin-top: 0px;
+    margin-right: 720px;
+    /* Adjust the value as needed to create the desired space */
+  }
+</style>
+
+<style>
+  body {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+  }
+</style>
+
+<div class="container">
+  <h2>Sign Up</h2>
+  <form action="/register" method="POST" onsubmit="return validateForm()">
+    <div class="row">
+      {% if error == "True" %}
+      <h6 style="color: red; text-align: left;">Error: Registration was not successful. Please try again.</h6>
+      {% endif %}
+      {% if userexists == "True" %}
+      <h6 style="color: red; text-align: left;">User already exists. Please try with a different email address!</h6>
+      {% endif%}
+    </div>
+    <div class="form-group">
+      <label for="salutation">Salutation*:</label>
+      <select class="form-control" id="salutation" name="salutation" required>
+        <option value="">Select Salutation</option>
+        <option value="Mr.">Mr</option>
+        <option value="Mrs.">Mrs</option>
+        <option value="Miss">Miss</option>
+        <option value="Ms.">Ms</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="firstname">First Name*:</label>
+      <input type="text" class="form-control" id="firstname" name="firstname" required>
+    </div>
+    <div class="form-group">
+      <label for="lastname">Last Name*:</label>
+      <input type="text" class="form-control" id="lastname" name="lastname" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email*:</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password*:</label>
+      <input type="password" class="form-control" id="password" name="password" minlength="8" required>
+      <p id="passwordLengthMessage" style="display: none; color: red;">Password must be at least 8 characters long.</p>
+      <p id="passwordComplexityMessage" style="display: none; color: red;">Password must contain at least one lowercase letter, one uppercase letter, one symbol, and one digit.</p>
+    </div>
+    <div class="form-group">
+      <label for="confirm-password">Confirm Password:</label>
+      <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
+      <p id="passwordMatchMessage" style="display: none; color: red;">Password and confirm password do not match.</p>
+    </div>
+    <div class="form-group">
+      <label for="address">Address*:</label>
+      <input type="address" class="form-control" id="address" name="address" required>
+    </div>
+    <div class="form-group">
+      <label for="phonenumber">Phone Number:</label>
+      <input type="text" class="form-control" id="phonenumber" name="phonenumber">
+    </div>
+    <div class="form-group">
+      <label for="confirm-password">Security Question: What city were you born in?* (Needed for password reset)</label>
+      <input type="security-question" class="form-control" id="security-question" name="security-question" required>
+    </div>
+    <button type="submit" class="btn">Register</button>
+  </form>
+  <script>
+    var newPasswordInput = document.getElementById("password");
+    var confirmPasswordInput = document.getElementById("confirm-password");
+    var passwordLengthMessage = document.getElementById("passwordLengthMessage");
+    var passwordComplexityMessage = document.getElementById("passwordComplexityMessage");
+    var passwordMatchMessage = document.getElementById("passwordMatchMessage");
+
+    newPasswordInput.addEventListener("input", validatePassword);
+    confirmPasswordInput.addEventListener("input", validatePassword);
+
+    function validatePassword() {
+      var newPassword = newPasswordInput.value;
+      var confirmPassword = confirmPasswordInput.value;
+
+      if (newPassword.length < 8) {
+        passwordLengthMessage.style.display = "block";
+      } else {
+        passwordLengthMessage.style.display = "none";
+      }
+
+      var hasLowercase = /[a-z]/.test(newPassword);
+      var hasUppercase = /[A-Z]/.test(newPassword);
+      var hasSymbol = /[!@#$%^&*()\-=_+[\]{}|\\;:'",.<>/?]/.test(newPassword);
+      var hasDigit = /\d/.test(newPassword);
+
+      if (!(hasLowercase && hasUppercase && hasSymbol && hasDigit)) {
+        passwordComplexityMessage.style.display = "block";
+      } else {
+        passwordComplexityMessage.style.display = "none";
+      }
+
+      if (newPassword !== confirmPassword) {
+        passwordMatchMessage.style.display = "block";
+      } else {
+        passwordMatchMessage.style.display = "none";
+      }
+    }
+
+    function validateForm() {
+      var newPassword = newPasswordInput.value;
+      var confirmPassword = confirmPasswordInput.value;
+
+      if (newPassword.length < 8) {
+        alert("Password must be at least 8 characters long.");
+        return false;
+      }
+
+      var hasLowercase = /[a-z]/.test(newPassword);
+      var hasUppercase = /[A-Z]/.test(newPassword);
+      var hasSymbol = /[!@#$%^&*()\-=_+[\]{}|\\;:'",.<>/?]/.test(newPassword);
+      var hasDigit = /\d/.test(newPassword);
+
+      if (!(hasLowercase && hasUppercase && hasSymbol && hasDigit)) {
+        alert("Password must contain at least one lowercase letter, one uppercase letter, one symbol, and one digit.");
+        return false;
+      }
+
+      if (newPassword !== confirmPassword) {
+        alert("New password and confirm password do not match.");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</div>

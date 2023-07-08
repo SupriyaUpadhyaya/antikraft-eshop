@@ -13,7 +13,7 @@ import nltk
 nltk.download('punkt')
 from backend.chat import get_response
 
-subprocess.run("python backend/train.py", shell=True)
+#subprocess.run("python backend/train.py", shell=True)
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -714,7 +714,7 @@ def chat_session_seller():
     cursor.execute("INSERT INTO CHAT (user_id, user_name, seller_id, seller_name, sender, message) VALUES (?, ?, ?, ?, ?, ?)", (user_id, user_name, seller_id, seller_name, sender, message))
     conn.commit()
 
-    select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT WHERE user_id=" + str(user_id) + " ORDER BY timestamp DESC"
+    select_query = "SELECT user_id, user_name, seller_id, seller_name, sender, message, timestamp FROM CHAT WHERE user_id=" + str(user_id) + " AND seller_id=" + str(seller_id) + " ORDER BY timestamp DESC"
     cursor.execute(select_query)
     chat_messages = cursor.fetchall()
     

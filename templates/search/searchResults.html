@@ -28,7 +28,7 @@
                     {% endif %}
                     {% if values[1].offer_flag == 1 %}
                     <img class="img-fluid" style="height: 50px; width: 150px;" src={{values[1].offer_image_id}} />
-                    <h6>Price: <del>&euro;{{values[1].product_price}}</del> &euro;{{values[1].offer_price}}</h6>
+                    <h6>Price: <del style="color: red;">&euro;{{values[1].product_price}}</del> <span style="color: green;">&euro;{{values[1].offer_price}}</span></h6>
                     {% endif %}
                     <h6 style="color: grey; font-size: small;">{% if values[1].sponsored == 1.0 %} Sponsored {% endif %}</h6>
                 </li>

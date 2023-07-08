@@ -55,12 +55,12 @@ def readOperation(TABLE_NAME: str, COLS: str):
 def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
     conn = get_db_connection()
     query = "SELECT * from " + TABLE_NAME + " where category_id=" + str(CAT_ID) + " and sub_category_id=" + str(SUB_CAT_ID)
-    
     data = conn.execute(query)
   
     keyList = ["category_id", "sub_category_id", "product_id", "product_name", "product_price", "product_description", "image_id", "url", "product_serial_number", "offer_flag", "offer_percent", "offer_price", "offer_image_id"]
     products = []
     for row in data:
+        sub_category_row = {}
         sub_category_row = {key: [] for key in keyList}
         url = "/subcategory?categoryid=" + str(row["category_id"]) + "&subcategoryid=" + str(row["sub_category_id"])
         sub_category_row['category_id'].append(row["category_id"])
@@ -74,20 +74,26 @@ def readOperationSubCategory(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int):
         sub_category_row['url'].append(url)
         sub_category_row['offer_flag'].append(row["offer_flag"])
         if sub_category_row['offer_flag'][0] != 0:
-            offerquery = "select * from offers where product_serial_number = " + str(sub_category_row['product_serial_number'][0]) + " and offer_id=" + str(row['offer_id'])
-            offers = conn.execute(offerquery)
-            for item in offers:
-                sub_category_row['offer_percent'].append(item['offer_percent'])
-                sub_category_row['offer_image_id'].append(item['offer_image_id'])
-                offer_price = round((sub_category_row['product_price'][0] - (sub_category_row['product_price'][0] * sub_category_row['offer_percent'][0]) / 100), 2)
-                sub_category_row['offer_price'].append(offer_price)
+            offer_percent, offer_image_id, offer_price = getOffersforSubCatPage(str(sub_category_row['product_serial_number'][0]), str(row['offer_id']), sub_category_row['product_price'][0])
+            sub_category_row['offer_percent'].append(offer_percent)
+            sub_category_row['offer_image_id'].append(offer_image_id)
+            sub_category_row['offer_price'].append(offer_price)
         else:
             sub_category_row['offer_percent'].append(0)
             sub_category_row['offer_image_id'].append(0)
-            sub_category_row['offer_price'].append('None')
+            sub_category_row['offer_price'].append(0)
         products.append(sub_category_row)
-    
     return products
+
+def getOffersforSubCatPage(product_serial_number, offer_id, product_price):
+    offerquery = "select * from offers where product_serial_number = " + str(product_serial_number)  + " and offer_id=" + str(offer_id)
+    conn = get_db_connection()
+    offers = conn.execute(offerquery)
+    for item in offers:
+        offer_percent = item['offer_percent']
+        offer_image_id = item['offer_image_id']
+        offer_price = round((product_price - (product_price * offer_percent) / 100), 2)
+    return offer_percent, offer_image_id, offer_price
 
 def readOperationProduct(TABLE_NAME: str, CAT_ID: int, SUB_CAT_ID: int, product_serial_number:int):
     conn = get_db_connection()
@@ -598,7 +604,7 @@ def readAllOffers(product_serial_number):
     return data
 
 def create_chat_table():
-    conn = sqlite3.connect('antiqkraft-database.db', isolation_level=None)
+    conn = sqlite3.connect('chat.db', isolation_level=None)
     cursor = conn.cursor()
     # Create a table to store messages
     cursor.execute('''CREATE TABLE IF NOT EXISTS CHAT 

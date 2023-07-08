@@ -1,0 +1,175 @@
+<div class="container min-container">
+    <h6 style="text-align: left;"><b>SHOPPING CART</b></h6>
+    <hr>
+    {% if session.total_items != '0' %}
+    <div class="row">
+        <div class="col-7">
+            {% for orders in order %}
+
+            <div class="row">
+                <div class="col-3">
+
+                    <a class="link-dark" href={{orders['product_url'][0]}}><img class="tile-image"
+                            src={{orders['image_id'][0]}}></img></a>
+
+                </div>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-12">
+                            <a href={{orders['product_url'][0]}} class="badge badge-dark" style="color: black;">
+                                <h6 class="tile-text" style="text-align: left;">{{orders["product_name"][0]}}</h6>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h6 class="tile-text" style="text-align: right;">Product Id : </h6>
+                        </div>
+                        <div class="col-9">
+                            <h6 class="tile-text" style="text-align: left;">{{orders["product_serial_number"][0]}}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h6 class="tile-text" style="text-align: right;">Quantity : </h6>
+                        </div>
+                        <div class="col-8">
+                            
+                                <form action="updateQuantity" method="POST">
+                                <div class="col-2 input-group mb-3">
+                                    
+                                
+                                        <input type="number" id="Number" name="quantity" class="form-control rounded" min="1" max="100" value={{orders["quantity"][0]}} style="font-size: x-small; opacity: 1"> </input>
+                                        <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
+                                    
+                                
+                                <div class="col-4 input-group-append" style="padding-left: 10px;">
+                                    <button type="submit" class="btn btn-dark" style="font-size: x-small;">Update Quantity</button>
+                                </div>
+                            </div>
+                            </form>
+                            
+                            </div> 
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h6 class="tile-text" style="text-align: right;">Price : </h6>
+                        </div>
+                        <div class="col-9">
+                            <h6 class="tile-text" style="text-align: left;">&euro;{{orders["selling_price"][0]}}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form action="deleteItem" method="POST">
+                            <div class="col-4 input-group-append" style="padding-left: 10px;">
+                                <input type="hidden" id="typeNumber"  name="product_serial_number" class="form-control" value={{orders["product_serial_number"][0]}} style="font-size: x-small;"> </input>
+                                <button type="submit" class="btn btn-light" style="font-size: x-small;" name="delete" value={{orders["product_serial_number"][0]}}>Remove Item</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+            {%endfor%}
+
+        </div>
+        
+        <div class="col-5">
+            <form action="/placeOrder" method="POST">
+            <div class="row">
+                <div class="col-10">
+                    <h6 class="tile-text" style="text-align: left;"><b>Delivery Details</b></h6>
+                </div>
+                <div class="col-1" style="text-align: left;">
+                    <a href="/editUserProfile" class="btn btn-dark rounded" role="button" aria-disabled="true" style="font-size: x-small;">Edit</a>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-5">
+                    <h6 style="text-align: left;">Delivery Address</h6>
+                </div>
+                <div class="col-7">
+                    <h6 style="text-align: left;">{{ session.user_address[0] }}</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <h6 style="text-align: left;">Phone Number</h6>
+                </div>
+                <div class="col-5">
+                    <h6 style="text-align: left;">{{ session.user_phone[0] }}</h6>
+                </div>
+            </div>
+            <hr>
+            <div class="col-5">
+                <h6 class="tile-text" style="text-align: left;"><b>Payment Option</b></h6>
+            </div>
+            <select class="form-select" required>
+                <option value="">None</option>
+                <option value="COD">Cash On Delivery</option>
+              </select>
+            
+            <hr>
+            <h6 class="tile-text" style="text-align: left;"><b>Order Summary</b></h6>
+            <hr>
+            {% for orders in order %}
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-1">
+                    <h6>{{orders["selling_price"][0]}}</h6>
+                </div>
+                <div class="col-1">
+
+                </div>
+                <div class="col-1">
+                    <h6>X</h6>
+                </div>
+                <div class="col-1">
+                    <h6>{{orders["quantity"][0]}}</h6>
+                </div>
+                <div class="col-1">
+                    <h6>=</h6>
+                </div>
+                <div class="col-1">
+                    <h6>&euro;{{orders["item_total"][0]}}</h6>
+                </div>
+            </div>
+            {%endfor%}
+            <hr>
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <h6 style="text-align: right;">Total</h6>
+                </div>
+                <div class="col-1">
+                    <h6 style="text-align: center;">=</h6>
+                </div>
+                <div class="col-3">
+                    <h6 style="text-align: left;">&euro;{{order_total}}</h6>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-8"></div>
+                <div class="col-4">
+                    
+                        <button type="submit" class="btn btn-dark rounded" style="border-radius: 0%;">Proceed To Buy</button>        
+                        
+                </div>
+            </form>
+            </div>
+
+        </div>
+        
+    </div>
+    {% endif %}
+    {% if session.total_items == '0' %}
+    <div class="row">
+        <div class="col-12">
+            <h6>No items in cart</h6>
+        </div>
+    </div>
+    {% endif %}
+</div>

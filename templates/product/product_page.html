@@ -90,7 +90,9 @@
     <div class="row">
         <div>
             <ul>
-                <h5 style="text-align: left; text-transform: uppercase;">{{category_name}} > {{sub_category_name}}
+                <h5 style="text-align: left; text-transform: uppercase;">
+                    <a href="/category?categoryid={{category_id}}" style="color: black;">{{category_name}}</a> > 
+                    <a href="/subcategory?categoryid={{category_id}}&subcategoryid={{sub_category_id}}" style="color: black;">{{sub_category_name}}</a>
                 </h5>
             </ul>
         </div>
@@ -100,12 +102,6 @@
     <div class="container banner">
         <div class="row">
             <div class="col-4">
-                {% if offer_flag == 1 %}
-                    <div style="margin-top: 10px; margin-bottom: 10px;">
-                        <a><img class="w-100 img-fluid" id="banner" style="height: 100px; width: 350px;"
-                            src={{offer_image_url}}></img></a>
-                    </div>
-                    {% endif %}
                 <div id="product-banner" class="carousel slide" data-bs-ride="true">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#product-banner" data-bs-slide-to="0" class="active"
@@ -119,7 +115,7 @@
                         <button type="button" data-bs-target="#product-banner" data-bs-slide-to="4"
                             aria-label="Slide 5"></button>
                     </div>
-                    <div class="carousel-inner" style="margin-top: 30px; margin-bottom: 30px;">
+                    <div class="carousel-inner" style="margin-top: 30px;">
                         <div class="carousel-item active">
                             <a><img class="w-100 img-fluid" id="banner" style="height: 350px; width: 350px;"
                                     src={{product_main_image[0]}}></img></a>
@@ -155,6 +151,12 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                 </div>
+                {% if offer_flag == 1 %}
+                    <div style="margin-bottom: 10px; display: flex; justify-content: center;">
+                        <a><img class="img-fluid" id="banner" style="align-items:center; height: 50px; width: 100px;"
+                            src={{offer_image_url}}></img></a>
+                    </div>
+                {% endif %}
             </div>
 
             <div class="col-7" style="margin-top: 25px; margin-left: 100px;">

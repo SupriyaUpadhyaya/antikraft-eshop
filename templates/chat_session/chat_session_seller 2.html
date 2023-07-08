@@ -1,0 +1,128 @@
+{% include 'base.html' %}
+{% include 'header/header-without-nav-seller.html' %}
+<script>
+    function refreshPage() {
+        var activeTab = $('.nav-link.active').attr('id'); // Get the ID of the active tab
+        var activeUser = activeTab.split("-")[2]; // Extract the user ID from the active tab ID
+        sessionStorage.setItem('activeTab', activeTab); // Store the active tab in sessionStorage
+        sessionStorage.setItem('activeUser', activeUser); // Store the active user ID in sessionStorage
+    }
+
+    // Function to send the user ID to backend when the tab is clicked
+    function sendMessage() {
+        var selectedUserId = $('.nav-link.active').attr('aria-controls').split('-')[2];
+        $('input[name="selected_user_id"]').val(selectedUserId);
+        $('#sendMessageForm').submit();
+    }
+
+    $(document).ready(function () {
+        var activeTab = sessionStorage.getItem('activeTab'); // Retrieve the active tab from sessionStorage
+        var activeUser = sessionStorage.getItem('activeUser'); // Retrieve the active user ID from sessionStorage
+        if (activeTab && activeUser) {
+            $('.nav-link').removeClass('active'); // Remove the 'active' class from all tabs
+            $('#' + activeTab).addClass('active'); // Add the 'active' class to the retrieved active tab
+            $('.tab-pane').removeClass('show active'); // Hide all tab panes
+            $('#v-pills-' + activeUser).addClass('show active'); // Show the tab pane corresponding to the retrieved active user
+            
+            $('.messages-container').hide(); // Hide all messages containers
+            $('#v-pills-' + activeUser + ' .messages-container').show(); // Show the messages container of the retrieved active user
+        }
+    });
+</script>
+
+
+<style>
+    #key {
+        text-align: right;
+    }
+
+    #val {
+        text-align: left;
+    }
+
+    .accInfo {
+        color: #000;
+        background-color: #ffffff;
+    }
+
+    .accInfo .accInfo.active,
+    .accInfo .accInfo:hover {
+        color: #fff;
+        background-color: #000;
+    }
+
+    .messages-container {
+        background-color: #f2f2f2;
+        padding: 10px;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <h2 style="text-align: left;">Customer Chat</h2>
+        </div>
+        <div class="col-9">
+            <h5 class="msg-panel" style="text-align: left; color: grey;">{{messages}}</h5>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<div class="container min-container">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="nav flex-column nav-pills accInfo" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                {% for item in users %}
+                <a class="nav-link {% if loop.first %}active{% endif %} accInfo"
+                    id="v-pills-{{ item['user_id'][0] }}-tab" data-toggle="pill"
+                    href="#v-pills-{{ item['user_id'][0] }}" role="tab"
+                    aria-controls="v-pills-{{ item['user_id'][0] }}"
+                    aria-selected="{% if loop.first %}true{% else %}false{% endif %}" style="margin-top: 20px;">{{
+                    item['user_name'][0] }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <div class="tab-content" id="v-pills-tabContent">
+                {% for item in users %}
+                <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                    id="v-pills-{{ item['user_id'][0] }}" role="tabpanel"
+                    aria-labelledby="v-pills-{{ item['user_id'][0] }}-tab">
+                    <div class="col-12">
+                        <h4>Chat with {{ item['user_name'][0] }}</h4>
+                        <hr>
+                    </div>
+                    <form action="/chat_session_seller" method="post">
+                        <input type="hidden" name="selected_user_id" value="{{ item['user_id'][0] }}"></input>
+                        <input type="hidden" name="selected_user_name" value="{{ item['user_name'][0] }}"></input>
+                        <button type="submit" onclick="refreshPage()" style="background-color: #000; color: #fff; border: none; padding: 4px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 20px;">Start/Refresh Chat</button>
+                    </form>
+                    
+                    <div class="messages-container">
+                        {% if len(chat_messages) != 0 %}
+                        {% for message in chat_messages[::-1] %}
+                        <p>{{ message[6] }}: {{ message[4] }} : <strong>{{ message[5]
+                                }}</strong></p>
+                        {% endfor %}
+                        {% endif %}
+                        <form action="/chat_session_seller" method="post">
+                            <input type="hidden" name="selected_user_id" value="{{ item['user_id'][0] }}"></input>
+                            <input type="hidden" name="selected_user_name" value="{{ item['user_name'][0] }}"></input>
+                            <input type="text" name="message" placeholder="Type your message" required style="width: 400px;"></input>
+                            <button type="submit" onclick="refreshPage()"
+                                style="background-color: #000; color: #fff; border: none; padding: 4px 16px; border-radius: 4px; cursor: pointer;">Send</button>
+                        </form>
+                    </div>
+                    
+                    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% include 'footer/footer.html' %}

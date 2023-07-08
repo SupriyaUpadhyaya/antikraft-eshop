@@ -88,7 +88,10 @@
     <div class="row">
         <div>
             <ul>
-                <h5 style="text-align: left; text-transform: uppercase;">{{category_name}} > {{sub_category_name}}</h5>
+                <h5 style="text-align: left; text-transform: uppercase;">
+                    <a href="/category?categoryid={{category_id}}" style="color: black;">{{category_name}}</a> > {{sub_category_name}}
+                </h5>
+                
             </ul>
         </div>
     </div>
@@ -126,7 +129,7 @@
                 {% if item["offer_flag"][0] == 1 %}
                 <img class="img-fluid" style="height: 50px; width: 150px;" src={{item['offer_image_id'][0]}} />
                 <span class="font-weight-bold d-block">
-                    <del>€{{item["product_price"][0]}}</del> €{{item["offer_price"][0]}}
+                    <del style="color: red;">€{{item["product_price"][0]}}</del> <span style="color: green;">€{{item["offer_price"][0]}}</span>
                 </span>
                 {% endif %}
                         <span>{{item["product_name"][0]}}</span>
