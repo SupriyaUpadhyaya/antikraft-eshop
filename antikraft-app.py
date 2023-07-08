@@ -13,7 +13,7 @@ import nltk
 # nltk.download('punkt')
 from backend.chat import get_response
 
-subprocess.run("python backend/train.py", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+subprocess.run("python backend/train.py", shell=True)
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
