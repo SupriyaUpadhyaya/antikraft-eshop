@@ -8,16 +8,6 @@ app.config['SECRET_KEY'] = "antiqkraft"
 
 cipher = SimpleCrypt()
 cipher.init_app(app)
-pw = "password124"
-# encryptedP = cipher.encrypt("password124")
-# print(encryptedP)
-# deencryptedP = cipher.decrypt(encryptedP)
-# print(deencryptedP)
-# if pw == deencryptedP.decode('ascii'):
-#     print("TRUE")
-# else:
-#     print("FALSE")
-
 
 def getUserAccount(username):
     data = readUserAccount(username)

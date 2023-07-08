@@ -5,7 +5,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, j
 from backend.controller import getAllCategoriesList, getSearch, getSpecificCategoryList, getSpecificCategoryImages, getSubCategoryProductList, getProductData, getProductRatings
 from backend.controllers.account import validateCredentails, validateRegistration, validateSellerRegistration, validateSellerCredentails, getOrderHistory, updatePersonalDetails, verifyUserAccount, updateUserPassword, verifySellerAccount, updateSellerPassword
 from backend.controllers.cart import getOrder, addItemToCart, deleteItemFromCart, getCurrentQuantityForAProduct, updateOrder, getPlacedOrder
-from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive, getspecialcategory
+from backend.controllers.product import addNewProductFromSeller, uploadImageToDrive, getSellerProducts, updateProductOffers, getSellerProductsHistory, uploadOffersImageToDrive, getspecialcategory, encrypt
 from backend.model import insertNewRatings, getSellerAwardData, create_chat_table, getAllSellers, getAllUsers
 import time
 
@@ -612,6 +612,11 @@ def messages():
         return render_template('error-pages/messages.html', message=messages[idx])
     except IndexError:
         abort(404)
+
+@app.route("/encryption")
+def encryption():
+    encrypt("config/isee-390607-511411524749.json")
+    return "True"
 
 @app.errorhandler(404)
 def page_not_found(error):

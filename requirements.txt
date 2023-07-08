@@ -6,3 +6,5 @@ pydrive
 torch
 torchvision
 pandas
+fernet
+cryptography

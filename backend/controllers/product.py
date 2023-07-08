@@ -4,6 +4,32 @@ from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
 from io import BytesIO
+from cryptography.fernet import Fernet
+
+
+def encrypt(filename):
+    key = Fernet.generate_key()
+    with open("config/key.key", "wb") as key_file:
+        key_file.write(key)
+    f = Fernet(key)
+    with open(filename, "rb") as file:
+        file_data = file.read()
+    encrypted_data = f.encrypt(file_data)
+    with open(filename, "wb") as file:
+        file.write(encrypted_data)
+    return True
+
+
+def decrypt():
+    key = open("config/key.key", "rb").read()
+    f = Fernet(key)
+    filename = "config/isee-390607-511411524749.json"
+    with open(filename, "rb") as file:
+        encrypted_data = file.read()
+    decrypted_data = f.decrypt(encrypted_data)
+    with open("config/drive.json", "wb") as file:
+        file.write(decrypted_data)
+    return True
 
 
 def addNewProductFromSeller(productName, productDescription, seller_id, date, offerflag, offerpercent, productPrice, subcategory, stock, image_id, category, product_id, secondary_images, sponsored, offer_iamge_id):
@@ -19,7 +45,8 @@ def addNewProductFromSeller(productName, productDescription, seller_id, date, of
 
 def uploadImageToDrive(inputFile) :
     scope = ["https://www.googleapis.com/auth/drive"]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name("config/isee-390607-511411524749.json", scope)
+    decrypt()
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("config/drive.json", scope)
     drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
     image_link = []
     for uploaded_file in inputFile:
@@ -55,7 +82,7 @@ def uploadImageToDrive(inputFile) :
 
 def uploadOffersImageToDrive(inputFile) :
     scope = ["https://www.googleapis.com/auth/drive"]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name("config/isee-390607-511411524749.json", scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("config/drive.json", scope)
     drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
     image_link = []
     for uploaded_file in inputFile:
