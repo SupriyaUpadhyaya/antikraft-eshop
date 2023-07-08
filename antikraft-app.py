@@ -10,7 +10,7 @@ from backend.model import insertNewRatings, getSellerAwardData, create_chat_tabl
 import time
 
 import nltk
-# nltk.download('punkt')
+nltk.download('punkt')
 from backend.chat import get_response
 
 subprocess.run("python backend/train.py", shell=True)
@@ -732,8 +732,4 @@ def chat_session_seller():
     
 
 if __name__ == '__main__':
-    try:
-        nltk.data.find('punkt.zip')
-    except:
-        nltk.download('punkt')
     app.run(host='0.0.0.0', debug=True)
