@@ -82,6 +82,7 @@ def uploadImageToDrive(inputFile) :
 
 def uploadOffersImageToDrive(inputFile) :
     scope = ["https://www.googleapis.com/auth/drive"]
+    decrypt()
     credentials = ServiceAccountCredentials.from_json_keyfile_name("config/drive.json", scope)
     drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
     image_link = []
