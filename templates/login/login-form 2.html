@@ -1,0 +1,44 @@
+<div class="container min-container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h2>Sign In</h2>
+            <form action="/userAccountLogin" method="POST">
+                <div class="row">
+                    {% if error == "True" %}
+                        <h6 style="color: red; text-align: left;">Error : Please enter correct username / password</h6>
+                    {%endif%}
+                </div>
+                <div class="row login-form-row">
+                    <div class="row login-form">
+                        <input type="text" class="form-control login-input" placeholder="Email or username" id="username" name="username"></input>
+                    </div>
+                </div>
+                <div class="row login-form-row">
+                    <div class="row login-form">
+                   
+                            <input type="password" class="form-control login-input" placeholder="password" id="password" name="password"></input>
+                        
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input type="checkbox" onclick="myFunction()">&nbsp&nbspShow password</input>
+                    </div>
+                    
+                </div>
+                <div class="row login-form-row">
+                    <div class="row login-form">
+                        <button class="btn btn-dark" type="submit"><h4>Log in</h4></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <h7 style="text-align: left;">New to AntiQKraft?&nbsp&nbsp<a class="link-dark" href="/signup">Sign Up</a></h7>
+                    <h7 style="text-align: left;">Forgot password?&nbsp&nbsp<a class="link-dark" href="/userpasswordreset"> Reset password</a></h7>
+                </div>
+            </form>
+        </div>
+    <div class="col-3"></div>
+    </div>
+</div>

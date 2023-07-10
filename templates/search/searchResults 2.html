@@ -1,0 +1,39 @@
+<div class="container min-container">
+    <div class="row">
+        <div class="col-5">
+            <hr/>
+        </div>
+        <div class="col-2">
+            <h5 id="shopByCategory">SEARCH RESULTS</h5>
+        </div>
+        <div class="col-5">
+            <hr/>
+        </div>
+    </div>
+    <ul>
+        <div class="row">
+            {% if results == False%}
+                <h6 style="text-align: center;">No search results</h6>
+            {% endif %}
+            {%for values in productList.items()%}
+            <div class="col-sm-3 tile">
+                <li>
+                    
+                    <a class="link-dark" href={{values[1].url}}><img class="tile-image" src={{values[1].image_id}}></img>
+                        
+                        <h6>{{values[1].product_name}}</h6>
+                    </a>
+                    {% if values[1].offer_flag == 0 %}
+                    <h6>Price: &euro;{{values[1].product_price}}</h6>
+                    {% endif %}
+                    {% if values[1].offer_flag == 1 %}
+                    <img class="img-fluid" style="height: 50px; width: 150px;" src={{values[1].offer_image_id}} />
+                    <h6>Price: <del style="color: red;">&euro;{{values[1].product_price}}</del> <span style="color: green;">&euro;{{values[1].offer_price}}</span></h6>
+                    {% endif %}
+                    <h6 style="color: grey; font-size: small;">{% if values[1].sponsored == 1.0 %} Sponsored {% endif %}</h6>
+                </li>
+            </div>
+            {%endfor%}
+        </div>
+    </ul>
+</div>

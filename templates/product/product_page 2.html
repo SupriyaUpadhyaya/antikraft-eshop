@@ -1,0 +1,291 @@
+{% include 'base.html' %}
+<style>
+    .separator_2 {
+        display: flex;
+        align-items: center;
+        flex: 2;
+        border-bottom: 1px solid #000;
+        margin-top: 4px;
+        margin-bottom: 2px;
+
+    }
+
+    #product-banner.carousel-item.img-fluid {
+        object-fit: cover;
+        height: 300px;
+        padding-bottom: 20px;
+    }
+
+    .carousel-control-next,
+    .carousel-control-prev {
+        filter: invert(100%);
+    }
+
+    .button {
+        background-color: #000000;
+        color: rgb(255, 255, 255);
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+        border: 2px solid black;
+    }
+
+    /* Define star rating styles */
+    .star-rating {
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
+    }
+
+    #span1 {
+        font-size: 30px;
+        color: gold;
+        display: inline-block;
+        position: relative;
+    }
+
+    #span2 {
+        font-size: 30px;
+        color: rgba(145, 144, 143, 0.505);
+        display: inline-block;
+        position: relative;
+    }
+
+    input[type=number]::-webkit-inner-spin-button {
+        opacity: 1
+    }
+</style>
+<script>
+    // Function to handle star rating selection
+    function handleStarRating(event) {
+        const selectedStar = event.target;
+        const rating = parseInt(selectedStar.dataset.value);
+
+        // Remove "selected" class from all stars
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => star.classList.remove('selected'));
+
+        // Add "selected" class to clicked star and stars before it
+        for (let i = 0; i < rating; i++) {
+            stars[i].classList.add('selected');
+        }
+    }
+
+    // Add event listeners to each star
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+        star.addEventListener('click', handleStarRating);
+    });
+
+</script>
+
+
+{% include 'header/header.html' %}
+
+<div class="container">
+    <div class="row">
+        <div>
+            <ul>
+                <h5 style="text-align: left; text-transform: uppercase;">
+                    <a href="/category?categoryid={{category_id}}" style="color: black;">{{category_name}}</a> > 
+                    <a href="/subcategory?categoryid={{category_id}}&subcategoryid={{sub_category_id}}" style="color: black;">{{sub_category_name}}</a>
+                </h5>
+            </ul>
+        </div>
+    </div>
+    <div class="separator_2"></div>
+
+    <div class="container banner">
+        <div class="row">
+            <div class="col-4">
+                <div id="product-banner" class="carousel slide" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="0" class="active"
+                            aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="2"
+                            aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="3"
+                            aria-label="Slide 4"></button>
+                        <button type="button" data-bs-target="#product-banner" data-bs-slide-to="4"
+                            aria-label="Slide 5"></button>
+                    </div>
+                    <div class="carousel-inner" style="margin-top: 30px;">
+                        <div class="carousel-item active">
+                            <a><img class="w-100 img-fluid" id="banner" style="height: 350px; width: 350px;"
+                                    src={{product_main_image[0]}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" style="height: 350px; width: 350px;"
+                                    src={{product_sec_image1}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" style="height: 350px; width: 350px;"
+                                    src={{product_sec_image2}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" style="height: 350px; width: 350px;"
+                                    src={{product_sec_image3}}></img></a>
+
+                        </div>
+                        <div class="carousel-item">
+                            <a><img class="w-100 img-fluid" id="banner" style="height: 350px; width: 350px;"
+                                    src={{product_sec_image4}}></img></a>
+
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#product-banner"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#product-banner"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+                {% if offer_flag == 1 %}
+                    <div style="margin-bottom: 10px; display: flex; justify-content: center;">
+                        <a><img class="img-fluid" id="banner" style="align-items:center; height: 50px; width: 100px;"
+                            src={{offer_image_url}}></img></a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-7" style="margin-top: 25px; margin-left: 100px;">
+                <h3 style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:xx-large;">
+                    {{product_name[0]}}</h3>
+                {% if offer_flag == 0 %}
+                <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger;">Price:
+                    €{{product_price[0]}}
+                </h3>
+                {% endif %}
+                {% if offer_flag == 1 %}
+                <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger; color: red;">Save
+                    {{offer_percent}}%
+                </h3>
+                <h3 style="margin-top: 40px; margin-left: 80px; font-weight: bold; font-size:larger;">
+                    <del>Price: €{{product_price[0]}}</del>
+                    <span style="margin-left: 50px; color: green;">Offer Price: {{offer_price}}</span>
+                </h3>
+                {% endif %}
+
+                <div id="seller"
+                    style="color: rgb(0, 0, 0); margin-left: 80px; margin-top: 40px;font-weight: bold; font-size:larger;">
+                    
+                    Seller: {{seller[0]}} <img id="badge" style="height: 50px; width: 50px;"
+                    src={{badge[0]}}></img>
+            
+                </div>
+                <div>
+                    <a href="/chat_session_user">
+                    <button class="button"
+                            style="background-color: #000; color: #fff; border: none; padding: 4px 16px; border-radius: 4px; cursor: pointer; margin-left: 80px; font-weight: bold;">
+                        Seller Chat
+                    </button>
+                    </a>
+                </div>
+
+                <div class="col-3 input-group mb-3"
+                    style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:larger;"><label
+                        style="margin-top: 30px; text-align: left; font-weight: bold;">Order Quantity: </label>
+
+                    <form action="updateQuantity" method="POST">
+                        <div class="col-3 input-group mb-3">
+
+                            <input
+                                style="font-size: large; margin-left: 20px; margin-top: 30px; height: 35px; width: 100px;  text-align: center;"
+                                type="number" id="typeNumber" name="quantity" class="form-control rounded" min="0"
+                                max={{product_stock[0]}} value={{orderquantity}}>
+
+                            </input>
+                            <input type="hidden" id="typeNumber" name="product_serial_number" class="form-control"
+                                value={{product_sn}}> </input>
+                        </div>
+
+                </div>
+                <div id="stockStatus" style="color: red; margin-left: 80px; font-weight: bold; font-size:larger;">
+                    {% if product_stock[0] == 0 %}
+                    Out of Stock
+                    {% endif %}
+                </div>
+                <div id="stockStatus"
+                    style="color: rgb(0, 0, 0); margin-left: 80px; font-weight: bold; font-size:larger;">
+                    {% if product_stock[0] > 0 %}
+                    In Stock: {{product_stock[0]}}
+                    {% endif %}
+                </div>
+
+                <div class="star-rating">
+                    <div style="margin-top: 20px; margin-left: -367px;">
+                        <label style="text-align:left;">
+                            &nbsp;{{no_of_ratings}}
+                            <span style="float:right;">
+                                &nbsp;ratings
+                            </span>
+                        </label>
+
+                        {% for rating in range(0,5-avg_rating_score) %}
+                        <span id="span2">&#x2605;</span>
+                        {% endfor %}
+                        {% for rating in range(0,avg_rating_score) %}
+                        <span id="span1">&#x2605;</span>
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+                <br>
+                                
+                <div>
+                    {% if product_stock[0] == 0 %}
+                    <button class="button"
+                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger; background-color: lightgray; border-color: lightgray;"
+                        disabled>Add
+                        to Cart</button>
+                    {% endif %}
+                    {% if product_stock[0] != 0 %}
+                    <button class="button"
+                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Add
+                        to Cart</button>
+                    {% endif %}
+                </div>
+                </form>
+                <a href="/checkout">
+                    <button class="button"
+                        style="margin-top: 20px; margin-left: 80px; height: 75px; width: 250px; font-weight: bold; font-size:larger;">Checkout</button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="separator_2"></div>
+    <h4>Product Description:</h4>
+    <div style="margin-top: auto; margin-left: 80px; font-weight: bold; font-size:large;">{{product_description[0]}}
+    </div>
+    <div class="separator_2"></div>
+    <h4>You might also like :</h4>
+    <div class="row">
+        {%for values in recommendation%}
+        <div class="col-sm-3 tile">
+            
+                
+                <a class="link-dark" href={{values['url'][0]}}><img class="tile-image" src={{values['image_id'][0]}}></img>
+                    
+                    <h6>{{values['product_name'][0]}}</h6>
+                </a>
+                <h6>Price: &euro;{{values['product_price'][0]}}</h6>
+            
+        </div>
+        {%endfor%}
+    </div>
+
+</div>
+{% include 'footer/footer.html' %}

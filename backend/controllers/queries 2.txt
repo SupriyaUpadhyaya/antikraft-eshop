@@ -1,0 +1,19 @@
+select * from product order by product_serial_number desc limit 20
+select * from product order by sponsored=1 limit 20
+select * from product where offer_flag=1 limit 20
+select * from product order by product_serial_number desc limit 20
+select * from product where product.offer_flag=True
+select * from product where stock < 10 limit 20
+SELECT * from PRODUCT where product_description LIKE '%porcelain%' OR product_name LIKE '%porcelain%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%pot%' OR product_name LIKE '%pot%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where category_id=5 ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%glass%' OR product_name LIKE '%glass%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%silver%' OR product_name LIKE '%silver%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%art%' OR product_name LIKE '%art%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where category_id=4 ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%wood%' OR product_name LIKE '%wood%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%silk%' OR product_name LIKE '%silk%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where category_id=2 ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%mirror%' OR product_name LIKE '%mirror%' ORDER BY sponsored DESC
+SELECT * from PRODUCT where product_description LIKE '%watch%' OR product_name LIKE '%watch%' ORDER BY sponsored DESC
+select * from product where stock>0 and product_serial_number in (select product_serial_number as num from orders group by product_serial_number order by count(product_serial_number) desc) limit 20

@@ -1,0 +1,145 @@
+{% include 'base.html' %}
+
+<style>
+    .separator_2 {
+        display: flex;
+        align-items: center;
+        flex: 2;
+        border-bottom: 1px solid #000;
+        margin-top: 4px;
+        margin-bottom: 2px;
+
+    }
+
+    .arrow {
+        border: solid black;
+        border-width: 0 2px 2px 0;
+        display: inline-block;
+        padding: 2px;
+        margin-left: 5px;
+        margin-top: 0px;
+    }
+
+    .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+
+    .grid-item {
+        border: none;
+    }
+
+    .grid {
+        border: none;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).on("change", ".sort_by", function () {
+        var sortingMethod = $(this).val();
+
+        if (sortingMethod == '1') { sortProductsPriceAscending(); }
+        else if (sortingMethod == '2') { sortProductsPriceDescending(); }
+        else if (sortingMethod == '3') { sortProductsName(); }
+        else {
+            $(".grid").load(location.href + " .grid>*", "");
+        }
+    });
+
+    function sortProductsName() {
+        var gridItems = $('.grid-item');
+        gridItems.sort(function (a, b) {
+            var nameA = $('.product-card', a).data("name").toUpperCase();
+            var nameB = $('.product-card', b).data("name").toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        });
+
+        $(".grid").append(gridItems);
+    }
+
+    function sortProductsPriceAscending() {
+        var gridItems = $('.grid-item');
+        gridItems.sort(function (a, b) {
+            return $('.product-card', a).data("price") - $('.product-card', b).data("price");
+        });
+
+        $(".grid").append(gridItems);
+    }
+
+    function sortProductsPriceDescending() {
+        var gridItems = $('.grid-item');
+        gridItems.sort(function (a, b) {
+            return $('.product-card', b).data("price") - $('.product-card', a).data("price");
+        });
+
+        $(".grid").append(gridItems);
+    }
+</script>
+
+{% include 'header/header.html' %}
+
+<div class="container">
+    <div class="row">
+        <div>
+            <ul>
+                <h5 style="text-align: left; text-transform: uppercase;">
+                    <a href="/category?categoryid={{category_id}}" style="color: black;">{{category_name}}</a> > {{sub_category_name}}
+                </h5>
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="separator_2"></div>
+
+    <div class="container">
+        <div class="col-2 my-3"><label style="text-align: left; font-weight: bold; margin-left: 12px;">SORT BY</label><i
+                class="arrow down"></i>
+            <select class="form-control col-2 sort_by" style="border-color: #000; font-weight: bold;">
+                <option value="">None</option>
+                <option value="1">Price Low to High</option>
+                <option value="2">Price High to Low</option>
+                <option value="3">Product Name</option>
+            </select>
+        </div>
+
+        <div class="row grid my-50">
+            {% for item in sub_cat_product_json %}
+            <div class="col-md-4 grid-item">
+                <div class="card p-3 product-card" style="border: none;" data-price="{{item['product_price'][0]}}"
+                    data-name="{{item['product_name'][0]}}">
+                    <div class="text-center">
+                        <a class="nav-link"
+                            href="/product?categoryid={{category_id}}&subcategoryid={{sub_category_id}}&product_serial_number={{item['product_serial_number'][0]}}"
+                            style="text-align: center; margin-right: auto; margin-left: auto;">
+                            <img src={{item['image_id'][0]}} width="200">
+                        </a>
+                    </div>
+                    <div class="product-details text-center"
+                        style="text-align: center; font-size: large; font-weight: bold;">
+                        {% if item["offer_flag"][0] == 0 %}
+                        <span class="font-weight-bold d-block">€ {{item["product_price"][0]}}</span>
+                {% endif %}
+                {% if item["offer_flag"][0] == 1 %}
+                <img class="img-fluid" style="height: 50px; width: 150px;" src={{item['offer_image_id'][0]}} />
+                <span class="font-weight-bold d-block">
+                    <del style="color: red;">€{{item["product_price"][0]}}</del> <span style="color: green;">€{{item["offer_price"][0]}}</span>
+                </span>
+                {% endif %}
+                        <span>{{item["product_name"][0]}}</span>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+
+    </div>
+</div>
+
+{% include "footer/footer.html" %}
