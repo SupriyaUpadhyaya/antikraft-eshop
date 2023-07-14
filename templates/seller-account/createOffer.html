@@ -135,7 +135,7 @@
                                           
                                       <div class="col-12"> <h6 class="tile-text" style="text-align: left;">Enter new offer percentage: </h6></div>
                                       
-                                              <div class="col-2"><input type="number" id="Number" name="offerpercent" class="form-control rounded" step=0.01 value={{product["offer_percent"][0]}} style="font-size: x-small; opacity: 1;" required> </input></div>
+                                              <div class="col-2"><input type="number" id="Number" name="offerpercent" class="form-control rounded" step=0.01 value={{product["offer_percent"][0]}} style="font-size: x-small; opacity: 1;" min="1" max="99" required> </input></div>
                                               
                                               <div class="col-6"><input type="file" class="form-control" id="offerimagenew" name="offerimagenew" type="image/jpg,image/png" style="display: block; font-size: x-small;" placeholder="Add 1 image for offers" required> </input></div>
                                               <input type="hidden" id="Number"  name="product_serial_number" class="form-control" value={{product["product_serial_number"][0]}} style="font-size: x-small;"> </input>
